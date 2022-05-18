@@ -21,7 +21,7 @@ async function submit() {
   <div>
     <form @submit.prevent="submit">
       <input type="text" v-model="search" />
-      <button>Search</button>
+      <button class="outline">Search</button>
     </form>
 
     <div class="shows">
