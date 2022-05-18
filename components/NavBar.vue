@@ -13,6 +13,7 @@
   <ul>
     <li><a href="/live" class="secondary">Markdown Live</a></li>
     <li><a href="/s" class="secondary">Search</a></li>
+    <li><a href="/drafts/demo" class="secondary">Demo</a></li>
     <li>
       <a href="https://github.com/aborn/mindpress" class="contrast" aria-label="Pico GitHub repository" target="_blank">
         <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" height="32px">

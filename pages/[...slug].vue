@@ -1,5 +1,6 @@
 <template>
-  <div style="padding: 1rem;">
+<NavBar/>
+  <main class="container">
     <ContentDoc />
-  </div>
+  </main>
 </template>
