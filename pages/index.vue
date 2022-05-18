@@ -1,4 +1,5 @@
 <template>
+<NavBar/>
   <main>
       <ContentDoc />
   </main>
