@@ -1,6 +1,6 @@
 <template>
 <NavBar/>
-  <main>
+  <main class="container">
       <ContentDoc />
   </main>
 </template>

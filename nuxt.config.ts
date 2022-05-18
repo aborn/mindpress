@@ -8,6 +8,10 @@ export default defineNuxtConfig({
                 {
                     rel: 'stylesheet',
                     href: 'https://unpkg.com/@picocss/pico@latest/css/pico.min.css'
+                },
+                {
+                    rel: 'stylesheet',
+                    href: '/assets/css/mp.css'
                 }
             ]
         }
