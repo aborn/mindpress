@@ -34,7 +34,8 @@ const tabs = ref(['Preview', 'AST'])
 </script>
 
 <template>
-  <div class="playground">
+<NavBar/>
+  <main class="playground">
     <textarea v-model="content" @input="refresh" />
     <div class="content">
       <div class="tabs">
@@ -55,7 +56,7 @@ const tabs = ref(['Preview', 'AST'])
       </ContentRenderer>
       <pre v-if="tab === 'AST'" style="padding: 1rem;">{{ doc }}</pre>
     </div>
-  </div>
+  </main>
 </template>
 
 <style>

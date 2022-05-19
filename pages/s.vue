@@ -17,8 +17,10 @@ async function submit() {
   searchShows(search);
 }
 </script>
+
 <template>
-  <div>
+<NavBar/>
+  <main class="container">
     <form @submit.prevent="submit">
       <input type="text" v-model="search" />
       <button class="outline">Search</button>
@@ -32,5 +34,5 @@ async function submit() {
         </nuxt-link>
       </div>
     </div>
-  </div>
+  </main>
 </template>
