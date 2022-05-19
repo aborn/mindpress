@@ -20,6 +20,9 @@ export default defineNuxtConfig({
         '@nuxt/content'
     ],
     content: {
-        // Options
+        highlight: {
+            theme: "monokai",
+            preload: ['java', 'javascript', 'typescript', 'vue']
+        }
     }
 })
