@@ -24,10 +24,5 @@ export default defineNuxtConfig({
             theme: "monokai",
             preload: ['java', 'javascript', 'typescript', 'vue']
         }
-    },
-    vue: {       
-        compilerOptions: {
-            sourceMap: true,
-        },
-    },
+    }
 })
