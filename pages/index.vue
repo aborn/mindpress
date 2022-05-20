@@ -5,9 +5,9 @@
       <div class="show" v-for="article in articles" :key="article.id">
           <article>
             <header>{{ article.title }}</header>
-            <NuxtLink :to="`${article.path}`">
+            <a :href="`${article.path}`">
             {{ article.description }}
-            </NuxtLink>
+            </a>
             <footer>{{ article.mtime }}</footer>
           </article>
       </div>
