@@ -33,6 +33,17 @@ input {
   transform: scale(1.1);
 }
 
+.article {
+  flex-direction: column;
+  align-items: center;
+  border-radius: 0.5rem;
+  flex: 1 1 0%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  overflow: hidden;
+}
+
 .shows {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

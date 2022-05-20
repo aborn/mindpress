@@ -2,7 +2,7 @@
   <NavBar />
   <main class="container">
     <div class="shows">
-      <div class="show" v-for="article in articles" :key="article.id">
+      <div class="article" v-for="article in articles" :key="article.id">
           <article>
             <header>{{ article.title }}</header>
             <a :href="`${article.path}`">
