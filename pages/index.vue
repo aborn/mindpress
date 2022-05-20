@@ -3,18 +3,7 @@
   <main class="container">
     <div class="articles">
       <div class="article" v-for="article in articles" :key="article.id">
-        <div class="card-image">
-          <img src="/assets/img/flex.JPG" alt="flex demo" loading="lazy" class="card-image-item" />
-        </div>
-        <div class="card-content">
-          <a :href="`${article.path}`">
-            <h2 class="text-gray-900">{{ article.title }}</h2>
-            <p class="text-gray-500">{{ article.description }}</p>
-          </a>
-          <div class="card-footer">
-            <div class="card-footer-date">May 19, 2022</div>
-          </div>
-        </div>
+        <PostCard :item="article" />
       </div>
     </div>
   </main>
