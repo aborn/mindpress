@@ -77,4 +77,39 @@ img {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   overflow: hidden;
+  background-color: var(--h1-color);
+}
+
+.card-image {
+  width: auto;
+  border-radius: 0.5rem;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 85%;
+}
+
+.card-footer {
+  margin-bottom: 1.5rem;
+}
+
+.card-footer-date {
+  font-size: small;
+}
+
+.text-gray-900 {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity));
+  text-align: left;
+  font-size: 1.25rem;
+}
+
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+  text-align: left;
+  font-size: 1rem;
 }
