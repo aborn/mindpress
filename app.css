@@ -92,6 +92,7 @@ img {
 
 .card-image-item {
   width: auto;
+  max-height: 250px;
   border-radius: 0.5rem;
 }
 

@@ -4,8 +4,7 @@
     <div class="articles">
       <div class="article" v-for="article in articles" :key="article.id">
         <div class="card-image">
-          <img src="/assets/img/flex.JPG" alt="flex demo" loading="lazy" width="480px" height="auto"
-            class="card-image-item" />
+          <img src="/assets/img/flex.JPG" alt="flex demo" loading="lazy" class="card-image-item" />
         </div>
         <div class="card-content">
           <a :href="`${article.path}`">
