@@ -6,6 +6,10 @@
         <div class="card-content">
             <a :href="`${item.path}`">
                 <h2 class="text-gray-900">{{ item.title }}</h2>
+                <div>
+                    <span class="text-tag-item">Tag A</span>
+                    <span class="text-tag-item">Tag B</span>
+                </div>
                 <p class="text-gray-500">{{ formatDesc(item.description) }}</p>
             </a>
             <div class="card-footer">
