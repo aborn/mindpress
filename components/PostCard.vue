@@ -17,7 +17,7 @@
     </div>
     <div class="card-footer">
         <div class="card-footer-date">
-            {{ formatDate(item.mtime) }}
+            {{ item.date ? formatDate(item.date) : formatDate(item.mtime) }}
         </div>
         <div class="card-footer-auther">
             <span class="card-footer-auther-item">Aborn Jiang</span>
