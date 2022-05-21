@@ -1,22 +1,28 @@
 <template>
-    <div class="article">
-        <div class="card-image">
-            <img src="/assets/img/flex.JPG" alt="flex demo" loading="lazy" class="card-image-item" />
-        </div>
-        <div class="card-content">
-            <a :href="`${item.path}`">
-                <h2 class="text-gray-900">{{ item.title }}</h2>
-                <div>
-                    <span class="text-tag-item">Tag A</span>
-                    <span class="text-tag-item">Tag B</span>
-                </div>
-                <p class="text-gray-500">{{ formatDesc(item.description) }}</p>
-            </a>
-            <div class="card-footer">
-                <div class="card-footer-date">
-                    {{ formatDate(item.mtime) }}
-                </div>
+    <!-- 
+    <div class="card-image">
+        <img src="/assets/img/flex.JPG" alt="flex demo" loading="lazy" class="card-image-item" />
+    </div> 
+    -->
+    <div class="card-content">
+        <a :href="`${item.path}`" style="text-decoration: none !important;">
+            <h2 class="card-content-title">{{ item.title }}</h2>
+            <div>
+                <span class="card-content-tag">Tag A</span>
+                <span class="card-content-tag">Tag B</span>
             </div>
+            <p class="card-content-desc">{{ formatDesc(item.description) }}</p>
+        </a>
+
+    </div>
+    <div class="card-footer">
+        <div class="card-footer-date">
+            {{ formatDate(item.mtime) }}
+        </div>
+        <div class="card-footer-auther">
+            <span class="card-footer-auther-item">Aborn Jiang</span>
+            <span class="card-footer-auther-item">|</span>
+            <span class="card-footer-auther-item">张杰</span>
         </div>
     </div>
 </template>
@@ -36,10 +42,10 @@ export default {
     methods: {
         formatDesc(des) {
             const maxLength = 50;
-            const cjkMatch = des.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/) 
+            const cjkMatch = des.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/)
             const trimmedString = des.trim().substr(0, maxLength);
             const desCutWord = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
-            return cjkMatch ?  trimmedString + "..." : desCutWord
+            return cjkMatch ? trimmedString + "..." : desCutWord
         },
         formatDate(date) {
             const options = { year: 'numeric', month: 'long', day: 'numeric' }
