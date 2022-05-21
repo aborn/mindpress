@@ -8,8 +8,7 @@
         <a :href="`${item.path}`" style="text-decoration: none !important;">
             <h2 class="card-content-title">{{ item.title }}</h2>
             <div>
-                <span class="card-content-tag">Tag A</span>
-                <span class="card-content-tag">Tag B</span>
+                <span class="card-content-tag" v-for="tag in tags" :key="tag">{{ tag }}</span>
             </div>
             <p class="card-content-desc">{{ formatDesc(item.description) }}</p>
         </a>
@@ -39,7 +38,16 @@ export default {
             required: true
         }
     },
+    data: function () {
+        return {
+            tags: this.assembyTags()
+        }
+    },
     methods: {
+        assembyTags() {
+            let tags = this.item.tag || this.item.tags || this.item.category;
+            return tags ? tags : ["MindPress"]
+        },
         formatDesc(des) {
             const maxLength = 50;
             const cjkMatch = des.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/)
