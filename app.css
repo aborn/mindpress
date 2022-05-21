@@ -80,15 +80,15 @@ img {
   align-items: center;
   border-radius: 0.5rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  cursor: pointer;
   transition: all 0.2s ease-in-out;
   overflow: hidden;
-  background-color: #edf0f3;
+  background-color: #ffffff;
 }
 
 .card-image {
   display: flex;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .card-image-item {
@@ -124,7 +124,8 @@ img {
   flex-grow: 2;
   justify-content: space-between;
   width: 85%;
-  margin-top: 1rem
+  margin-top: 1rem;
+  cursor: pointer;
 }
 
 .card-content-title {
