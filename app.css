@@ -83,7 +83,7 @@ img {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   overflow: hidden;
-  background-color: var(--h1-color);
+  background-color: #edf0f3;
 }
 
 .card-image {
