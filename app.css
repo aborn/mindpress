@@ -97,27 +97,6 @@ img {
   border-radius: 0.5rem;
 }
 
-.card-footer {
-  display: flex;
-  margin-bottom: .8rem;
-  font-size: small;
-  justify-content: space-between;
-  width: 85%;
-}
-
-.card-footer-date {
-  flex-grow: 1;
-}
-
-.card-footer-author {
-  flex-grow: 3;
-  text-align: right;
-}
-
-.card-footer-author-item {
-  margin-left: .5rem;
-}
-
 .card-content {
   display: flex;
   flex-direction: column;
@@ -157,4 +136,25 @@ img {
   background-color: rgb(224 231 255 / var(--tw-bg-opacity));
   padding-left: .75rem;
   padding-right: .75rem;
+}
+
+.card-footer {
+  display: flex;
+  margin-bottom: .8rem;
+  font-size: small;
+  justify-content: space-between;
+  width: 85%;
+}
+
+.card-footer-date {
+  flex-grow: 1;
+}
+
+.card-footer-author {
+  flex-grow: 3;
+  text-align: right;
+}
+
+.card-footer-author-item {
+  margin-left: .5rem;
 }

@@ -12,7 +12,6 @@
             </div>
             <p class="card-content-desc">{{ formatDesc(item.description) }}</p>
         </a>
-
     </div>
     <div class="card-footer">
         <div class="card-footer-date">
