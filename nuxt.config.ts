@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     content: {
         highlight: {
             theme: "monokai",
-            preload: ['java', 'javascript', 'typescript', 'vue']
+            preload: ['java', 'javascript', 'typescript', 'vue', 'bash']
         }
     }
 })

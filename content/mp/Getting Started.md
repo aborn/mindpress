@@ -1,8 +1,18 @@
+---
+title: Getting Started
+author: {name: Aborn Jiang, link: aborn.jiang}
+date: 2022-05-22
+category:
+  - MindPress
+  - Guide
+tag:
+  - Guide
+  - API
+---
+
+<!-- Content of the page -->
 # MindPress
-
-Press your mind gracefully, which is powered by [nuxt.js 3.0](https://v3.nuxtjs.org) and nuxt.js content 2.0.
-
-![](assets/img/mindpress.png)
+Press your mind gracefully, which is powered by nuxt.js 3.0 and nuxt.js content 2.0.
 
 ## Setup
 
