@@ -109,12 +109,12 @@ img {
   flex-grow: 1;
 }
 
-.card-footer-auther {
+.card-footer-author {
   flex-grow: 3;
   text-align: right;
 }
 
-.card-footer-auther-item {
+.card-footer-author-item {
   margin-left: .5rem;
 }
 

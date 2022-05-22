@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-author: {name: Aborn Jiang, link: aborn.jiang}
+authors: [{name: Aborn Jiang, link: aborn.jiang}, {name: 张三, link: aborn.jiang}]
 date: 2022-05-22
 category:
   - MindPress
