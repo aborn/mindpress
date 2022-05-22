@@ -2,7 +2,8 @@
 
 Press your mind gracefully, which is powered by [nuxt.js 3.0](https://v3.nuxtjs.org) and nuxt.js content 2.0.
 
-![](assets/img/mindpress.png)
+![darkmode](assets/img/mindpress.png)
+![lightmode](assets/img/mindpress_light.png)
 
 ## Setup
 
