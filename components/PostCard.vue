@@ -61,7 +61,6 @@ export default {
                     pureAuthors.push("|")
                 }
             })
-            console.log(pureAuthors)
             return pureAuthors
         },
         assembyTags() {
