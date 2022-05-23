@@ -5,7 +5,7 @@
     </div> 
     -->
     <div class="card-content">
-        <a :href="`${item.path}`" style="text-decoration: none !important;">
+        <a :href="`${link}`" style="text-decoration: none !important;">
             <h2 class="card-content-title">{{ item.title }}</h2>
             <div>
                 <span class="card-content-tag" v-for="tag in tags" :key="tag">{{ tag }}</span>
@@ -13,6 +13,7 @@
             <p class="card-content-desc">{{ formatDesc(item.description) }}</p>
         </a>
     </div>
+
     <div class="card-footer">
         <div class="card-footer-date">
             {{ item.date ? formatDate(item.date) : formatDate(item.mtime) }}
@@ -38,14 +39,18 @@ export default {
     data: function () {
         return {
             tags: this.assembyTags(),
-            authors: this.assembyAuthors()
+            authors: this.assembyAuthors(),
+            link: this.prelink()
         }
     },
     methods: {
+        prelink() {
+            return this.item.permalink || this.item.path
+        },
         assembyAuthors() {
             let authors = [];
             if (this.item.author) {
-                authors.push(this.item.author);
+                authors.push(this.item.author)
             }
 
             if (Array.isArray(this.item.authors)) {
