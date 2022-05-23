@@ -4,14 +4,11 @@ import { defineNuxtConfig } from 'nuxt'
 export default defineNuxtConfig({
     app: {
         head: {
+            title: 'MindPress, Press your mind gracefully.',
             link: [
                 {
                     rel: 'stylesheet',
                     href: 'https://unpkg.com/@picocss/pico@latest/css/pico.min.css'
-                },
-                {
-                    rel: 'stylesheet',
-                    href: '/assets/css/mp.css'
                 }
             ]
         }
