@@ -153,6 +153,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
   width: 100%;
   margin-bottom: 3rem;
   text-align: center;
+  color: var(--h1-color);
 }
 
 @media (max-width: 800px) {
