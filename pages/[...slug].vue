@@ -1,5 +1,5 @@
 <template>
-<NavBar/>
+  <NavBar />
   <main class="container">
     <ContentDoc />
   </main>
