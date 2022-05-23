@@ -1,7 +1,5 @@
 <script setup>
 const route = useRoute()
-
-const contentQuery = queryContent('drafts')
 const permalink = '/articles/' + route.params.slug;
 const articles = await queryContent('drafts').where({ permalink: { $eq: permalink } }).findOne()
 // console.log(articles);
