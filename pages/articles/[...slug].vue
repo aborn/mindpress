@@ -4,12 +4,7 @@ const route = useRoute()
 const contentQuery = queryContent('drafts')
 const permalink = '/articles/' + route.params.slug;
 const articles = await queryContent('drafts').where({ permalink: { $eq: permalink } }).findOne()
-console.log(articles);
-
-
-if (route.params.slug === 'index') {
-    console.log('index file route')
-}
+// console.log(articles);
 </script>
 
 <template>
