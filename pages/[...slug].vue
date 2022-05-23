@@ -1,6 +1,19 @@
 <template>
   <NavBar />
   <main class="container">
-    <ContentDoc />
+    <ContentDoc v-slot="{ doc }">
+      <div class="article-title">{{ doc.title }}</div>
+      <!-- todo: show authors.
+      <div v-for="author of doc" :key="author.name">
+        {{ author.name }}
+      </div>
+      -->
+
+      <ContentRenderer :value="doc">
+        <template #empty>
+          <p>No content found.</p>
+        </template>
+      </ContentRenderer>
+    </ContentDoc>
   </main>
 </template>

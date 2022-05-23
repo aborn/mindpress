@@ -1,5 +1,6 @@
 ---
 title: 'Demo Page'
+author: {name: aborn, link: aborn}
 description: 'A markdown demo page.'
 ---
 
