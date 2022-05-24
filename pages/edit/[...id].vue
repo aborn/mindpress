@@ -2,7 +2,8 @@
     <NavBar />
     <main class="container">
         <md-editor v-model="text" :theme="theme" :toolbarsExclude="toolbarsExclude"
-            style="background-color: var(--md-background-color);height:480px;" />
+            style="background-color: var(--md-background-color);height:480px;" 
+            @onChange="changeAction" @onSave="saveAction" />
     </main>
 </template>
 
@@ -38,6 +39,15 @@ export default {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
             const newColorScheme = event.matches ? "dark" : "light";
         });
+    },
+    methods: {
+        changeAction(e) {
+            // console.log('ch')
+        },
+        saveAction(text) {
+            console.log('--- now save event triggled. ---')
+            console.log(text)
+        }
     }
 }
 
@@ -52,10 +62,3 @@ if (id.length > 0) {
  */
 
 </script>
-
-<style scoped>
-.dark-mode body {
-    background-color: #091a28;
-    color: #ebf4f1;
-}
-</style>
