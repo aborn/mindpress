@@ -11,7 +11,7 @@
     <li><a href="/" class="first">MindPress</a></li>
   </ul>
   <ul>
-    <li><a href="/live" class="secondary">Markdown Live</a></li>
+    <li><a href="/edit" class="secondary">New File</a></li>
     <li><a href="/s" class="secondary">Search</a></li>
     <li><a href="/drafts/demo" class="secondary">Demo</a></li>
     <li>

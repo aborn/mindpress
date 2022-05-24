@@ -9,5 +9,8 @@
   "devDependencies": {
     "@nuxt/content": "npm:@nuxt/content-edge@latest",
     "nuxt": "3.0.0-rc.3"
+  },
+  "dependencies": {
+    "md-editor-v3": "^2.0.0"
   }
 }

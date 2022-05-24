@@ -34,18 +34,12 @@ const tabs = ref(['Preview', 'AST'])
 </script>
 
 <template>
-<NavBar/>
-  <main class="playground">
-    <textarea v-model="content" @input="refresh" />
-    <div class="content">
-      <div class="tabs">
-        <button
-          v-for="name in tabs"
-          :key="name"
-          class="outline"
-          :class="{ active: name === tab }"
-          @click="tab = name"
-        >
+  <NavBar />
+  <main class="live-playground">
+    <textarea class="live-textarea" v-model="content" @input="refresh" />
+    <div class="live-content">
+      <div class="live-tabs">
+        <button v-for="name in tabs" :key="name" class="outline" :class="{ active: name === tab }" @click="tab = name">
           {{ name }}
         </button>
       </div>
@@ -59,43 +53,39 @@ const tabs = ref(['Preview', 'AST'])
   </main>
 </template>
 
-<style>
-body, html {
-  margin: 0;
-  padding: 0;
-}
+<style scoped>
 
-.playground {
+.live-playground {
   display: flex;
   align-items: stretch;
 }
 
-textarea {
+.live-textarea {
   flex: 1;
   min-height: 100vh;
   width: 50%;
   border-radius: 0;
 }
 
-.content {
+.live-content {
   flex: 1;
   width: 50%;
   min-height: 100vh;
   padding: 1rem;
 }
 
-.tabs {
+.live-tabs {
   display: flex;
   flex-direction: row;
   padding: 1rem;
   gap: 1rem;
 }
 
-.tabs > button {
+.tabs>button {
   opacity: 0.75;
 }
 
-.tabs > button.active {
+.tabs>button.active {
   border-width: 2px;
   opacity: 1;
 }
