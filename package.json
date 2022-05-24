@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@nuxt/content": "npm:@nuxt/content-edge@latest",
+    "@nuxtjs/color-mode": "^3.0.3",
     "nuxt": "3.0.0-rc.3"
   },
   "dependencies": {

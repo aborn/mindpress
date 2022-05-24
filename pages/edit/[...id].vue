@@ -1,7 +1,7 @@
 <template>
     <NavBar />
     <main class="container">
-        <md-editor v-model="text" theme="dark" :toolbarsExclude="toolbarsExclude"/>
+        <md-editor v-model="text" :theme="theme" :toolbarsExclude="toolbarsExclude" style="background-color: var(--md-background-color);"/>
     </main>
 </template>
 
@@ -10,18 +10,24 @@ import { ref } from 'vue';
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 
+
 export default {
     setup() {
         const route = useRoute()
+        const colorMode = useColorMode()
         const text = ref('')
         const id = route.params.id
         const toolbarsExclude = ['github']
+
+        // three values: system dark light, TODO: md-editor not support 'system'.
+        const theme = colorMode.value   
 
         // demo id: 8dd81d
         return {
             id,
             text,
-            toolbarsExclude            
+            toolbarsExclude,
+            theme
         }
     },
     components: {
@@ -46,3 +52,10 @@ if (id.length > 0) {
  */
 
 </script>
+
+<style scoped>
+.dark-mode body {
+    background-color: #091a28;
+    color: #ebf4f1;
+}
+</style>

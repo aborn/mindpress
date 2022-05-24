@@ -60,6 +60,7 @@ img {
   --nav-logo-color: #fff;
   --nav-title-color: #edf0f3;
   --article-code-background-color: #f9fafb;
+  --md-background-color: #fff;
 }
 
 @media only screen and (prefers-color-scheme: dark) {
@@ -70,6 +71,7 @@ img {
     --nav-border-color: rgba(115, 130, 140, 0.2);
     --nav-logo-color: #0e1419;
     --article-code-background-color: var(--code-background-color);
+    --md-background-color: #11191f;
   }
 }
 
@@ -81,6 +83,7 @@ img {
   --nav-logo-color: #0e1419;
   --nav-title-color: #edf0f3;
   --article-code-background-color: var(--code-background-color);
+  --md-background-color: #11191f;
 }
 
 div>main {

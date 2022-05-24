@@ -14,7 +14,8 @@ export default defineNuxtConfig({
         }
     },
     modules: [
-        '@nuxt/content'
+        '@nuxt/content',
+        '@nuxtjs/color-mode'
     ],
     content: {
         highlight: {
