@@ -36,11 +36,8 @@ const tokenSpan = ({ content, color }) => ({
 const highlightInline = async (node) => {
   const code = node.children[0].value
 
-  const base = useRuntimeConfig().content.base
-  console.log(base);
-
   // Fetch highlighted tokens
-  const lines = await $fetch(withBase('highlight', `/api/${base}`), {
+  const lines = await $fetch(withBase('highlight', `/api/_content`), {
     method: 'POST',
     body: {
       code,
@@ -60,11 +57,8 @@ const highlightInline = async (node) => {
 const highlightBlock = async (node) => {
   const { code, language: lang, highlights = [] } = node.props
 
-  const base = useRuntimeConfig().content.base
-  console.log(base);
-
   // Fetch highlighted tokens
-  const lines = await $fetch(withBase('highlight', `/api/${base}`), {
+  const lines = await $fetch(withBase('highlight', `/api/_content`), {
     method: 'POST',
     body: {
       code,

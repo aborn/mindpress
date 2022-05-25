@@ -16,9 +16,12 @@ export async function parseMdContent(content: any) {
     }
   }
 
-  //const { theme, preload } = useRuntimeConfig().content.highlight
-  //console.log(theme)
-  //console.log(preload);
+  const { theme, preload } = useRuntimeConfig().content.highlight
+  console.log(theme)
+  console.log(preload);
+
+  const base = useRuntimeConfig().content.base
+  console.log(base);
 
   config.rehypePlugins = await Promise.all((config.rehypePlugins || []).map(importPlugin))
   config.remarkPlugins = await Promise.all((config.remarkPlugins || []).map(importPlugin))
@@ -29,7 +32,8 @@ export async function parseMdContent(content: any) {
   return {
     ...parsed.meta,
     body: parsed.body,
-    type: 'markdown'
+    type: 'markdown',
+    _base: base
   }
 
 }
