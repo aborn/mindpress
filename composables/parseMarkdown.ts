@@ -12,8 +12,8 @@ export async function parseMdContent(content: any) {
     ...useRuntimeConfig().content?.markdown || {},
     mdc: true,
     toc: {
-      depth: 4,
-      searchDepth: 0
+      depth: 2,
+      searchDepth: 2
     }
   }
   config.rehypePlugins = await Promise.all((config.rehypePlugins || []).map(importPlugin))
