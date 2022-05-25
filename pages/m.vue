@@ -11,6 +11,6 @@
 </template>
 
 <script setup>
-const articles = await parseMdContent(DEMO_TEXT_MARKDOWN);
+const articles = await parseText(DEMO_TEXT_MARKDOWN);
 console.log(articles)
 </script>

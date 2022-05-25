@@ -1,6 +1,5 @@
 import { parse } from '../node_modules/@nuxt/content/dist/runtime/markdown-parser'
 import type { MarkdownOptions } from '../node_modules/@nuxt/content/dist/runtime/types'
-import { useRuntimeConfig } from '#imports'
 
 const importPlugin = async (p: [string, any]) => ([
   await import(/* @vite-ignore */p[0]).then(res => res.default || res),
@@ -16,10 +15,16 @@ export async function parseMdContent(content: any) {
       searchDepth: 2
     }
   }
+
+  //const { theme, preload } = useRuntimeConfig().content.highlight
+  //console.log(theme)
+  //console.log(preload);
+
   config.rehypePlugins = await Promise.all((config.rehypePlugins || []).map(importPlugin))
   config.remarkPlugins = await Promise.all((config.remarkPlugins || []).map(importPlugin))
 
-  const parsed = await parse(content, config)
+  // console.log(config)
+  const parsed = await parse(content.trimStart(), config)
 
   return {
     ...parsed.meta,
