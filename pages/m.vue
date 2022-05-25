@@ -1,29 +1,16 @@
 <template>
-    <article>
-        <h1>{{ page.title }}</h1>
-        
-    </article>
+    <NavBar />
+    <main class="container">
+        <div class="article-title">{{ articles.title }}</div>
+        <ContentRenderer :value="articles">
+            <template #empty>
+                <p>No content found.</p>
+            </template>
+        </ContentRenderer>
+    </main>
 </template>
 
-<script>
-export default {
-    setup() {
-        parseMdContent(DEMO_TEXT_MARKDOWN).then(res => {
-            console.log(res)
-        })
-        // console.log(mdArticle)
-        return {
-            page: {
-                title: "aaa"
-            }
-        }
-    },
-    async asyncData({ $content }) {
-        const page = await $content('home').fetch()
-        console.log(page)
-        return {
-            page
-        }
-    }
-}
+<script setup>
+const articles = await parseMdContent(DEMO_TEXT_MARKDOWN);
+console.log(articles)
 </script>
