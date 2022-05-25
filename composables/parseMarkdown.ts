@@ -16,12 +16,11 @@ export async function parseMdContent(content: any) {
     }
   }
 
-  const { theme, preload } = useRuntimeConfig().content.highlight
-  console.log(theme)
-  console.log(preload);
+  // const { theme, preload } = useRuntimeConfig().content.highlight
+  // console.log(theme)
+  // console.log(preload);
 
   const base = useRuntimeConfig().content.base
-  console.log(base);
 
   config.rehypePlugins = await Promise.all((config.rehypePlugins || []).map(importPlugin))
   config.remarkPlugins = await Promise.all((config.remarkPlugins || []).map(importPlugin))
