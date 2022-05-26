@@ -1,11 +1,9 @@
 <template>
     <NavBar />
     <main class="container">
-        <div class="article-title">{{ articles.title }}</div>
         <ContentRenderer :value="articles">
-            <template #empty>
-                <p>No content found.</p>
-            </template>
+            <div class="article-title">{{ articles.title }}</div>
+            <MarkdownRenderer :value="articles" />
         </ContentRenderer>
     </main>
 </template>
