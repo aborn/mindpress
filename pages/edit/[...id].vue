@@ -2,7 +2,7 @@
     <NavBar />
     <main class="container">
         <md-editor v-model="text" :theme="theme" :toolbarsExclude="toolbarsExclude"
-            
+            style="background-color: var(--md-background-color);height:480px;" 
             @onChange="changeAction" @onSave="saveAction" />
     </main>
 </template>

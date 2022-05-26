@@ -58,7 +58,7 @@ img {
   --nav-background-color: rgba(255, 255, 255, 0.7);
   --nav-border-color: rgba(115, 130, 140, 0.2);
   --nav-logo-color: #fff;
-  
+  --code-background-color: #2e3440;
   --md-background-color: #fff;
 }
 
@@ -69,7 +69,7 @@ img {
     --nav-background-color: rgba(16, 24, 30, 0.8);
     --nav-border-color: rgba(115, 130, 140, 0.2);
     --nav-logo-color: #0e1419;
-    
+    --code-background-color: #2e3440;
     --md-background-color: #11191f;
   }
 }
@@ -80,7 +80,7 @@ img {
   --nav-background-color: rgba(16, 24, 30, 0.8);
   --nav-border-color: rgba(115, 130, 140, 0.2);
   --nav-logo-color: #0e1419;
-  
+  --code-background-color: #2e3440;
   --md-background-color: #11191f;
 }
 
