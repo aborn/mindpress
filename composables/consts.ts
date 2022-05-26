@@ -1,5 +1,4 @@
-export const DEMO_TEXT_MARKDOWN = `
----
+export const DEMO_TEXT_MARKDOWN = `---
 title: 'Demo Page'
 author: {name: aborn, link: aborn}
 description: 'A markdown demo page.'

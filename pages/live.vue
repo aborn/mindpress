@@ -1,21 +1,10 @@
 <script setup>
-const PARSE_SERVER = 'https://mdc.nuxt.dev/api/parse'
 
-const INITIAL_CODE = `# MDC
-
-MDC stands for _**M**ark**D**own **C**omponents_.
-
-This syntax supercharges regular Markdown to write documents interacting deeply with any Vue component from your \`components/content/\` directory or provided by a module.
-
-## Next steps
-- [Install Nuxt Content](/docs/getting-started)
-- [Explore the MDC syntax](/docs/syntax)
-`
-const content = ref(INITIAL_CODE)
+const content = ref(DEMO_TEXT_MARKDOWN)
 
 const { data: doc, refresh } = await useAsyncData('playground', async () => {
   try {
-    return await $fetch(PARSE_SERVER, {
+    return await $fetch('/api/parse', {
       method: 'POST',
       cors: true,
       body: {
