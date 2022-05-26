@@ -19,8 +19,8 @@ export default defineNuxtConfig({
     ],
     content: {
         highlight: {
-            theme: "monokai",
-            preload: ['java', 'javascript', 'typescript', 'vue', 'bash', 'json', 'objc']
+            theme: "one-dark-pro",
+            preload: ['java', 'javascript', 'typescript', 'vue', 'bash', 'json', 'objc', 'ts', 'js', 'css', 'go', 'html']
         }
     }
 })

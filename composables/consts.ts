@@ -28,21 +28,23 @@ Here a list:
 Here's java code snappit highlight.
 ` +
     "\
-```java"
+```js"
     + `
-public List<String> matchScan(String pattern) {
-        List<String> keys = redisTemplate.execute((RedisCallback<List<String>>) connection -> {
-            List<String> keysTmp = new ArrayList<>();
-            Cursor<byte[]> cursor = connection.scan(ScanOptions.scanOptions().match(pattern).count(10000).build());
-
-            while (cursor.hasNext()) {
-                keysTmp.add(new String(cursor.next()));
-            }
-            return keysTmp;
-        });
-
-        return keys;
-}
+    const content = ref(DEMO_TEXT_MARKDOWN)
+    const { data: doc } = await useAsyncData('serv', async () => {
+      try {
+        return await $fetch('/api/parse', {
+          method: 'POST',
+          cors: true,
+          body: {
+            id: 'content:_servercontent.md',
+            content: content.value
+          }
+        })
+      } catch (e) {
+        return doc.value
+      }
+    })
 ` +
 "\
 ```\
