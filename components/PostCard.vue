@@ -45,7 +45,7 @@ export default {
     },
     methods: {
         prelink() {
-            return this.item.permalink || this.item.path
+            return this.item.permalink || this.item._path
         },
         assembyAuthors() {
             let authors = [];
@@ -89,6 +89,7 @@ export default {
             return cjkMatch ? cjkTrim + cjkTrimPad : trimmedString + trimmedStringPad
         },
         formatDate(date) {
+            if (!date) { return '' }
             const options = { year: 'numeric', month: 'long', day: 'numeric' }
             return new Date(date).toLocaleDateString('en', options)
         }
