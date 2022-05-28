@@ -30,10 +30,6 @@ export default {
     components: {
         MdEditor
     },
-    mounted() {
-        console.log("article_id=" + this.id);
-        this.theme = 'dark'
-    },
     methods: {
         changeAction(e) {
             // console.log('ch')
