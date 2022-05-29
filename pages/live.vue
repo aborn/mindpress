@@ -17,6 +17,9 @@ const { data: doc, refresh } = await useAsyncData('playground', async () => {
   }
 })
 
+const { data } = await useFetch('http://localhost:3012/api/content?articleid=1hdefa')
+console.log(data.value)
+
 const tab = ref('Preview')
 
 const tabs = ref(['Preview', 'AST'])

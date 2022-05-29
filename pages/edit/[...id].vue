@@ -2,43 +2,49 @@
     <NavBar />
     <main class="container">
         <ColorScheme placeholder="..." tag="span">
-            <md-editor v-model="text" :theme="$colorMode.value" :toolbarsExclude="toolbarsExclude" style="height:480px;"
+            <md-editor v-model="mkdContent" :theme="$colorMode.value" :toolbarsExclude="toolbarsExclude" style="height:480px;"
                 @onChange="changeAction" @onSave="saveAction" />
         </ColorScheme>
     </main>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 
-export default {
-    setup() {
-        const route = useRoute()
-        const text = ref(DEMO_TEXT_MARKDOWN)
-        const id = route.params.id
-        const toolbarsExclude = ['github']
+// docs==> https://vuejs.org/api/sfc-script-setup.html
 
-        // demo id: 8dd81d
-        return {
-            id,
-            text,
-            toolbarsExclude
-        }
-    },
-    components: {
-        MdEditor
-    },
-    methods: {
-        changeAction(e) {
-            // console.log('ch')
-        },
-        saveAction(text) {
-            console.log('--- now save event triggled. ---')
-            console.log(text)
-        }
+const route = useRoute()
+const text = ref(DEMO_TEXT_MARKDOWN)
+const id = route.params.id
+const toolbarsExclude = ['github']
+console.log('id=' + id)
+
+const url = 'http://localhost:3012/api/content?articleid=' + id
+console.log(url)
+const { data } = await useFetch(url)
+console.log(data)
+
+const processData = (data) => {
+    if (data.value.totalElements > 0) {
+        return data.value.content[0].content
+    } else {
+        console.log('error in http')
+        return ''
     }
+}
+
+const mkdContent = ref(processData(data))
+//console.log(mkdContent)
+
+const changeAction = (e) => {
+    console.log('content changed. data=' + new Date())
+}
+
+const saveAction = (text) => {
+    console.log('--- now save event triggled. ---')
+    console.log(text)
 }
 
 </script>
