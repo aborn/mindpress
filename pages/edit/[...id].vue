@@ -21,14 +21,14 @@ const id = route.params.id
 const toolbarsExclude = ['github']
 console.log('id=' + id)
 
-const url = 'http://localhost:3012/api/content?articleid=' + id
+const url = 'http://localhost:3012/api/content/' + id
 console.log(url)
 const { data } = await useFetch(url)
 console.log(data)
 
 const processData = (data) => {
-    if (data.value.totalElements > 0) {
-        return data.value.content[0].content
+    if (data.value) {
+        return data.value.content
     } else {
         console.log('error in http')
         return ''
