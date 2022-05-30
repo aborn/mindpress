@@ -30,7 +30,6 @@ const { data } = articleid ? await useFetch(url) : defaultData;
 // console.log(data)
 
 const processData = (data) => {
-    console.log(data)
     if (data.value) {
         return {
             content: data.value.content,
@@ -55,11 +54,6 @@ const pData = articleid ? processData(data) : defaultData;
 const mkdContent = ref(pData.content)
 const title = ref(pData.title)
 // console.log(mkdContent)
-
-const changeAction = (e) => {
-    // console.log('content changed. data=' + new Date())
-}
-
 </script>
 
 <script>
@@ -72,6 +66,9 @@ export default {
         }
     },
     methods: {
+        changeAction(e) {
+            // console.log('content changed. data=' + new Date())
+        },
         saveAction(text) {
             const route = useRoute()
             const articleids = route.params.id
@@ -111,7 +108,7 @@ export default {
                             console.log(data.ext.articleid)
                             this.articleid = data.ext.articleid   // begin edit it when file created.
                         }
-                    }            
+                    }
                 }, error => {
                     console.log('exception...')
                     console.log(error)
