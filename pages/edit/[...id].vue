@@ -75,11 +75,12 @@ export default {
             // console.log(text)
             const cuUrl = 'http://localhost:3012/api/content'
             // console.log('id=' + id + ', articleid=' + articleid)
+            const keyValue = articleid + "t" + new Date()
 
             // this.hint = "save action triggled."
             useFetch(cuUrl,
                 {
-                    key: "cu_action",
+                    key: keyValue,
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -91,14 +92,16 @@ export default {
                 }).then(res => {
                     const data = res.data.value
                     const error = res.error.value
-                    res.refresh()   // TODO: Cannot undstand why must it?
+                    // res.refresh()   // TODO: Cannot undstand why must it?
                     console.log(data)
 
                     this.hint = data.msg;
                     if (data.success) {
                         this.hint = data.msg + new Date();
-                        console.log(data.ext.articleid)
-                        this.articleid = data.ext.articleid   // begin edit it when file created.
+                        if (data.ext && data.ext.articleid) {
+                            console.log(data.ext.articleid)
+                            this.articleid = data.ext.articleid   // begin edit it when file created.
+                        }
                     }
 
                     /** 
