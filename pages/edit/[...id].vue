@@ -24,7 +24,8 @@ const toolbarsExclude = ['github']
 
 const url = 'http://localhost:3012/api/content/' + articleid
 console.log(url)
-const { data } = await useFetch(url)
+const defaultData = { content: "", id: 0 }
+const { data } = articleid ? await useFetch(url) : defaultData;
 // console.log(data)
 
 const processData = (data) => {
@@ -46,13 +47,12 @@ const processData = (data) => {
     }
 }
 
-const pData = processData(data);
+const pData = articleid ? processData(data) : defaultData;
 const mkdContent = ref(pData.content)
-const id = pData.id
 // console.log(mkdContent)
 
 const changeAction = (e) => {
-    console.log('content changed. data=' + new Date())
+    // console.log('content changed. data=' + new Date())
 }
 
 </script>
@@ -61,14 +61,15 @@ const changeAction = (e) => {
 export default {
     data: () => {
         return {
-            hint: ''
+            hint: '',
+            articleid: ''
         }
     },
     methods: {
         saveAction(text) {
             const route = useRoute()
             const articleids = route.params.id
-            const articleid = articleids[0]
+            const articleid = articleids[0] || this.articleid
 
             console.log('--- now save event triggled. articleid=' + articleid + '---')
             // console.log(text)
@@ -91,8 +92,17 @@ export default {
                     const data = res.data.value
                     const error = res.error.value
                     res.refresh()   // TODO: Cannot undstand why must it?
+                    console.log(data)
 
-                    if (error) {
+                    this.hint = data.msg;
+                    if (data.success) {
+                        this.hint = data.msg;
+                        console.log(data.ext.articleid)
+                        this.articleid = data.ext.articleid   // begin edit it when file created.
+                    }
+
+                    /** 
+                    else if (error) {
                         // dealing error
                         console.log(error)
                         this.hint = 'save error! ' + error
@@ -100,6 +110,7 @@ export default {
                         console.log(data)
                         this.hint = 'save success! ' + new Date()
                     }
+                    */
                 }, error => {
                     console.log('exception...')
                     console.log(error)
