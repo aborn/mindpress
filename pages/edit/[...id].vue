@@ -1,8 +1,9 @@
 <template>
     <NavBar />
     <main class="container">
+        <input id="title" name="title" placeholder="Article title" v-model="title" required>
         <label>{{ hint }}</label>
-        <ColorScheme placeholder="..." tag="span">
+        <ColorScheme placeholder="loading..." tag="span">
             <md-editor v-model="mkdContent" :theme="$colorMode.value" :toolbarsExclude="toolbarsExclude"
                 style="height:480px;" @onChange="changeAction" @onSave="saveAction" />
         </ColorScheme>
@@ -29,9 +30,11 @@ const { data } = articleid ? await useFetch(url) : defaultData;
 // console.log(data)
 
 const processData = (data) => {
+    console.log(data)
     if (data.value) {
         return {
             content: data.value.content,
+            title: data.value.title,
             id: data.value.id,
             msg: 'success',
             status: true
@@ -42,13 +45,15 @@ const processData = (data) => {
             content: "",
             id: 0,
             msg: "error http fetch content, articleid=" + articleid,
-            status: false
+            status: false,
+            title: ""
         }
     }
 }
 
 const pData = articleid ? processData(data) : defaultData;
 const mkdContent = ref(pData.content)
+const title = ref(pData.title)
 // console.log(mkdContent)
 
 const changeAction = (e) => {
@@ -62,7 +67,8 @@ export default {
     data: () => {
         return {
             hint: '',
-            articleid: ''
+            articleid: '',
+            title: ''
         }
     },
     methods: {
@@ -70,6 +76,7 @@ export default {
             const route = useRoute()
             const articleids = route.params.id
             const articleid = articleids[0] || this.articleid
+            const title = this.title
 
             console.log('--- now save event triggled. articleid=' + articleid + '---')
             // console.log(text)
@@ -87,33 +94,24 @@ export default {
                     },
                     body: {
                         "articleid": articleid,
-                        "content": text
+                        "content": text,
+                        "title": title
                     }
                 }).then(res => {
                     const data = res.data.value
                     const error = res.error.value
                     // res.refresh()   // TODO: Cannot undstand why must it?
                     console.log(data)
+                    console.log(error)
 
-                    this.hint = data.msg;
-                    if (data.success) {
-                        this.hint = data.msg + new Date();
+                    this.hint = data ? data.msg : error;
+                    if (data && data.success) {
+                        this.hint = data.msg + " " + new Date();
                         if (data.ext && data.ext.articleid) {
                             console.log(data.ext.articleid)
                             this.articleid = data.ext.articleid   // begin edit it when file created.
                         }
-                    }
-
-                    /** 
-                    else if (error) {
-                        // dealing error
-                        console.log(error)
-                        this.hint = 'save error! ' + error
-                    } else {
-                        console.log(data)
-                        this.hint = 'save success! ' + new Date()
-                    }
-                    */
+                    }            
                 }, error => {
                     console.log('exception...')
                     console.log(error)
