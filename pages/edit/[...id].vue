@@ -1,6 +1,7 @@
 <template>
     <NavBar />
     <main class="container">
+        <label>{{ hint }}</label>
         <ColorScheme placeholder="..." tag="span">
             <md-editor v-model="mkdContent" :theme="$colorMode.value" :toolbarsExclude="toolbarsExclude"
                 style="height:480px;" @onChange="changeAction" @onSave="saveAction" />
@@ -16,10 +17,10 @@ import 'md-editor-v3/lib/style.css';
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 
 const route = useRoute()
-const text = ref(DEMO_TEXT_MARKDOWN)
 const articleids = route.params.id
 const articleid = articleids[0]
 const toolbarsExclude = ['github']
+//const hint = 'This is a simple tips.'
 
 const url = 'http://localhost:3012/api/content/' + articleid
 console.log(url)
@@ -54,35 +55,55 @@ const changeAction = (e) => {
     console.log('content changed. data=' + new Date())
 }
 
-const saveAction = (text) => {
-    console.log('--- now save event triggled. articleid=' + articleid + '---')
-    // console.log(text)
-    const cuUrl = 'http://localhost:3012/api/content'
-    // console.log('id=' + id + ', articleid=' + articleid)
-    useFetch(cuUrl,
-        {
-            key: "cu_action",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: {
-                "articleid": articleid,
-                "content": text
-            }
-        }).then(res => {
-            const data = res.data.value
-            const error = res.error.value
-            if (error) {
-                // dealing error
-                console.log(error)
-            } else {
-                console.log(data)
-            }
-        }, error => {
-            console.log('exception...')
-            console.log(error)
-        })
-}
-
 </script>
+
+<script>
+export default {
+    data: () => {
+        return {
+            hint: ''
+        }
+    },
+    methods: {
+        saveAction(text) {
+            const route = useRoute()
+            const articleids = route.params.id
+            const articleid = articleids[0]
+
+            console.log('--- now save event triggled. articleid=' + articleid + '---')
+            // console.log(text)
+            const cuUrl = 'http://localhost:3012/api/content'
+            // console.log('id=' + id + ', articleid=' + articleid)
+
+            // this.hint = "save action triggled."
+            useFetch(cuUrl,
+                {
+                    key: "cu_action",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: {
+                        "articleid": articleid,
+                        "content": text
+                    }
+                }).then(res => {
+                    const data = res.data.value
+                    const error = res.error.value
+                    if (error) {
+                        // dealing error
+                        console.log(error)
+                        this.hint = 'save error! ' + error
+                    } else {
+                        console.log(data)
+                        this.hint = 'save success! ' + new Date()
+                    }
+                }, error => {
+                    console.log('exception...')
+                    console.log(error)
+                })
+        }
+    }
+}
+</script>
+
