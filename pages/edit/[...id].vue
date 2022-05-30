@@ -90,6 +90,8 @@ export default {
                 }).then(res => {
                     const data = res.data.value
                     const error = res.error.value
+                    res.refresh()   // TODO: Cannot undstand why must it?
+
                     if (error) {
                         // dealing error
                         console.log(error)
