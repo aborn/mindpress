@@ -15,7 +15,11 @@
             </thead>
             <tbody>
                 <tr v-for="article in articles" :key="article.id">
-                    <th scope="row">{{ article.articleid }}</th>
+                    <th scope="row">
+                        <a :href="article.permalink">
+                            {{ article.articleid }}
+                        </a>
+                    </th>
                     <td>{{ article.title }}</td>
                     <td>{{ formatDate(article.createTime, 'zh') }}</td>
                     <td>{{ formatDate(article.updateTime, 'zh') }}</td>
