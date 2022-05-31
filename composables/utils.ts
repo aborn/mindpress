@@ -15,3 +15,8 @@ export const mpTransform = (server: any) => {
         "_type": "markdown",
     }
 }
+
+export const mpFormatDate = (date, lang) => {
+    if (!date) { return '' }
+    return new Date(date).toLocaleDateString(lang || 'en', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+}

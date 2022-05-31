@@ -46,9 +46,11 @@ input {
   width: 100%;
 }
 
+/**
 img {
   width: 45%;
 }
+*/
 
 /* MindPress style css */
 [data-theme=light],
@@ -152,9 +154,24 @@ nav>ul:first-of-type li:nth-of-type(2) {
   font-size: 2.5rem;
   font-weight: 800;
   width: 100%;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
   text-align: center;
   color: var(--h1-color);
+}
+
+.article-meta {
+  font-size: 1.167rem;
+  text-align: center;
+  color: #8a919f;
+  line-height: 22px;
+  vertical-align: middle;
+}
+
+.article-edit {
+  color: #1e80ff;
+  cursor: pointer;
+  margin-left: .6rem;
+  vertical-align: middle;
 }
 
 @media (max-width: 800px) {
