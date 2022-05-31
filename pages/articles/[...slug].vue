@@ -1,6 +1,6 @@
 <script setup>
 const route = useRoute()
-const articles = ref();
+const articles = ref()
 
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 // console.log(mp)
@@ -13,7 +13,7 @@ if (mp.mode === MINDPRESS_MODE.static) {
 } else {
     console.log('server mode.')
     const articleid = route.params.slug[0]
-    const url = mp.contentUrl + articleid
+    const url = mp.contentUrl + "/" + articleid
     // console.log(url)
 
     const { data } = await useFetch(url)

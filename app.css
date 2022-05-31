@@ -87,7 +87,7 @@ img {
 }
 
 div>main {
-  padding-top: calc(var(--block-spacing-vertical) + 3.5rem);
+  padding-top: calc(var(--block-spacing-vertical) + 2.0rem);
 }
 
 div>nav {
@@ -154,7 +154,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
   font-size: 2.5rem;
   font-weight: 800;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: .5rem;
   text-align: center;
   color: var(--h1-color);
 }
@@ -165,6 +165,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
   color: #8a919f;
   line-height: 22px;
   vertical-align: middle;
+  margin-bottom: 1rem;
 }
 
 .article-edit {

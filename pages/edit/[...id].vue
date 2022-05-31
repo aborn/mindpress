@@ -1,7 +1,7 @@
 <template>
     <NavBar />
     <main class="container">
-        <input id="title" name="title" placeholder="Article title" v-model="title" required>
+        <input id="title" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
         <label>{{ hint }}</label>
         <ColorScheme placeholder="loading..." tag="span">
             <md-editor v-model="mkdContent" :theme="$colorMode.value" :toolbarsExclude="toolbarsExclude"
@@ -23,7 +23,7 @@ const articleid = articleids[0]
 const toolbarsExclude = ['github']
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 
-const url = mp.contentUrl + articleid
+const url = mp.contentUrl + '/' + articleid
 console.log(url)
 const defaultData = { content: "", id: 0 }
 const { data } = articleid ? await useFetch(url) : defaultData;
@@ -82,7 +82,7 @@ export default {
             console.log(this.mp)
 
             // this.hint = "save action triggled."
-            useFetch(this.mp.baseUrl,
+            useFetch(this.mp.contentUrl,
                 {
                     key: requestSpace,
                     method: "POST",
