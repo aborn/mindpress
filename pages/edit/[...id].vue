@@ -14,15 +14,16 @@
 import { ref } from 'vue';
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
+import { mpConfig } from '~~/composables/utils';
 
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
 const articleids = route.params.id
 const articleid = articleids[0]
 const toolbarsExclude = ['github']
-const mp = useRuntimeConfig().public.minpress
+const mp = mpConfig(useRuntimeConfig().public.minpress)
 
-const url = mp.baseUrl + articleid
+const url = mp.contentUrl + articleid
 console.log(url)
 const defaultData = { content: "", id: 0 }
 const { data } = articleid ? await useFetch(url) : defaultData;

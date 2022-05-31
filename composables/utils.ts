@@ -22,6 +22,15 @@ export const mpTransform = (server: any) => {
     }
 }
 
+export const mpConfig = (config: any) => {
+    return {
+        mode: config.mode,
+        contentUrl: config.baseUrl + 'content',
+        metaUrl: config.baseUrl + 'meta',
+        spaceUrl: config.baseUrl + 'space'
+    }
+}
+
 export const mpFormatDate = (date, lang) => {
     if (!date) { return '' }
     return new Date(date).toLocaleDateString(lang || 'en', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })

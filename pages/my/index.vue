@@ -54,7 +54,7 @@
 <script setup>
 import { ref } from "vue"
 const articles = ref([]);
-const mp = useRuntimeConfig().public.minpress
+const mp = mpConfig(useRuntimeConfig().public.minpress)
 const formatDate = mpFormatDate;
 
 if (mp.mode === MINDPRESS_MODE.static) {

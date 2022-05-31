@@ -12,7 +12,8 @@
 <script setup>
 import { ref } from "vue"
 const articles = ref([]);
-const mp = useRuntimeConfig().public.minpress
+const mp = mpConfig(useRuntimeConfig().public.minpress)
+console.log(mp)
 
 if (mp.mode === MINDPRESS_MODE.static) {
   console.log('static mode')
