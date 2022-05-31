@@ -12,27 +12,27 @@
 <script setup>
 import { ref } from "vue"
 const articles = ref([]);
-const url = 'http://localhost:3012/api/markdownMeta'
+const mp = useRuntimeConfig().public.minpress
 
-async function query() {
+if (mp.mode === MINDPRESS_MODE.static) {
+  console.log('static mode')
   const { data } = await useAsyncData('home', () => queryContent().find())
-  console.log(data.value)
-  const { data: dataServer } = await useFetch(url)
-
-  console.log(dataServer.value)
+  // console.log(data.value)
+  articles.value = data.value;
+} else {
+  console.log('server mode')
+  const { data: dataServer } = await useFetch(mp.metaUrl)
+  // console.log(dataServer.value)
 
   if (dataServer.value.totalElements > 0) {
     const dataS = ref([])
     dataS.value = dataServer.value.content.map((value) => {
       return mpTransform(value)
     })
-    console.log(dataS)
+    // console.log(dataS)
     articles.value = dataS.value;
-  } else {
-    articles.value = data.value;
   }
 }
 
-query();
 </script>
 

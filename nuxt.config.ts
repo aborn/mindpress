@@ -27,7 +27,8 @@ export default defineNuxtConfig({
         public: {
             minpress: {
                 mode: 'server',   // 'static'
-                baseUrl: 'http://localhost:3012/api/content/'
+                baseUrl: 'http://localhost:3012/api/content/',
+                metaUrl: 'http://localhost:3012/api/markdownMeta'
             }
         }
     }

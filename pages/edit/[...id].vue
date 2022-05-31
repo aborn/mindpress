@@ -16,14 +16,13 @@ import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 
 // docs==> https://vuejs.org/api/sfc-script-setup.html
-
 const route = useRoute()
 const articleids = route.params.id
 const articleid = articleids[0]
 const toolbarsExclude = ['github']
-//const hint = 'This is a simple tips.'
+const mp = useRuntimeConfig().public.minpress
 
-const url = 'http://localhost:3012/api/content/' + articleid
+const url = mp.baseUrl + articleid
 console.log(url)
 const defaultData = { content: "", id: 0 }
 const { data } = articleid ? await useFetch(url) : defaultData;
@@ -62,7 +61,8 @@ export default {
         return {
             hint: '',
             articleid: '',
-            title: ''
+            title: '',
+            mp: {}
         }
     },
     methods: {
@@ -76,15 +76,14 @@ export default {
             const title = this.title
 
             console.log('--- now save event triggled. articleid=' + articleid + '---')
-            // console.log(text)
-            const cuUrl = 'http://localhost:3012/api/content'
-            // console.log('id=' + id + ', articleid=' + articleid)
-            const keyValue = articleid + "t" + new Date()
+            // console.log(text)            
+            const requestSpace = articleid + "t" + new Date()
+            console.log(this.mp)
 
             // this.hint = "save action triggled."
-            useFetch(cuUrl,
+            useFetch(this.mp.baseUrl,
                 {
-                    key: keyValue,
+                    key: requestSpace,
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
