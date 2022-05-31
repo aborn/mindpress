@@ -1,3 +1,8 @@
+export const MINDPRESS_MODE = {
+  static: 'static',
+  server: 'server'
+}
+
 export const DEMO_TEXT_MARKDOWN = `---
 title: 'Demo Page'
 author: {name: aborn, link: aborn}
@@ -27,9 +32,9 @@ Here a list:
 #### Fourth title
 Here's java code snappit highlight.
 ` +
-    "\
+  "\
 ```js"
-    + `
+  + `
     const content = ref(DEMO_TEXT_MARKDOWN)
     const { data: doc } = await useAsyncData('serv', async () => {
       try {
@@ -46,10 +51,10 @@ Here's java code snappit highlight.
       }
     })
 ` +
-"\
+  "\
 ```\
 "
-    + `
+  + `
 
 ##### Fifth title 
 fifth content

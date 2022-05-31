@@ -22,5 +22,11 @@ export default defineNuxtConfig({
             theme: "one-dark-pro",
             preload: ['java', 'javascript', 'typescript', 'vue', 'bash', 'json', 'objc', 'ts', 'js', 'css', 'go', 'html']
         }
+    },
+    runtimeConfig: {
+        minpress: {
+            mode: 'server',   // 'static'
+            baseUrl: 'http://localhost:3012/api/content/'
+        }
     }
 })

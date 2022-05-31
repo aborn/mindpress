@@ -1,39 +1,46 @@
 <script setup>
 const route = useRoute()
-const permalink = '/articles/' + route.params.slug;
-//const articles = await queryContent().where({ permalink: { $eq: permalink } }).findOne()
+const articles = ref();
 
-const articleid = route.params.slug[0]
-const url = 'http://localhost:3012/api/content/' + articleid
-// console.log(url)
+const mp = useRuntimeConfig().minpress
+console.log(mp)
 
-const { data } = await useFetch(url)
-// console.log(data.value)
+if (mp.mode === MINDPRESS_MODE.static) {
+    console.log('static mode.')
+    const permalink = '/articles/' + route.params.slug;
+    const dataL = await queryContent().where({ permalink: { $eq: permalink } }).findOne()
+    articles.value = dataL.value;
+} else {
+    console.log('server mode.')
+    const articleid = route.params.slug[0]
+    const url = mp.baseUrl + articleid
+    // console.log(url)
 
-const content = ref(data.value.content)
+    const { data } = await useFetch(url)
+    // console.log(data.value)
 
-const { data: doc, refresh } = await useAsyncData(articleid, async () => {
-    try {
-        return await $fetch('/api/parse', {
-            method: 'POST',
-            cors: true,
-            body: {
-                id: 'content:_file.md',
-                content: content.value
-            }
-        })
-    } catch (e) {
-        return doc.value
-    }
-})
+    const content = ref(data.value.content)
 
-// console.log(doc.value)
+    const { data: doc, refresh } = await useAsyncData(articleid, async () => {
+        try {
+            return await $fetch('/api/parse', {
+                method: 'POST',
+                cors: true,
+                body: {
+                    id: 'content:_file.md',
+                    content: content.value
+                }
+            })
+        } catch (e) {
+            return doc.value
+        }
+    })
 
-// modify title
-doc.value.title = data.value.title;
-const articles = doc.value
-
-// console.log(articles);
+    // console.log(doc.value)
+    // modify title
+    doc.value.title = data.value.title;
+    articles.value = doc.value
+}
 </script>
 
 <template>
