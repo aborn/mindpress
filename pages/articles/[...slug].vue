@@ -2,8 +2,8 @@
 const route = useRoute()
 const articles = ref();
 
-const mp = useRuntimeConfig().minpress
-console.log(mp)
+const mp = useRuntimeConfig().public.minpress
+// console.log(mp)
 
 if (mp.mode === MINDPRESS_MODE.static) {
     console.log('static mode.')

@@ -24,9 +24,11 @@ export default defineNuxtConfig({
         }
     },
     runtimeConfig: {
-        minpress: {
-            mode: 'server',   // 'static'
-            baseUrl: 'http://localhost:3012/api/content/'
+        public: {
+            minpress: {
+                mode: 'server',   // 'static'
+                baseUrl: 'http://localhost:3012/api/content/'
+            }
         }
     }
 })
