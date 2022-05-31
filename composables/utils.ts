@@ -10,7 +10,13 @@ export const mpTransform = (server: any) => {
         ],
         date: server.createTime,
         updateTime: server.updateTime,
+        createTime: server.createTime,
+        space: server.space,
+        isPublic: server.isPublic === 1,
         permalink: "/articles/" + server.articleid,
+        articleid: server.articleid,
+        id: server.id,
+        editlink: "/edit/" + server.articleid,
         tag: server.tags ? server.tags.split(',') : [],
         "_type": "markdown",
     }
