@@ -27,7 +27,8 @@ export const mpConfig = (config: any) => {
         mode: config.mode,
         contentUrl: config.baseUrl + 'content',
         metaUrl: config.baseUrl + 'meta',
-        spaceUrl: config.baseUrl + 'space'
+        spaceUrl: config.baseUrl + 'space',
+        searchUrl: config.baseUrl + 'search'
     }
 }
 
