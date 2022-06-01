@@ -13,7 +13,7 @@ export const mpTransform = (server: any) => {
         createTime: server.createTime,
         space: server.space,
         isPublic: server.isPublic === 1,
-        permalink: "/articles/" + server.articleid,
+        permalink: "/article/" + server.articleid,
         articleid: server.articleid,
         id: server.id,
         editlink: "/edit/" + server.articleid,

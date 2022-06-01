@@ -1,33 +1,33 @@
 # MindPress
 
-Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://v3.nuxtjs.org) and nuxt.js content 2.0. Markdown editor use [md-editor-v3](https://github.com/imzbf/md-editor-v3). MindPress provide two mode: `server` and `static` (default). For `server mode`, the markdown file edit and update upstream from another server. An java language server implementation here [mindpress-serv](https://github.com/aborn/mindpress-serv).
+Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://v3.nuxtjs.org) and [nuxt content 2.0](https://github.com/nuxt/content). Markdown editor use [md-editor-v3](https://github.com/imzbf/md-editor-v3). MindPress provide two mode: `server` and `static` (default). For `server mode`, the markdown file edit and update upstream from another server. An java language server implementation here [mindpress-serv](https://github.com/aborn/mindpress-serv).
 
 ## server mode
-1. The home page  
+1. The home page `/`  
 
 ![index](assets/img/index.png)
 
-2. Edit file  
+2. Edit file `/edit/articleid`  
 
 ![edit](assets/img/edit.png)
 
-3. Markdown file(article) detail
+3. Markdown file(article) detail `/article/articleid`  
 
 ![article](assets/img/article.png)
 
-4. Create new file
+4. Create new file `/edit`
 
 ![new](assets/img/new.png)
 
-5. Search by keyword
+5. Search by keyword `/search`
 
 ![search](assets/img/search.png)
 
-6. Tag group page
+6. Tag group page `/tag/your_query_tag`
 
 ![tag](assets/img/tag.png)
 
-7. My space docs
+7. My space docs `/my`  
 
 ![my](assets/img/my.png)
 
