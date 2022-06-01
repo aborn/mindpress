@@ -20,18 +20,19 @@ if (data.value.totalElements > 0) {
     })
     // console.log(dataS)
     articles.value = dataS.value;
-    const hint = ''    
+
 } else {
     articles.value = []
-    const hint = 'not find.'
 }
+
+const hint = ref('find <span style="color:red">' + data.value.totalElements + '</span> markdown files contains tag: <span style="color:red">' + tag + '</span>.')
 
 </script>
 
 <template>
     <NavBar />
     <main class="container">
-        <label>{{ hint }}</label>
+        <label style="margin-bottom:1rem" v-html="hint"></label>
         <div class="articles">
             <div class="article" v-for="article in articles" :key="article.id">
                 <PostCard :item="article" />
