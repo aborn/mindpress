@@ -1,9 +1,6 @@
 # MindPress
 
-Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://v3.nuxtjs.org) and nuxt.js content 2.0. MindPress provide two mode: `server` and `static` (default). For `server mode`, the markdown file edit and update upstream from another server. An java language server implementation here [mindpress-serv](https://github.com/aborn/mindpress-serv).
-
-![darkmode](assets/img/mindpress.png)
-![lightmode](assets/img/mindpress_light.png)
+Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://v3.nuxtjs.org) and nuxt.js content 2.0. Markdown editor use [md-editor-v3](https://github.com/imzbf/md-editor-v3). MindPress provide two mode: `server` and `static` (default). For `server mode`, the markdown file edit and update upstream from another server. An java language server implementation here [mindpress-serv](https://github.com/aborn/mindpress-serv).
 
 ## server mode
 1. The home page  
