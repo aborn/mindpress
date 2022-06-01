@@ -11,7 +11,7 @@
     <li><a href="/" class="first">MindPress</a></li>
   </ul>
   <ul>
-    <li><a href="/s" class="secondary">Search</a></li>
+    <li><a href="/search" class="secondary">Search</a></li>
     <li><a href="/edit" class="secondary">New File</a></li>
     <li><a href="/my" class="secondary">My docs</a></li>
     <li>
