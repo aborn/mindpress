@@ -365,10 +365,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nuxt/content@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmmirror.com/@nuxt/content/-/content-2.0.0.tgz#f93f3ee10777fdf2d6c0531c4461604e02be4b98"
-  integrity sha512-HOy3YpIJGPi2b/bXuqwVTIrVPwcjc7TNRU2FVQmrnSpR1F7iGUj257pAbmVw9fDeqNbjeVv2quwntUJlmWb5kw==
+"@nuxt/content@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.npmmirror.com/@nuxt/content/-/content-2.0.1.tgz#aad15f62d2614d0e73e7a5e1381d447b2bc30963"
+  integrity sha512-fqKnE+oWc/yjLBEP4OERELV7soZES9Ah1gyNaZpCG2wF6Q1XXcqL4uHhx7XjetBxK44n9+BTM9qJODVkk0xYnw==
   dependencies:
     "@nuxt/kit" "^3.0.0-rc.3"
     csvtojson "^2.0.10"
@@ -414,7 +414,7 @@
     unist-util-position "^4.0.3"
     unist-util-visit "^4.1.0"
     unstorage "^0.4.1"
-    ws "^8.6.0"
+    ws "^8.7.0"
 
 "@nuxt/devalue@^2.0.0":
   version "2.0.0"
@@ -5567,6 +5567,11 @@ ws@^8.6.0:
   version "8.6.0"
   resolved "https://registry.npmmirror.com/ws/-/ws-8.6.0.tgz#e5e9f1d9e7ff88083d0c0dd8281ea662a42c9c23"
   integrity sha512-AzmM3aH3gk0aX7/rZLYvjdvZooofDu3fFOzGqcSnQ1tOcTWwhM/o+q++E8mAyVVIyUdajrkzWUGftaVSDLn1bw==
+
+ws@^8.7.0:
+  version "8.7.0"
+  resolved "https://registry.npmmirror.com/ws/-/ws-8.7.0.tgz#eaf9d874b433aa00c0e0d8752532444875db3957"
+  integrity sha512-c2gsP0PRwcLFzUiA8Mkr37/MI7ilIlHQxaEAtd0uNMbVMoy8puJyafRlm0bV9MbGSabUPeLrRRaqIBcFcA2Pqg==
 
 xxhashjs@~0.2.2:
   version "0.2.2"
