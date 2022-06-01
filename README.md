@@ -7,24 +7,31 @@ Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://
 
 ## server mode
 1. The home page  
+
 ![index](assets/img/index.png)
 
 2. Edit file  
+
 ![edit](assets/img/edit.png)
 
 3. Markdown file(article) detail
+
 ![article](assets/img/article.png)
 
 4. Create new file
+
 ![new](assets/img/new.png)
 
 5. Search by keyword
+
 ![search](assets/img/search.png)
 
 6. Tag group page
+
 ![tag](assets/img/tag.png)
 
 7. My space docs
+
 ![my](assets/img/my.png)
 
 ## Setup
