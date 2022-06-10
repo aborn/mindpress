@@ -17,11 +17,13 @@ This syntax supercharges regular Markdown to write documents interacting deeply 
 </script>
 
 <template>
-    <NavBar />
-    <main class="container">
-        <div class="article-title">Demo</div>
-        <Markdown :use="text" unwrap="p">
-           
-        </Markdown>
-    </main>
+    <div>
+        <NavBar />
+        <main class="container">
+            <div class="article-title">Demo</div>
+            <Markdown :use="text" unwrap="p">
+
+            </Markdown>
+        </main>
+    </div>
 </template>

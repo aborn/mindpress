@@ -30,13 +30,15 @@ const hint = ref('find <span style="color:red">' + data.value.totalElements + '<
 </script>
 
 <template>
-    <NavBar />
-    <main class="container">
-        <label style="margin-bottom:1rem" v-html="hint"></label>
-        <div class="articles">
-            <div class="article" v-for="article in articles" :key="article.id">
-                <PostCard :item="article" />
+    <div>
+        <NavBar />
+        <main class="container">
+            <label style="margin-bottom:1rem" v-html="hint"></label>
+            <div class="articles">
+                <div class="article" v-for="article in articles" :key="article.id">
+                    <PostCard :item="article" />
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 </template>

@@ -1,13 +1,15 @@
 <template>
-    <NavBar />
-    <main class="container">
-        <input id="title" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
-        <label>{{ hint }}</label>
-        <ColorScheme placeholder="loading..." tag="span">
-            <md-editor v-model="mkdContent" :theme="$colorMode.value" :toolbarsExclude="toolbarsExclude"
-                style="height:480px;" @onChange="changeAction" @onSave="saveAction" />
-        </ColorScheme>
-    </main>
+    <div>
+        <NavBar />
+        <main class="container">
+            <input id="title" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
+            <label>{{ hint }}</label>
+            <ColorScheme placeholder="loading..." tag="span">
+                <md-editor v-model="mkdContent" :theme="$colorMode.value" :toolbarsExclude="toolbarsExclude"
+                    style="height:480px;" @onChange="changeAction" @onSave="saveAction" />
+            </ColorScheme>
+        </main>
+    </div>
 </template>
 
 <script setup>

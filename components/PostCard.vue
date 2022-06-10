@@ -5,13 +5,13 @@
     </div> 
     -->
     <div class="card-content">
-        <a :href="`${link}`" style="text-decoration: none !important;">
+        <NuxtLink :to="`${link}`" style="text-decoration: none !important;">
             <h2 class="card-content-title">{{ item.title }}</h2>
             <div>
                 <span class="card-content-tag" v-for="tag in tags" :key="tag">{{ tag }}</span>
             </div>
             <p class="card-content-desc">{{ formatDesc(item.description) }}</p>
-        </a>
+        </NuxtLink>
     </div>
 
     <div class="card-footer">

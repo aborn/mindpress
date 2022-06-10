@@ -1,12 +1,14 @@
 <template>
-  <NavBar />
-  <main class="container">
-    <div class="articles">
-      <div class="article" v-for="article in articles" :key="article.id">
-        <PostCard :item="article" />
+  <div>
+    <NavBar />
+    <main class="container">
+      <div class="articles">
+        <div class="article" v-for="article in articles" :key="article.id">
+          <PostCard :item="article" />
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
+  </div>
 </template>
 
 <script setup>
