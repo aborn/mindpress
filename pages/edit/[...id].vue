@@ -76,6 +76,12 @@ export default {
             const route = useRoute()
             const articleids = route.params.id
             const articleid = articleids[0] || this.articleid
+
+            const extInfo = JSON.stringify(simpleParser(text))
+            console.log(extInfo)
+            if (extInfo.title && extInfo.title !== '') {
+                this.title = extInfo.title
+            }
             const title = this.title
 
             console.log('--- now save event triggled. articleid=' + articleid + '---')
@@ -94,7 +100,8 @@ export default {
                     body: {
                         "articleid": articleid,
                         "content": text,
-                        "title": title
+                        "title": title,
+                        "extInfo": extInfo
                     }
                 }).then(res => {
                     const data = res.data.value
