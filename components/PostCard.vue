@@ -29,10 +29,6 @@
 <script>
 export default {
     props: {
-        description: {
-            type: Boolean,
-            default: true
-        },
         item: {
             type: Object,
             required: true
