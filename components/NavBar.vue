@@ -16,7 +16,7 @@
     </ul>
     <ul>
       <li><NuxtLink to="/search" class="secondary">Search</NuxtLink></li>
-      <li><NuxtLink to="/edit" class="secondary">New File</NuxtLink></li>
+      <li><NuxtLink to="/edit" class="secondary">New file</NuxtLink></li>
       <li><NuxtLink to="/my" class="secondary">My docs</NuxtLink></li>
       <li>
         <NuxtLink to="https://github.com/aborn/mindpress" class="contrast" aria-label="Pico GitHub repository"
