@@ -13,7 +13,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "generate": "MINDPRESS_MODE=ghpages nuxt generate",
     "preview": "nuxt preview",
     "deploy": "touch ./dist/.nojekyll && push-dir --dir=dist --branch=gh-pages --cleanup",
     "gh": "npx serve -s ./dist"
