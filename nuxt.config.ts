@@ -3,7 +3,7 @@ import { defineNuxtConfig } from 'nuxt'
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
     app: {
-        baseURL: '/mindpress/',   // default '/'  (change to your need.)
+        baseURL: process.env.MINDPRESS_ENV === 'dev' ? '/' : '/mindpress/',   // default '/'  (change to your need.)
         head: {
             title: 'MindPress, Press your mind gracefully.',
             link: [
