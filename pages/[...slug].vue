@@ -11,7 +11,7 @@
 
       <ContentRenderer :value="doc">
         <template #empty>
-          <p>No content found.</p>
+          <p>No contents found.</p>
         </template>
       </ContentRenderer>
     </ContentDoc>

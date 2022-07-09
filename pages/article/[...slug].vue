@@ -39,14 +39,15 @@
 <script setup>
 const route = useRoute()
 const articles = ref()
+console.log('article page...')
 
 const mp = mpConfig(useRuntimeConfig().public.minpress)
-// console.log(mp)
 
 if (mp.mode === MINDPRESS_MODE.static) {
     console.log('static mode.')
-    const permalink = '/articles/' + route.params.slug;
+    const permalink = '/articles/' + route.params.slug[0];
     const dataL = await queryContent().where({ permalink: { $eq: permalink } }).findOne()
+    console.log(dataL)
     articles.value = dataL.value;
 } else {
     console.log('server mode.')

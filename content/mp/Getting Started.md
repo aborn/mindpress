@@ -1,7 +1,7 @@
 ---
 title: Getting Started
 authors: [{name: Aborn Jiang, link: aborn.jiang}, {name: John, link: aborn.jiang}]
-permalink: /articles/8dd81e
+permalink: /article/8dd81e
 date: 2022-05-22
 category:
   - MindPress
