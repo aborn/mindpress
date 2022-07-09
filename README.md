@@ -1,7 +1,7 @@
 # MindPress
 [![cd](https://github.com/aborn/mindpress/actions/workflows/cd.yml/badge.svg)](https://github.com/aborn/mindpress/actions/workflows/cd.yml)
 
-Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://v3.nuxtjs.org) and [nuxt content 2.0](https://github.com/nuxt/content). Markdown editor use [md-editor-v3](https://github.com/imzbf/md-editor-v3). MindPress provide two mode: `server` and `static` (default). For `server mode`, the markdown file edit and update upstream from another server. An java language server implementation here [mindpress-serv](https://github.com/aborn/mindpress-serv).
+Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://v3.nuxtjs.org) and [nuxt content 2.0](https://github.com/nuxt/content). Markdown editor use [md-editor-v3](https://github.com/imzbf/md-editor-v3). MindPress provide two mode: `server` and `static` (default). For `server mode`, the markdown file edit and update upstream from another server. An java language server implementation here [mindpress-serv](https://github.com/aborn/mindpress-serv). For `static mode`, mindpress generate static site from markdown files, here is static site [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/).
 
 ## server mode
 1. The home page `/`  
