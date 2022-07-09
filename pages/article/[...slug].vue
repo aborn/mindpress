@@ -45,7 +45,7 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 
 if (mp.mode === MINDPRESS_MODE.static) {
     console.log('static mode.')
-    const permalink = '/articles/' + route.params.slug[0];
+    const permalink = '/article/' + route.params.slug[0];
     const dataL = await queryContent().where({ permalink: { $eq: permalink } }).findOne()
     console.log(dataL)
     articles.value = dataL.value;
