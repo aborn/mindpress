@@ -39,16 +39,26 @@
 <script setup>
 const route = useRoute()
 const articles = ref()
-console.log('article page...')
-
+const formatDate = mpFormatDate;
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 
 if (mp.mode === MINDPRESS_MODE.static) {
+    const getAuthor = (dataL) => {
+        if (!dataL) { return '' }
+        if (dataL.author) { return dataL.author.name }
+        if (dataL.authors) {
+            return dataL.authors[0].name
+        }
+    }
     console.log('static mode.')
     const permalink = '/article/' + route.params.slug[0];
     const dataL = await queryContent().where({ permalink: { $eq: permalink } }).findOne()
-    console.log(dataL)
-    articles.value = dataL.value;
+    // console.log(dataL)
+    articles.value = dataL
+    articles.value.time = dataL.date
+    articles.value.author = getAuthor(dataL)
+    // console.log('--------after.')
+    // console.log(articles)
 } else {
     console.log('server mode.')
     const articleid = route.params.slug[0]
@@ -82,5 +92,4 @@ if (mp.mode === MINDPRESS_MODE.static) {
     doc.value.articleid = data.value.articleid
     articles.value = doc.value
 }
-const formatDate = mpFormatDate;
 </script>
