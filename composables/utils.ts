@@ -22,6 +22,18 @@ export const mpTransform = (server: any) => {
     }
 }
 
+export const staticMdTransform = (md: any) => {
+    return {
+        title: md.title,
+        description: md.description,
+        permalink: md.permalink ? md.permalink : md._path,
+        date: md.date ? md.date : new Date(),
+        createTime: md.date ? md.date : new Date(),
+        id: md._id,
+        articleid: md._id
+    }
+}
+
 export const mpConfig = (config: any) => {
     return {
         mode: config.mode,

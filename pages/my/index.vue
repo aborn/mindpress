@@ -22,8 +22,8 @@
                             </NuxtLink>
                         </th>
                         <td>{{ article.title }}</td>
-                        <td>{{ formatDate(article.createTime, 'zh') }}</td>
-                        <td>{{ formatDate(article.updateTime, 'zh') }}</td>
+                        <td>{{ formatDate(article.createTime, 'en') }}</td>
+                        <td>{{ formatDate(article.updateTime, 'en') }}</td>
                         <td>{{ article.space }}</td>
                         <td>{{ article.isPublic }}</td>
                         <td>
@@ -66,8 +66,10 @@ const formatDate = mpFormatDate;
 if (mp.mode === MINDPRESS_MODE.static) {
     console.log('static mode')
     const { data } = await useAsyncData('home', () => queryContent().find())
-    // console.log(data.value)
-    articles.value = data.value;
+    const tdata = data.value.map((value) => {
+        return staticMdTransform(value)
+    })    
+    articles.value = tdata;
 } else {
     console.log('server mode')
     const { data: dataServer } = await useFetch(mp.metaUrl)
