@@ -21,7 +21,9 @@ export default defineNuxtConfig({
     content: {
         highlight: {
             theme: "one-dark-pro",
-            preload: ['java', 'javascript', 'typescript', 'vue', 'bash', 'json', 'objc', 'ts', 'js', 'css', 'go', 'html']
+            preload: ['bash', 'c', 'csharp', 'c#', 'css', 'docker', 'go', 'groovy', 'html', 'java', 'javascript', 'js', 'jsx',
+                'json', 'julia', 'kotlin', 'markdown', 'lua', 'less', 'md', 'nginx', 'objc', 'python', 'py', 'ruby', 'rb', 'rust',
+                'rs', 'swift', 'sql', 'typescript', 'ts', 'tsx', 'vue', 'xml', 'yaml']
         }
     },
     runtimeConfig: {
