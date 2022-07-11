@@ -16,7 +16,7 @@
     "generate": "MINDPRESS_MODE=ghpages nuxt generate",
     "preview": "nuxt preview",
     "deploy": "touch ./dist/.nojekyll && push-dir --dir=dist --branch=gh-pages --cleanup",
-    "gh": "npx serve -s ./dist"
+    "gh": "nuxt generate && npx serve -s ./dist"
   },
   "devDependencies": {
     "@nuxt/content": "2.0.1",

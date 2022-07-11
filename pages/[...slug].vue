@@ -12,7 +12,7 @@
 
         <ContentRenderer :value="doc">
           <template #empty>
-            <p>No contents found.</p>
+            <p>No contents found. This is a default page.</p>
           </template>
         </ContentRenderer>
       </ContentDoc>
