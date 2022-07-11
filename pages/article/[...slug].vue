@@ -29,7 +29,7 @@
             </div>
             <ContentRenderer :value="articles">
                 <template #empty>
-                    <p>No content found.</p>
+                    <label style="margin-bottom:1rem" v-html="hint"></label>
                 </template>
             </ContentRenderer>
         </main>
@@ -39,10 +39,12 @@
 <script setup>
 const route = useRoute()
 const articles = ref()
+const hint = ref('')
 const formatDate = mpFormatDate;
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 
 if (mp.mode === MINDPRESS_MODE.static) {
+    hint.value = 'No content found.'
     const getAuthor = (dataL) => {
         if (!dataL) { return '' }
         if (dataL.author) { return dataL.author.name }
@@ -84,12 +86,14 @@ if (mp.mode === MINDPRESS_MODE.static) {
         }
     })
 
-    // console.log(doc.value)
-    // modify title
-    doc.value.title = data.value.title
-    doc.value.author = data.value.updateBy
-    doc.value.time = data.value.updateTime
-    doc.value.articleid = data.value.articleid
-    articles.value = doc.value
+    if (!doc.value.success) {
+        hint.value = 'Markdown 内容解析异常: <span style="color:red">' + doc.value.msg + '</span>，请找管理员处理。'
+    }
+    articles.value = doc.value.data
+    articles.value.title = data.value.title
+    articles.value.author = data.value.createBy
+    articles.value.time = data.value.createTime
+    articles.value.articleid = data.value.articleid
+    articles.value.editable = data.value.editable
 }
 </script>

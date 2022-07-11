@@ -98,10 +98,11 @@ export default {
                         "Content-Type": "application/json"
                     },
                     body: {
-                        "articleid": articleid,
-                        "content": text,
-                        "title": title,
-                        "extInfo": extInfo
+                        articleid: articleid,
+                        content: text,
+                        title: title,
+                        extInfo: extInfo,
+                        pub: true
                     }
                 }).then(res => {
                     const data = res.data.value
