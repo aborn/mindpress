@@ -114,7 +114,7 @@ export default {
 
                     this.hint = data ? data.msg : error;
                     if (data && data.success) {
-                        this.hint = data.msg + " " + new Date();
+                        this.hint = data.msg + " ,Time:" + new Date();
                         if (data.ext && data.ext.articleid) {
                             console.log(data.ext.articleid)
                             this.articleid = data.ext.articleid   // begin edit it when file created.
