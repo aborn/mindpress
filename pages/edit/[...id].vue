@@ -4,6 +4,7 @@
         <main class="container">
             <input id="title" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
             <label>{{ hint }}</label>
+            <NuxtLink v-if="articleid" :to="`/article/${articleid}`" class="secondary" target="_blank">Article Detail</NuxtLink>
             <ColorScheme placeholder="loading..." tag="span">
                 <md-editor v-model="mkdContent" :theme="$colorMode.value" :toolbarsExclude="toolbarsExclude"
                     style="height:480px;" @onChange="changeAction" @onSave="saveAction" />
