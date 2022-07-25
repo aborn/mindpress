@@ -87,7 +87,7 @@ if (mp.mode === MINDPRESS_MODE.static) {
     })
 
     if (!doc.value.success) {
-        hint.value = 'Markdown 内容解析异常: <span style="color:red">' + doc.value.msg + '</span>，请找管理员处理。'
+        hint.value = 'Markdown parser error: <span style="color:red">' + doc.value.msg + '</span>. Program language does not support.'
     }
     articles.value = doc.value.data
     articles.value.title = data.value.title
