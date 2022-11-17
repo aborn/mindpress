@@ -1,8 +1,8 @@
-import { defineEventHandler, useBody } from 'h3'
+import { defineEventHandler, readBody } from 'h3'
 import { parseContent } from '#content/server'
 
 export default defineEventHandler(async (event) => {
-  const body = await useBody(event)
+  const body = await readBody(event)
 
   try {
     // @ts-ignore
