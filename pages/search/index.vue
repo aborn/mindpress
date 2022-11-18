@@ -1,3 +1,23 @@
+<template>
+  <div>
+    <NavBar />
+    <main class="container">
+      <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
+        <input type="text" style="height:2.5rem" v-model="search" placeholder="Please input your keyword." />
+        <button class="outline" style="margin-left: .5rem;height:2.5rem;width: 10rem;">Search</button>
+      </form>
+
+      <label style="margin-bottom:1rem" v-html="hint"></label>
+
+      <div class="articles">
+        <div class="article" v-for="article in articles" :key="article.id">
+          <PostCard :item="article" />
+        </div>
+      </div>
+    </main>
+  </div>
+</template>
+
 <script setup>
 import { ref } from "vue";
 import "../../app.css";
@@ -54,23 +74,3 @@ export default {
   }
 }
 </script>
-
-<template>
-  <div>
-    <NavBar />
-    <main class="container">
-      <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
-        <input type="text" style="height:2.5rem" v-model="search" placeholder="Please input your keyword." />
-        <button class="outline" style="margin-left: .5rem;height:2.5rem;width: 10rem;">Search</button>
-      </form>
-
-      <label style="margin-bottom:1rem" v-html="hint"></label>
-
-      <div class="articles">
-        <div class="article" v-for="article in articles" :key="article.id">
-          <PostCard :item="article" />
-        </div>
-      </div>
-    </main>
-  </div>
-</template>

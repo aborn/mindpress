@@ -1,3 +1,15 @@
+<template>
+    <div>
+        <NavBar />
+        <main class="container">
+            <div class="article-title">Demo</div>
+            <Markdown :use="text" unwrap="p">
+
+            </Markdown>
+        </main>
+    </div>
+</template>
+
 <script setup>
 const route = useRoute()
 const permalink = '/articles/' + route.params.slug;
@@ -15,15 +27,3 @@ This syntax supercharges regular Markdown to write documents interacting deeply 
 
 // console.log(articles);
 </script>
-
-<template>
-    <div>
-        <NavBar />
-        <main class="container">
-            <div class="article-title">Demo</div>
-            <Markdown :use="text" unwrap="p">
-
-            </Markdown>
-        </main>
-    </div>
-</template>
