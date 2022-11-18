@@ -12,9 +12,10 @@
   "license": "MIT",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev --port=6001",
+    "dev": "nuxt dev --port=7001",
     "generate": "MINDPRESS_MODE=ghpages nuxt generate",
     "preview": "nuxt preview",
+    "start": "nuxt build && PORT=8001 node .output/server/index.mjs",
     "deploy": "touch ./dist/.nojekyll && push-dir --dir=dist --branch=gh-pages --cleanup",
     "gh": "npx nuxi generate && npx serve -s ./dist"
   },
