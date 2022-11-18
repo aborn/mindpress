@@ -1,23 +1,31 @@
-export const mpTransform = (server: any) => {
+
+import { MarkdownMetaS, MarkdownMeta } from './types';
+
+export const mpTransform = (server: MarkdownMetaS): MarkdownMeta => {
     return {
-        title: server.title,
-        description: server.desc,
+        articleid: server.articleid,
         authors: [
             {
                 name: server.createBy,
                 link: server.createBy
             }
         ],
-        date: server.createTime,
-        updateTime: server.updateTime,
+        category: server.category,
+        createBy: server.createBy,
         createTime: server.createTime,
-        space: server.space,
-        isPublic: server.isPublic === 1,
-        permalink: "/article/" + server.articleid,
-        articleid: server.articleid,
-        id: server.id,
         editlink: "/edit/" + server.articleid,
-        tag: server.tags ? server.tags.split(',') : [],
+        date: server.createTime,
+        description: server.desc,
+        id: server.id,
+        isPublic: server.isPublic === 1,
+        likeCount: server.likeCountVo || 0,
+        permalink: "/article/" + server.articleid,
+        reviewInfo: server.reviewInfo,
+        status: server.status,
+        space: server.space,
+        tags: server.tags ? server.tags.split(',') : [],
+        title: server.title,
+        updateTime: server.updateTime,
         "_type": "markdown",
     }
 }
@@ -44,7 +52,7 @@ export const mpConfig = (config: any) => {
     }
 }
 
-export const mpFormatDate = (date, lang) => {
+export const mpFormatDate = (date: any, lang: string) => {
     if (!date) { return '' }
     return new Date(date).toLocaleDateString(lang || 'en', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })
 }
@@ -52,7 +60,7 @@ export const mpFormatDate = (date, lang) => {
 export const simpleParser = (text: string) => {
     let lines = text.split('\n');
     let count = 0;
-    let result = {}
+    let result = {} as any;
     let legalKeys = ['title', 'author', 'categories', 'category', 'tags', 'tag', 'date', 'permalink', 'desc']
     let pointer = 0
     for (var i = 0; i < lines.length; i++) {
@@ -104,7 +112,7 @@ export const simpleParser = (text: string) => {
 export const parseToJson = (text: string) => {
     let textVaule = (text.trim().startsWith('{') && text.trim().endsWith('}')) ?
         text.substring(text.indexOf('{') + 1, text.indexOf('}')) : text
-    let obj = {}
+    let obj = {} as any;
     for (let item of textVaule.split(',')) {
         if (item.includes(':')) {
             let itemArr = item.split(':')

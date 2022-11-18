@@ -18,59 +18,43 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref } from "vue";
+import { MarkdownMetaPageResponse, MarkdownMetaS, MarkdownMeta } from "~~/composables/types";
 import "../../app.css";
 const search = ref("")
 const mp = mpConfig(useRuntimeConfig().public.minpress)
+const hint = ref("")
+const articles = ref<MarkdownMeta[]>([]);
 
-</script>
+function searchShows(searchKey: string) {
+  const url = mp.searchUrl + "?q=" + searchKey
+  console.log(url)
 
-<script>
-export default {
-  data: () => {
-    return {
-      hint: '',
-      search: '',
-      mp: {},
-      articles: []
-    }
-  },
-  methods: {
-    searchShows(search) {
-      const url = this.mp.searchUrl + "?q=" + search.value
-      console.log(url)
+  useFetch(url).then(res => {
+    const data = res.data.value as MarkdownMetaPageResponse
+    console.log(data)
 
-      useFetch(url).then(res => {
-        const data = res.data.value
-        console.log(data)
-
-        if (data.totalElements > 0) {
-          const dataS = ref([])
-          dataS.value = data.content.map((value) => {
-            return mpTransform(value)
-          })
-          // console.log(dataS)
-          this.articles = dataS.value;
-          this.hint = 'find <span style="color:red">' + data.totalElements + "</span> markdown files."
-          console.log(this.articles)
-          console.log(this.hint)
-        } else {
-          this.articles = []
-          this.hint = "no markdown file find."
-        }
-      }, error => {
-        this.hint = "http request error. " + error
-        this.articles = []
+    if (data.totalElements > 0) {
+      articles.value = data.content.map((value: MarkdownMetaS) => {
+        return mpTransform(value)
       })
-    },
-    submit(e) {
-      console.log(e)
-      const search = ref(this.search)
-      console.log('submit... q=' + search.value)
-      if (!search.value) return;
-      this.searchShows(search);
+      hint.value = 'find <span style="color:red">' + data.totalElements + "</span> markdown files."
+      console.log(articles.value)
+      console.log(hint.value)
+    } else {
+      articles.value = []
+      hint.value = "no markdown file find."
     }
-  }
+  }, error => {
+    hint.value = "http request error. " + error
+    articles.value = []
+  })
+}
+
+function submit() {
+  console.log('submit... q=' + search.value)
+  if (!search.value) return;
+  searchShows(search.value);
 }
 </script>
