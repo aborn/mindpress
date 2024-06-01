@@ -4,7 +4,8 @@
         <main class="container">
             <input id="title" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
             <label>{{ hint }}</label>
-            <NuxtLink v-if="articleid" :to="`/article/${articleid}`" class="secondary" target="_blank">Article Detail</NuxtLink>
+            <NuxtLink v-if="articleid" :to="`/article/${articleid}`" class="secondary" target="_blank">Article Detail
+            </NuxtLink>
             <ColorScheme placeholder="loading..." tag="span">
                 <md-editor v-model="mkdContent" :theme="$colorMode.value" :toolbarsExclude="toolbarsExclude"
                     style="height:480px;" @onChange="changeAction" @onSave="saveAction" />
@@ -13,7 +14,7 @@
     </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue';
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
@@ -22,14 +23,18 @@ import { mpConfig } from '~~/composables/utils';
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
 const articleids = route.params.id
-const articleid = articleids[0]
+const articleid = ref(articleids[0])
+
+const hint = ref('')
+const title = ref('')
+
 const toolbarsExclude = ['github']
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 
-const url = mp.contentUrl + '/' + articleid
+const url = mp.contentUrl + '/' + articleid.value
 console.log(url)
 const defaultData = { content: "", id: 0 }
-const { data } = articleid ? await useFetch(url) : defaultData;
+const { data } = articleid.value ? await useFetch(url) : defaultData;
 // console.log(data)
 
 const processData = (data) => {
@@ -46,86 +51,75 @@ const processData = (data) => {
         return {
             content: "",
             id: 0,
-            msg: "error http fetch content, articleid=" + articleid,
+            msg: "error http fetch content, articleid=" + articleid.value,
             status: false,
             title: ""
         }
     }
 }
 
-const pData = articleid ? processData(data) : defaultData;
+const pData = articleid.value ? processData(data) : defaultData;
 const mkdContent = ref(pData.content)
-const title = ref(pData.title)
-// console.log(mkdContent)
-</script>
+title.value = pData.title
 
-<script>
-export default {
-    data: () => {
-        return {
-            hint: '',
-            articleid: '',
-            title: '',
-            mp: {}
-        }
-    },
-    methods: {
-        changeAction(e) {
-            // console.log('content changed. data=' + new Date())
-        },
-        saveAction(text) {
-            const route = useRoute()
-            const articleids = route.params.id
-            const articleid = articleids[0] || this.articleid
-
-            const extInfo = JSON.stringify(simpleParser(text))
-            console.log(extInfo)
-            if (extInfo.title && extInfo.title !== '') {
-                this.title = extInfo.title
-            }
-            const title = this.title
-
-            console.log('--- now save event triggled. articleid=' + articleid + '---')
-            // console.log(text)            
-            const requestSpace = articleid + "t" + new Date()
-            console.log(this.mp)
-
-            // this.hint = "save action triggled."
-            useFetch(this.mp.contentUrl,
-                {
-                    key: requestSpace,
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: {
-                        articleid: articleid,
-                        content: text,
-                        title: title,
-                        extInfo: extInfo,
-                        pub: true
-                    }
-                }).then(res => {
-                    const data = res.data.value
-                    const error = res.error.value
-                    // res.refresh()   // TODO: Cannot undstand why must it?
-                    console.log(data)
-                    console.log(error)
-
-                    this.hint = data ? data.msg : error;
-                    if (data && data.success) {
-                        this.hint = data.msg + " ,Time:" + new Date();
-                        if (data.ext && data.ext.articleid) {
-                            console.log(data.ext.articleid)
-                            this.articleid = data.ext.articleid   // begin edit it when file created.
-                        }
-                    }
-                }, error => {
-                    console.log('exception...')
-                    console.log(error)
-                })
-        }
-    }
+function changeAction(e) {
+    // console.log('content changed. data=' + new Date())
 }
-</script>
 
+function saveAction(text) {
+    const route = useRoute()
+    const extInfo = JSON.stringify(simpleParser(text))
+    console.log(extInfo)
+    if (extInfo.title && extInfo.title !== '') {
+        title.value = extInfo.title
+    }
+
+    console.log('title:' + title.value)
+    console.log('--- now save event triggled. articleid=' + articleid.value + '---')
+    // console.log(text)            
+    const requestSpace = articleid + "t" + new Date()
+
+    const bodyContent = {
+        articleid: articleid.value,
+        content: text,
+        title: title.value,
+        extInfo: JSON.stringify(extInfo),
+        pub: true, // 默认都为开文档
+    }
+    hint.value = "保存中......"
+
+    console.log(mp)
+
+    console.log(mp.contentUrl)
+    // this.hint = "save action triggled."
+    useFetch(mp.contentUrl,
+        {
+            key: requestSpace,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: bodyContent
+        }).then(res => {
+            const data = res.data.value as any
+            const error = res.error.value
+            // res.refresh()   // TODO: Cannot undstand why must it?
+            console.log(data)
+            console.log(error)
+
+            hint.value = data ? data.msg : error
+            if (data && data.success) {
+                hint.value = data.msg + " ,Time:" + new Date();
+                if (data.ext && data.ext.articleid) {
+                    console.log(data.ext.articleid)
+                    articleid.value = data.ext.articleid // begin edit it when file created success.
+                    console.log('saved articleid: ' + articleid.value)
+                }
+            }
+        }, error => {
+            console.log('exception...')
+            console.log(error)
+        })
+}
+
+</script>
