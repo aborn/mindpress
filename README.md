@@ -34,7 +34,7 @@ Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://
 
 ## Setup
 
-Make sure to install the dependencies:
+Make sure to install the dependencies: (Node 18+)
 
 ```bash
 # yarn
