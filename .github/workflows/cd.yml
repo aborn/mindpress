@@ -1,4 +1,4 @@
-name: cd
+name: mindpress
 
 on: [push, pull_request]
 
@@ -17,17 +17,21 @@ jobs:
 
       - name: Setup node env
         uses: actions/setup-node@v2.1.2
+        working-directory: mindpress-fe
         with:
           node-version: ${{ matrix.node }}
 
       - name: Install dependencies
+        working-directory: mindpress-fe
         run: yarn
 
       - name: Generate
+        working-directory: mindpress-fe
         run: yarn generate
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
+        working-directory: mindpress-fe
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
