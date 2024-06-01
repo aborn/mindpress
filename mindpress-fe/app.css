@@ -156,6 +156,16 @@ nav>ul:first-of-type li:nth-of-type(2) {
   color: var(--h1-color);
 }
 
+.container {
+  max-width: 1130px;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 80px;
+  padding-right: var(--spacing);
+  padding-left: var(--spacing);
+}
+
 .article-meta {
   font-size: 1.167rem;
   text-align: center;
