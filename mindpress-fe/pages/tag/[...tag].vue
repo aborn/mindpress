@@ -14,7 +14,6 @@
 
 <script setup>
 import { ref } from "vue";
-import "../../app.css";
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const route = useRoute()
 const tags = route.params.tag
