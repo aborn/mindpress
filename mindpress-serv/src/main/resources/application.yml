@@ -1,0 +1,44 @@
+server:
+  port: 3012
+  session-timeout: 1800
+
+spring:
+  freemarker:
+    check-template-location: false
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+  #配置 Jpa
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+swagger:
+  controller: com.sancaiwulian.sms
+  description: mindpress api
+  enable: true
+  license: MIT
+  licenseUrl: https://github.com/aborn/mindpress-serv
+  title: Mindpress API
+  version: 1.0.0
+
+task:
+  pool:
+    # 核心线程池大小
+    core-pool-size: 10
+    # 最大线程数
+    max-pool-size: 30
+    # 活跃时间
+    keep-alive-seconds: 60
+    # 队列容量
+    queue-capacity: 50
