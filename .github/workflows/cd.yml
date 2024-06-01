@@ -17,7 +17,6 @@ jobs:
 
       - name: Setup node env
         uses: actions/setup-node@v2.1.2
-        working-directory: mindpress-fe
         with:
           node-version: ${{ matrix.node }}
 
