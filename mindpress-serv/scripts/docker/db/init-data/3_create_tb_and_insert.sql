@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS `mp_markdown_content`;
 CREATE TABLE `mp_markdown_content`
 (
-    `id`          bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `id`          bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
     `articleid`   varchar(128) NOT NULL COMMENT 'markdown article uniq id',
     `content`     text COMMENT 'Markdown content',
     `create_by`   varchar(255) NOT NULL DEFAULT '' COMMENT 'creator,author',
@@ -16,7 +16,7 @@ CREATE TABLE `mp_markdown_content`
 DROP TABLE IF EXISTS `mp_markdown_meta`;
 CREATE TABLE `mp_markdown_meta`
 (
-    `id`            bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `id`          bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
     `articleid`     varchar(128)  NOT NULL DEFAULT '' COMMENT 'markdown article uniq id',
     `title`         varchar(255)  NOT NULL DEFAULT '' COMMENT 'title',
     `description`   varchar(1024) NOT NULL DEFAULT '' COMMENT 'description',
@@ -39,7 +39,7 @@ CREATE TABLE `mp_markdown_meta`
 DROP TABLE IF EXISTS `mp_markdown_space`;
 CREATE TABLE `mp_markdown_space`
 (
-    `id`          bigint       NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `id`          bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
     `name`        varchar(255) NOT NULL COMMENT 'space uniq name',
     `desc`        varchar(255) DEFAULT NULL COMMENT 'space description',
     `owner`       varchar(255) NOT NULL COMMENT 'space owner',
