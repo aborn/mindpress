@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import MdEditor, { Themes, ToolbarNames } from 'md-editor-v3'
+import MdEditor, { type Themes, type ToolbarNames } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css';
 import { mpConfig } from '~~/composables/utils';
 
@@ -34,7 +34,6 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 
 const url = mp.contentUrl + '/' + articleid.value
 console.log(url)
-const defaultData = { content: "", id: 0 }
 // console.log(data)
 
 async function getData() {

@@ -1,5 +1,5 @@
 
-import { MarkdownMetaS, MarkdownMeta } from './types';
+import type { MarkdownMetaS, MarkdownMeta } from './types';
 
 export const mpTransform = (server: MarkdownMetaS): MarkdownMeta => {
     return {

@@ -21,7 +21,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { MarkdownMetaPageResponse, MarkdownMetaS, MarkdownMeta } from "~~/composables/types";
-import "../../app.css";
 const search = ref("")
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const hint = ref("")

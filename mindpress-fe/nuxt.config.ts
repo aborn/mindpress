@@ -12,6 +12,9 @@ export default defineNuxtConfig({
             ]
         }
     },
+    css: [
+        '@/assets/css/app.css',
+    ],
     modules: [
         '@nuxt/content',
         '@nuxtjs/color-mode'
