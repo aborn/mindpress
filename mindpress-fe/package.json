@@ -26,6 +26,7 @@
     "push-dir": "^0.4.1"
   },
   "dependencies": {
-    "md-editor-v3": "^2.0.0"
+    "md-editor-v3": "^2.0.0",
+    "axios": "^1.1.3"
   }
 }

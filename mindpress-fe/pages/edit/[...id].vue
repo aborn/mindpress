@@ -25,6 +25,7 @@ const route = useRoute()
 const articleids = route.params.id
 const articleid = ref(articleids[0])
 
+const mkdContent = ref('')
 const hint = ref('')
 const title = ref('')
 
@@ -34,41 +35,32 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 const url = mp.contentUrl + '/' + articleid.value
 console.log(url)
 const defaultData = { content: "", id: 0 }
-const { data } = articleid.value ? await useFetch(url) : defaultData;
 // console.log(data)
 
-const processData = (data) => {
-    if (data.value) {
-        return {
-            content: data.value.content,
-            title: data.value.title,
-            id: data.value.id,
-            msg: 'success',
-            status: true
+async function getData() {
+    return await request({
+        url: url,
+        method: "get",
+        headers: {
+            uid: ''
         }
-    } else {
-        console.log('error in http')
-        return {
-            content: "",
-            id: 0,
-            msg: "error http fetch content, articleid=" + articleid.value,
-            status: false,
-            title: ""
-        }
-    }
+    }) as any;
 }
 
-const pData = articleid.value ? processData(data) : defaultData;
-const mkdContent = ref(pData.content)
-title.value = pData.title
+if (articleid.value) {
+    const dataS = await getData()
+    mkdContent.value = dataS.content
+    title.value = dataS.title
+} else {
+}
 
-function changeAction(e) {
+function changeAction(e: any) {
     // console.log('content changed. data=' + new Date())
 }
 
-function saveAction(text) {
+function saveAction(text: string) {
     const route = useRoute()
-    const extInfo = JSON.stringify(simpleParser(text))
+    const extInfo = simpleParser(text)
     console.log(extInfo)
     if (extInfo.title && extInfo.title !== '') {
         title.value = extInfo.title
