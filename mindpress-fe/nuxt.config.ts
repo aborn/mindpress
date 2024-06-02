@@ -30,7 +30,7 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             minpress: {
-                mode: 'server',   // 'static' (default) or 'server'
+                mode: 'static',   // 'static' (default) or 'server'
                 baseUrl: 'http://localhost:3012/api/mindpress/'
             }
         }
