@@ -1,5 +1,6 @@
 package com.github.aborn.mindpress.rest;
 
+import com.github.aborn.mindpress.inf.es.MindpressESClient;
 import com.github.aborn.mindpress.service.MarkdownMetaService;
 import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
 import io.swagger.annotations.Api;
@@ -25,10 +26,20 @@ public class MindpressController {
 
     private final MarkdownMetaService markdownMetaService;
 
+    private final MindpressESClient mindpressESClient;
+
     @GetMapping("search")
     @ApiOperation("query Markdown meta infos")
     @CrossOrigin
     public ResponseEntity<Object> queryMarkdownMeta(MarkdownMetaQueryCriteria criteria, Pageable pageable) {
         return new ResponseEntity<>(markdownMetaService.queryAll(criteria, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("es")
+    @ApiOperation("init es")
+    @CrossOrigin
+    public ResponseEntity<Object> es() {
+        mindpressESClient.transferData();
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 }

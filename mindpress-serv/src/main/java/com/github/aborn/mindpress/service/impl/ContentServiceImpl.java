@@ -59,6 +59,11 @@ public class ContentServiceImpl implements ContentService {
         return contentMapper.toDto(content);
     }
 
+    public List<ContentDto> findAllByArticleIds(List<String> articleIds) {
+        List<Content> contents = contentRepository.findAllByArticleIds(articleIds);
+        return contentMapper.toDto(contents);
+    }
+
     @Override
     @Transactional
     public ContentDto findByArticleId(String id) {

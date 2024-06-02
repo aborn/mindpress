@@ -1,6 +1,7 @@
 package com.github.aborn.mindpress.service.dto;
 
 import com.github.aborn.mindpress.inf.annotation.Query;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -8,6 +9,7 @@ import lombok.Data;
  * @date 2022-05-29
  **/
 @Data
+@Builder
 public class MarkdownMetaQueryCriteria {
 
     @Query(blurry = "title,desc")
