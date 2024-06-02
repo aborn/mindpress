@@ -49,10 +49,10 @@ public class MindpressESClient {
             boolean exists = restHighLevelClientService.indexExists(MindpressESConfig.MP_ES_INDEX_NAME);
             if (!exists) {
                 JSONObject jsonObjectS = JSONObject.parseObject( MindpressESConfig.MP_ES_SETTINGS);
-                JSONObject jsonObjectM = JSONObject.parseObject( MindpressESConfig.MP_ES_MAPPINGS);
+                JSONObject jsonObjectM = JSONObject.parseObject( MindpressESConfig.BuildMappings());
                 CreateIndexResponse res = restHighLevelClientService.createIndex(MindpressESConfig.MP_ES_INDEX_NAME,
                         MindpressESConfig.MP_ES_SETTINGS,
-                        MindpressESConfig.MP_ES_MAPPINGS);
+                        MindpressESConfig.BuildMappings());
             }
             return true;
         } catch (IOException e) {
@@ -69,7 +69,7 @@ public class MindpressESClient {
         }
         MarkdownMetaQueryCriteria criteria = MarkdownMetaQueryCriteria.builder()
                 .build();
-        Pageable pageRequest = PageRequest.of(1, 10, Sort.by("createTime").descending());
+        Pageable pageRequest = PageRequest.of(0, 10, Sort.by("createTime").descending());
         Page<MarkdownMeta> page = markdownMetaRepository.findAll((root, criteriaQuery, criteriaBuilder) ->
                 QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageRequest);
         Page<MarkdownMetaDto> pageDTO = page.map(markdownMetaMapper::toDto);
@@ -88,6 +88,8 @@ public class MindpressESClient {
                     false, JSON.toJSONString(esdata));
             return true;
         } catch (IOException ioException) {
+            return false;
+        } catch (Exception e) {
             return false;
         }
 

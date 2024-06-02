@@ -1,11 +1,13 @@
 package com.github.aborn.mindpress.inf.es;
 
+import com.alibaba.fastjson2.JSONObject;
+
 /**
  * @author aborn (jiangguobao)
  * @date 2024/06/02 15:46
  */
 public class MindpressESConfig {
-    public static String MP_ES_INDEX_NAME = "MINDPRESS";
+    public static String MP_ES_INDEX_NAME = "mindpress";
     public static String MP_ES_SETTINGS = "" +
             "  {\n" +
             "      \"number_of_shards\" : \"2\",\n" +
@@ -13,7 +15,7 @@ public class MindpressESConfig {
             "   }";
 
     public static String MP_ES_MAPPINGS = "" +
-            "{\n" +
+            "{" +
             "    \"properties\": {\n" +
             "      \"id\" : {\n" +
             "        \"type\": \"keyword\",\n" +
@@ -25,7 +27,7 @@ public class MindpressESConfig {
             "      },\n" +
             "      \"title\" : {\n" +
             "        \"type\": \"text\",\n" +
-            "        \"analyzer\": \"ik_max_word\", \n" +
+            "        \"analyzer\": \"ik_max_word\",\n" +
             "        \"search_analyzer\": \"ik_smart\",\n" +
             "        \"fields\": {\n" +
             "          \"keyword\" : {\"ignore_above\" : 256, \"type\" : \"keyword\"}\n" +
@@ -33,7 +35,7 @@ public class MindpressESConfig {
             "      },\n" +
             "      \"desc\" : {\n" +
             "        \"type\": \"text\",\n" +
-            "        \"analyzer\": \"ik_max_word\", \n" +
+            "        \"analyzer\": \"ik_max_word\",\n" +
             "        \"search_analyzer\": \"ik_smart\",\n" +
             "        \"fields\": {\n" +
             "          \"keyword\" : {\"ignore_above\" : 256, \"type\" : \"keyword\"}\n" +
@@ -41,7 +43,7 @@ public class MindpressESConfig {
             "      },\n" +
             "      \"tags\" : {\n" +
             "        \"type\": \"text\",\n" +
-            "        \"analyzer\": \"ik_max_word\", \n" +
+            "        \"analyzer\": \"ik_max_word\",\n" +
             "        \"search_analyzer\": \"ik_smart\",\n" +
             "        \"fields\": {\n" +
             "          \"keyword\" : {\"ignore_above\" : 256, \"type\" : \"keyword\"}\n" +
@@ -56,7 +58,7 @@ public class MindpressESConfig {
             "      },\n" +
             "      \"category\" : {\n" +
             "        \"type\": \"text\",\n" +
-            "        \"analyzer\": \"ik_max_word\", \n" +
+            "        \"analyzer\": \"ik_max_word\",\n" +
             "        \"search_analyzer\": \"ik_smart\",\n" +
             "        \"fields\": {\n" +
             "          \"keyword\" : {\"ignore_above\" : 256, \"type\" : \"keyword\"}\n" +
@@ -72,15 +74,7 @@ public class MindpressESConfig {
             "      },\n" +
             "      \"ext\" : {\n" +
             "        \"type\": \"text\",\n" +
-            "        \"analyzer\": \"ik_max_word\", \n" +
-            "        \"search_analyzer\": \"ik_smart\",\n" +
-            "        \"fields\": {\n" +
-            "          \"keyword\" : {\"ignore_above\" : 256, \"type\" : \"keyword\"}\n" +
-            "        }\n" +
-            "      },\n" +
-            "      \"ext\" : {\n" +
-            "        \"type\": \"text\",\n" +
-            "        \"analyzer\": \"ik_max_word\", \n" +
+            "        \"analyzer\": \"ik_max_word\",\n" +
             "        \"search_analyzer\": \"ik_smart\",\n" +
             "        \"fields\": {\n" +
             "          \"keyword\" : {\"ignore_above\" : 256, \"type\" : \"keyword\"}\n" +
@@ -88,7 +82,7 @@ public class MindpressESConfig {
             "      },\n" +
             "      \"content\" : {\n" +
             "        \"type\": \"text\",\n" +
-            "        \"analyzer\": \"ik_max_word\", \n" +
+            "        \"analyzer\": \"ik_max_word\",\n" +
             "        \"search_analyzer\": \"ik_smart\",\n" +
             "        \"fields\": {\n" +
             "          \"keyword\" : {\"ignore_above\" : 256, \"type\" : \"keyword\"}\n" +
@@ -104,7 +98,7 @@ public class MindpressESConfig {
             "      },\n" +
             "      \"createBy\" : {\n" +
             "        \"type\": \"text\",\n" +
-            "        \"analyzer\": \"ik_max_word\", \n" +
+            "        \"analyzer\": \"ik_max_word\",\n" +
             "        \"search_analyzer\": \"ik_smart\",\n" +
             "        \"fields\": {\n" +
             "          \"keyword\" : {\"ignore_above\" : 256, \"type\" : \"keyword\"}\n" +
@@ -112,12 +106,78 @@ public class MindpressESConfig {
             "      },\n" +
             "      \"updateBy\" : {\n" +
             "        \"type\": \"text\",\n" +
-            "        \"analyzer\": \"ik_max_word\", \n" +
+            "        \"analyzer\": \"ik_max_word\",\n" +
             "        \"search_analyzer\": \"ik_smart\",\n" +
             "        \"fields\": {\n" +
             "          \"keyword\" : {\"ignore_above\" : 256, \"type\" : \"keyword\"}\n" +
-            "        }\n" +
-            "      }\n" +
-            "   }\n" +
+            "}" +
+            "}" +
+            "}" +
+
             "}";
+
+    public static String BuildMappings() {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject properties = new JSONObject();
+
+        properties.put("id", buildKeyword());
+        properties.put("articleid", buildKeyword());
+        properties.put("title", buildText());
+        properties.put("desc", buildText());
+        properties.put("tags", buildText());
+        properties.put("space", buildKeyword());
+        properties.put("isPublic", buildKeyword());
+        properties.put("category", buildText());
+        properties.put("status", buildKeyword());
+        properties.put("refArticleid", buildKeyword());
+
+        properties.put("ext", buildText());
+        properties.put("content", buildText());
+
+        properties.put("createTime", buildDate());
+        properties.put("updateTime", buildDate());
+
+        properties.put("createBy", buildText());
+        properties.put("updateBy", buildText());
+
+        jsonObject.put("properties", properties);
+        return jsonObject.toJSONString();
+    }
+
+    public static void main(String[] args) {
+        try {
+            JSONObject jsonObject = JSONObject.parseObject(BuildMappings());
+        } catch (Exception e) {
+            System.out.println("gg");
+        }
+    }
+
+    private static JSONObject buildKeyword() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", "keyword");
+        jsonObject.put("ignore_above", 64);
+        return jsonObject;
+    }
+
+    private static JSONObject buildDate() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", "date");
+        jsonObject.put("format", "yyyy-MM-dd HH:mm:ss");
+        return jsonObject;
+    }
+    private static JSONObject buildText() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", "text");
+        jsonObject.put("analyzer", "ik_max_word");
+        jsonObject.put("search_analyzer", "ik_smart");
+
+        JSONObject fields = new JSONObject();
+        JSONObject keyword = new JSONObject();
+        keyword.put("ignore_above", 256);
+        keyword.put("type", "keyword");
+        fields.put("keyword", keyword);
+        jsonObject.put("fields", fields);
+
+        return jsonObject;
+    }
 }
