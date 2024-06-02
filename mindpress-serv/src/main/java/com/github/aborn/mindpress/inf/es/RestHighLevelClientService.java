@@ -13,10 +13,8 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchQueryBuilder;
-import org.elasticsearch.index.query.RangeQueryBuilder;
-import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.core.TimeValue;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.xcontent.XContentType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author aborn (jiangguobao)
@@ -70,15 +69,21 @@ public class RestHighLevelClientService {
     /**
      * 搜索
      */
-    public SearchResponse search(String field, String key, String rangeField, String
-            from, String to, String termField, String termVal,
+    public SearchResponse search(String field, String key,
                                  String... indexNames) throws IOException {
         SearchRequest request = new SearchRequest(indexNames);
 
         SearchSourceBuilder builder = new SearchSourceBuilder();
-        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-        boolQueryBuilder.must(new MatchQueryBuilder(field, key)).must(new RangeQueryBuilder(rangeField).from(from).to(to)).must(new TermQueryBuilder(termField, termVal));
-        builder.query(boolQueryBuilder);
+
+
+        //查询条件使用QueryBuilders工具来实现
+        //QueryBuilders.termQuery 精准查询
+        //QueryBuilders.matchAllQuery() 匹配全部
+        MatchQueryBuilder matchQuery = QueryBuilders.matchQuery(field, key);
+        builder.query(matchQuery);
+        builder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+
+        request.source(builder);
         request.source(builder);
         // log.info("[搜索语句为:{}]",request.source().toString());
         return client.search(request, RequestOptions.DEFAULT);

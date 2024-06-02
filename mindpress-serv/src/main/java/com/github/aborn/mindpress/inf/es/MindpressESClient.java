@@ -13,7 +13,10 @@ import com.github.aborn.mindpress.service.impl.ContentServiceImpl;
 import com.github.aborn.mindpress.service.mapstruct.MarkdownMetaMapper;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -58,6 +61,22 @@ public class MindpressESClient {
         } catch (IOException e) {
             return false;
             //
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean search(String key) {
+        try {
+            SearchResponse search = restHighLevelClientService.search("title", key, MindpressESConfig.MP_ES_INDEX_NAME);
+            SearchHits hits = search.getHits();
+            SearchHit[] hits1 = hits.getHits();
+            for (SearchHit documentFields : hits1) {
+                System.out.println(documentFields.getSourceAsString());
+            }
+            return true;
+        } catch (IOException ioe) {
+            return false;
         } catch (Exception e) {
             return false;
         }
