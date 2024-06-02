@@ -24,15 +24,17 @@ import { mpConfig } from '~~/composables/utils';
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
 const articleids = route.params.id
-const articleid = ref(articleids[0])
+
+const mp = mpConfig(useRuntimeConfig().public.minpress)
+const articleid = (mp.mode === MINDPRESS_MODE.static && 'undefined' === articleids[0]) ?
+    ref(null) : ref(articleids[0]);
 
 const mkdContent = ref('')
 const hint = ref('')
 const title = ref('')
-
 const toolbarsExclude = ['github']
-const mp = mpConfig(useRuntimeConfig().public.minpress)
 
+console.log('articleid === ' + articleid.value)
 const url = mp.contentUrl + '/' + articleid.value
 console.log(url)
 // console.log(data)
