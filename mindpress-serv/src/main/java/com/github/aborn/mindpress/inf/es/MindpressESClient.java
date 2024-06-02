@@ -113,7 +113,7 @@ public class MindpressESClient {
             if (isSync) {
                 BulkResponse bulkResponse = restHighLevelClientService.sync(request);
             } else {
-                restHighLevelClientService.sync(request);
+                restHighLevelClientService.async(request);
             }
 
             return true;
