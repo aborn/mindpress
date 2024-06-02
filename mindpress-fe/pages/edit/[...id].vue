@@ -7,8 +7,9 @@
             <NuxtLink v-if="articleid" :to="`/article/${articleid}`" class="secondary" target="_blank">Article Detail
             </NuxtLink>
             <ColorScheme placeholder="loading..." tag="span">
-                <md-editor v-model="mkdContent" :theme="$colorMode.value as Themes" :toolbarsExclude="toolbarsExclude as ToolbarNames[]"
-                    style="height:480px;" @onChange="changeAction" @onSave="saveAction" />
+                <md-editor v-model="mkdContent" :theme="$colorMode.value as Themes"
+                    :toolbarsExclude="toolbarsExclude as ToolbarNames[]" style="height:480px;" @onChange="changeAction"
+                    @onSave="saveAction" />
             </ColorScheme>
         </main>
     </div>
@@ -16,7 +17,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import MdEditor, { type Themes, type ToolbarNames } from 'md-editor-v3'
+import { MdEditor, type Themes, type ToolbarNames } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css';
 import { mpConfig } from '~~/composables/utils';
 
@@ -114,3 +115,4 @@ function saveAction(text: string) {
 }
 
 </script>
+<style scoped></style>
