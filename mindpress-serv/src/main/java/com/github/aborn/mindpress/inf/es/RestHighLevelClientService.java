@@ -19,9 +19,11 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.xcontent.XContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -69,8 +71,7 @@ public class RestHighLevelClientService {
     /**
      * 搜索
      */
-    public SearchResponse search(String field, String key,
-                                 String... indexNames) throws IOException {
+    public SearchResponse search(String key, String... indexNames) throws IOException {
         SearchRequest request = new SearchRequest(indexNames);
 
         SearchSourceBuilder builder = new SearchSourceBuilder();
@@ -103,9 +104,8 @@ public class RestHighLevelClientService {
      * @throws IOException
      */
     public BulkResponse importAll(String indexName, boolean isAutoId, List<ESMarkdownItem> source) throws IOException {
-        if (0 == source.size()) {
+        if (CollectionUtils.isEmpty(source)) {
             return null;
-            //todo 抛出异常 导入数据为空
         }
         BulkRequest request = new BulkRequest();
 

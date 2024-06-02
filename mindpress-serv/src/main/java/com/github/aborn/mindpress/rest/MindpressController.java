@@ -1,5 +1,6 @@
 package com.github.aborn.mindpress.rest;
 
+import com.github.aborn.mindpress.inf.es.ESMarkdownItem;
 import com.github.aborn.mindpress.inf.es.MindpressESClient;
 import com.github.aborn.mindpress.service.MarkdownMetaService;
 import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author aborn
@@ -38,9 +41,9 @@ public class MindpressController {
     @GetMapping("es")
     @ApiOperation("init es")
     @CrossOrigin
-    public ResponseEntity<Object> es(String s, String f) {
-        //mindpressESClient.transferData();
-        String detail = mindpressESClient.search(f, s);
+    public ResponseEntity<Object> es(String s) {
+        // mindpressESClient.transferData();
+        List<ESMarkdownItem> detail = mindpressESClient.search(s);
         return new ResponseEntity<>(detail, HttpStatus.OK);
     }
 }

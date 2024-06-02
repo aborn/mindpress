@@ -66,22 +66,23 @@ public class MindpressESClient {
         }
     }
 
-    public String search(String field, String key) {
+    public List<ESMarkdownItem> search(String key) {
+        List<ESMarkdownItem> res = new ArrayList<>();
+
         try {
-            SearchResponse search = restHighLevelClientService.search(field, key, MindpressESConfig.MP_ES_INDEX_NAME);
+            SearchResponse search = restHighLevelClientService.search(key, MindpressESConfig.MP_ES_INDEX_NAME);
             SearchHits hits = search.getHits();
             SearchHit[] hits1 = hits.getHits();
-            String detail = "";
             for (SearchHit documentFields : hits1) {
-                System.out.println(documentFields.getSourceAsString());
-                detail += documentFields.getId() + ", ";
+                // System.out.println(documentFields.getSourceAsString());
+                res.add(JSON.parseObject(documentFields.getSourceAsString(), ESMarkdownItem.class));
             }
-            return "hits:" + hits1.length + ", detail:" + detail;
         } catch (IOException ioe) {
-            return ioe.getMessage();
+
         } catch (Exception e) {
-            return e.getMessage();
+
         }
+        return res;
     }
 
     public boolean transferData() {
