@@ -148,12 +148,12 @@ public class RestHighLevelClientService {
         ActionListener<BulkResponse> listener = new ActionListener<BulkResponse>() {
             @Override
             public void onResponse(BulkResponse bulkResponse) {
-                System.out.println("success");
+                System.out.println("async to es success.");
             }
 
             @Override
             public void onFailure(Exception e) {
-                System.out.println("failed.");
+                System.out.println("async to es failed.");
             }
         };
 

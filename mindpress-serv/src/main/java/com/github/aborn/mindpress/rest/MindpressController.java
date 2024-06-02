@@ -7,6 +7,7 @@ import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +42,10 @@ public class MindpressController {
     @GetMapping("es")
     @ApiOperation("init es")
     @CrossOrigin
-    public ResponseEntity<Object> es(String s) {
-        // mindpressESClient.transferData();
+    public ResponseEntity<Object> es(String s, String t) {
+        if (!StringUtils.isBlank(t)) {
+            mindpressESClient.transferData(true);
+        }
         List<ESMarkdownItem> detail = mindpressESClient.search(s);
         return new ResponseEntity<>(detail, HttpStatus.OK);
     }
