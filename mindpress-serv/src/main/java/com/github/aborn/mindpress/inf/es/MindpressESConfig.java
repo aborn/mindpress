@@ -130,13 +130,10 @@ public class MindpressESConfig {
         properties.put("category", buildText());
         properties.put("status", buildKeyword());
         properties.put("refArticleid", buildKeyword());
-
         properties.put("ext", buildText());
         properties.put("content", buildText());
-
         properties.put("createTime", buildDate());
         properties.put("updateTime", buildDate());
-
         properties.put("createBy", buildText());
         properties.put("updateBy", buildText());
 

@@ -1,5 +1,6 @@
 package com.github.aborn.mindpress.inf.es;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author aborn (jiangguobao)
@@ -91,24 +93,23 @@ public class RestHighLevelClientService {
      * @return
      * @throws IOException
      */
-    public BulkResponse importAll(String indexName, boolean isAutoId, String source) throws IOException {
-        if (0 == source.length()) {
+    public BulkResponse importAll(String indexName, boolean isAutoId, List<ESMarkdownItem> source) throws IOException {
+        if (0 == source.size()) {
+            return null;
             //todo 抛出异常 导入数据为空
         }
         BulkRequest request = new BulkRequest();
-        JsonNode jsonNode = mapper.readTree(source);
 
-        if (jsonNode.isArray()) {
-            for (JsonNode node : jsonNode) {
-                if (isAutoId) {
-                    request.add(new IndexRequest(indexName).source(node.asText(), XContentType.JSON));
-                } else {
-                    request.add(new IndexRequest(indexName)
-                            .id(node.get("id").asText())
-                            .source(node.asText(), XContentType.JSON));
-                }
+        for (ESMarkdownItem node : source) {
+            if (isAutoId) {
+                request.add(new IndexRequest(indexName).source(JSONObject.toJSONString(node), XContentType.JSON));
+            } else {
+                request.add(new IndexRequest(indexName)
+                        .id(node.getId().toString())
+                        .source(JSONObject.toJSONString(node), XContentType.JSON));
             }
         }
+
         return client.bulk(request, RequestOptions.DEFAULT);
     }
 }

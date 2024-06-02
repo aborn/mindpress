@@ -79,19 +79,19 @@ public class MindpressESClient {
         Map<String, ContentDto> contentDtoMap = tastes.stream().collect(Collectors.toMap(ContentDto::getArticleid, Function.identity()));
 
         List<ESMarkdownItem> esdata = new ArrayList<>(metaDtoList.size());
+
         for (MarkdownMetaDto metaDto : metaDtoList) {
             esdata.add(new ESMarkdownItem(metaDto, contentDtoMap.get(metaDto.getArticleid())));
         }
 
         try {
             BulkResponse bulkResponse = restHighLevelClientService.importAll(MindpressESConfig.MP_ES_INDEX_NAME,
-                    false, JSON.toJSONString(esdata));
+                    false, esdata);
             return true;
         } catch (IOException ioException) {
             return false;
         } catch (Exception e) {
             return false;
         }
-
     }
 }

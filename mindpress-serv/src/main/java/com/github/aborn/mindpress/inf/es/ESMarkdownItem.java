@@ -20,6 +20,7 @@ public class ESMarkdownItem extends BaseDTO {
         BeanUtils.copyProperties(markdownMeta, this);
         if (contentDto != null) {
             this.content = contentDto.getContent();
+            this.category = "abc";
         }
     }
 
