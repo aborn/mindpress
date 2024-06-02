@@ -39,8 +39,8 @@ public class MindpressController {
     @ApiOperation("init es")
     @CrossOrigin
     public ResponseEntity<Object> es(String s) {
-        mindpressESClient.transferData();
-        mindpressESClient.search(s);
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        //mindpressESClient.transferData();
+        String detail = mindpressESClient.search(s);
+        return new ResponseEntity<>(detail, HttpStatus.OK);
     }
 }

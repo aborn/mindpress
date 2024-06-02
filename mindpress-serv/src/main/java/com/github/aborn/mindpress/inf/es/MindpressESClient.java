@@ -66,19 +66,21 @@ public class MindpressESClient {
         }
     }
 
-    public boolean search(String key) {
+    public String search(String key) {
         try {
             SearchResponse search = restHighLevelClientService.search("title", key, MindpressESConfig.MP_ES_INDEX_NAME);
             SearchHits hits = search.getHits();
             SearchHit[] hits1 = hits.getHits();
+            String detail = "";
             for (SearchHit documentFields : hits1) {
                 System.out.println(documentFields.getSourceAsString());
+                detail += documentFields.getId() + ", ";
             }
-            return true;
+            return "hits:" + hits1.length + ", detail:" + detail;
         } catch (IOException ioe) {
-            return false;
+            return ioe.getMessage();
         } catch (Exception e) {
-            return false;
+            return e.getMessage();
         }
     }
 
