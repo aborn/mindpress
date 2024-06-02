@@ -12,6 +12,7 @@ import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
 import com.github.aborn.mindpress.service.impl.ContentServiceImpl;
 import com.github.aborn.mindpress.service.mapstruct.MarkdownMetaMapper;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.indices.CreateIndexResponse;
@@ -70,7 +71,7 @@ public class MindpressESClient {
         List<ESMarkdownItem> res = new ArrayList<>();
 
         try {
-            SearchResponse search = restHighLevelClientService.search(key, MindpressESConfig.MP_ES_INDEX_NAME);
+            SearchResponse search = restHighLevelClientService.search(key, 0, 10, MindpressESConfig.MP_ES_INDEX_NAME);
             SearchHits hits = search.getHits();
             SearchHit[] hits1 = hits.getHits();
             for (SearchHit documentFields : hits1) {
@@ -85,7 +86,7 @@ public class MindpressESClient {
         return res;
     }
 
-    public boolean transferData() {
+    public boolean transferData(boolean isSync) {
         if (!init()) {
             return false;
         }
@@ -107,8 +108,14 @@ public class MindpressESClient {
         }
 
         try {
-            BulkResponse bulkResponse = restHighLevelClientService.importAll(MindpressESConfig.MP_ES_INDEX_NAME,
+            BulkRequest request = restHighLevelClientService.buildImportRequest(MindpressESConfig.MP_ES_INDEX_NAME,
                     false, esdata);
+            if (isSync) {
+                BulkResponse bulkResponse = restHighLevelClientService.sync(request);
+            } else {
+                restHighLevelClientService.sync(request);
+            }
+
             return true;
         } catch (IOException ioException) {
             return false;

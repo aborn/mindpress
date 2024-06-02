@@ -2,6 +2,7 @@ package com.github.aborn.mindpress.rest;
 
 import com.github.aborn.mindpress.domain.Content;
 import com.github.aborn.mindpress.inf.base.BaseResponse;
+import com.github.aborn.mindpress.inf.es.MindpressESClient;
 import com.github.aborn.mindpress.inf.exception.EntityExistException;
 import com.github.aborn.mindpress.inf.utils.MarkdownUtils;
 import com.github.aborn.mindpress.service.ContentService;
@@ -31,6 +32,8 @@ public class ContentController {
     private final ContentService contentService;
 
     private final MarkdownMetaService markdownMetaService;
+
+    private final MindpressESClient mindpressESClient;
 
     @GetMapping
     public ResponseEntity<Object> queryContent(ContentQueryCriteria criteria, Pageable pageable) {
@@ -85,6 +88,8 @@ public class ContentController {
                 res.setSuccess(false);
             }
         }
+
+        mindpressESClient.transferData(false);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 

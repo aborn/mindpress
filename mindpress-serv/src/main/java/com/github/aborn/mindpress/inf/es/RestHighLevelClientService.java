@@ -3,6 +3,7 @@ package com.github.aborn.mindpress.inf.es;
 import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -13,9 +14,13 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
+import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.common.util.concurrent.ListenableFuture;
 import org.elasticsearch.core.TimeValue;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.xcontent.XContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,9 +41,6 @@ public class RestHighLevelClientService {
 
     @Resource
     private RestHighLevelClient client;
-
-    @Resource
-    private ObjectMapper mapper;
 
     /**
      * 创建索引
@@ -71,26 +73,43 @@ public class RestHighLevelClientService {
     /**
      * 搜索
      */
-    public SearchResponse search(String key, String... indexNames) throws IOException {
+    public SearchResponse search(String key, int pageNumber, int pageSize, String... indexNames) throws IOException {
         SearchRequest request = new SearchRequest(indexNames);
-
-        SearchSourceBuilder builder = new SearchSourceBuilder();
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         //查询条件使用QueryBuilders工具来实现
         //QueryBuilders.termQuery 精准查询
         //QueryBuilders.matchAllQuery() 匹配全部
-        MatchQueryBuilder contentQuery = QueryBuilders.matchQuery("content", key);
-        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", key);
 
-        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-        boolQueryBuilder.minimumShouldMatch(1).filter(contentQuery).filter(titleQuery);
+        MatchQueryBuilder contentQuery = QueryBuilders.matchQuery("content", key)
+                .fuzziness(Fuzziness.AUTO)
+                .prefixLength(3)
+                .maxExpansions(10);
+        MatchQueryBuilder titleQuery = new MatchQueryBuilder("title", key);
+        MatchQueryBuilder descQuery = new MatchQueryBuilder("desc", key);
 
-        // builder.query(boolQueryBuilder);
-        builder.query(contentQuery);
-        builder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+        // content or title
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()
+                .should(contentQuery)
+                .should(titleQuery)
+                .should(descQuery)
+                .minimumShouldMatch(1);
 
-        request.source(builder);
-        // log.info("[搜索语句为:{}]",request.source().toString());
+        searchSourceBuilder.query(boolQueryBuilder);
+        // searchSourceBuilder.query(contentQuery);
+
+        // return part fields
+        String[] includeFields = new String[]{"title", "content"};
+        String[] excludeFields = new String[]{};
+        // searchSourceBuilder.fetchSource(includeFields, excludeFields);
+
+        searchSourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+        searchSourceBuilder.from(pageNumber); // from 0
+        searchSourceBuilder.size(pageSize);   // pagesize default 10
+        searchSourceBuilder.sort(new FieldSortBuilder("updateTime").order(SortOrder.DESC));
+        request.source(searchSourceBuilder);
+
+        // log.info("[search query:{}]",request.source().toString());
         return client.search(request, RequestOptions.DEFAULT);
     }
 
@@ -103,7 +122,7 @@ public class RestHighLevelClientService {
      * @return
      * @throws IOException
      */
-    public BulkResponse importAll(String indexName, boolean isAutoId, List<ESMarkdownItem> source) throws IOException {
+    public BulkRequest buildImportRequest(String indexName, boolean isAutoId, List<ESMarkdownItem> source) {
         if (CollectionUtils.isEmpty(source)) {
             return null;
         }
@@ -118,7 +137,26 @@ public class RestHighLevelClientService {
                         .source(JSONObject.toJSONString(node), XContentType.JSON));
             }
         }
+        return request;
+    }
 
+    public BulkResponse sync(BulkRequest request) throws IOException {
         return client.bulk(request, RequestOptions.DEFAULT);
+    }
+
+    public void async(BulkRequest request) {
+        ActionListener<BulkResponse> listener = new ActionListener<BulkResponse>() {
+            @Override
+            public void onResponse(BulkResponse bulkResponse) {
+                System.out.println("success");
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                System.out.println("failed.");
+            }
+        };
+
+        client.bulkAsync(request, RequestOptions.DEFAULT, listener);
     }
 }
