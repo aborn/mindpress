@@ -78,11 +78,16 @@ public class RestHighLevelClientService {
         //查询条件使用QueryBuilders工具来实现
         //QueryBuilders.termQuery 精准查询
         //QueryBuilders.matchAllQuery() 匹配全部
-        MatchQueryBuilder matchQuery = QueryBuilders.matchQuery(field, key);
-        builder.query(matchQuery);
+        MatchQueryBuilder contentQuery = QueryBuilders.matchQuery("content", key);
+        MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", key);
+
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        boolQueryBuilder.minimumShouldMatch(1).filter(contentQuery).filter(titleQuery);
+
+        // builder.query(boolQueryBuilder);
+        builder.query(contentQuery);
         builder.timeout(new TimeValue(60, TimeUnit.SECONDS));
 
-        request.source(builder);
         request.source(builder);
         // log.info("[搜索语句为:{}]",request.source().toString());
         return client.search(request, RequestOptions.DEFAULT);
