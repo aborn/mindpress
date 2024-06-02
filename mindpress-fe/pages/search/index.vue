@@ -20,11 +20,13 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { MarkdownMetaPageResponse, MarkdownMetaS, MarkdownMeta } from "~~/composables/types";
+import type { MarkdownMetaPageResponse, MarkdownMetaS, MarkdownMeta } from "~~/composables/types";
 const search = ref("")
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const hint = ref("")
 const articles = ref<MarkdownMeta[]>([]);
+
+console.log('search.....')
 
 function searchShows(searchKey: string) {
   const url = mp.searchUrl + "?q=" + searchKey
