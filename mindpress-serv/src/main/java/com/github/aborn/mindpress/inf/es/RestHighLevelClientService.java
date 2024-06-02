@@ -75,7 +75,6 @@ public class RestHighLevelClientService {
 
         SearchSourceBuilder builder = new SearchSourceBuilder();
 
-
         //查询条件使用QueryBuilders工具来实现
         //QueryBuilders.termQuery 精准查询
         //QueryBuilders.matchAllQuery() 匹配全部

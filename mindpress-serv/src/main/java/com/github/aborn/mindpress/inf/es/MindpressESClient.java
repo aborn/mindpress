@@ -66,9 +66,9 @@ public class MindpressESClient {
         }
     }
 
-    public String search(String key) {
+    public String search(String field, String key) {
         try {
-            SearchResponse search = restHighLevelClientService.search("title", key, MindpressESConfig.MP_ES_INDEX_NAME);
+            SearchResponse search = restHighLevelClientService.search(field, key, MindpressESConfig.MP_ES_INDEX_NAME);
             SearchHits hits = search.getHits();
             SearchHit[] hits1 = hits.getHits();
             String detail = "";
