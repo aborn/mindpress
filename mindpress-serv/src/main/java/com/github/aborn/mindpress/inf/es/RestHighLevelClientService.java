@@ -105,8 +105,8 @@ public class RestHighLevelClientService {
         // searchSourceBuilder.query(contentQuery);
 
         HighlightBuilder highlightBuilder = new HighlightBuilder();
-        highlightBuilder.preTags("<em>"); // 高亮前缀
-        highlightBuilder.postTags("</em>"); // 高亮后缀
+        highlightBuilder.preTags("<span style=\"color:red\">"); // 高亮前缀
+        highlightBuilder.postTags("</span>"); // 高亮后缀
 
         highlightBuilder.fields().add(new HighlightBuilder.Field("title")); // 高亮字段
         highlightBuilder.fields().add(new HighlightBuilder.Field("content")); // 高亮字段

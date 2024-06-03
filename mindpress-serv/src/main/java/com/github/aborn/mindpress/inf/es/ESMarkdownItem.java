@@ -10,6 +10,9 @@ import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author aborn (jiangguobao)
@@ -85,4 +88,15 @@ public class ESMarkdownItem implements Serializable {
 
     @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Timestamp updateTime;
+
+    private HashMap<String, List<String>> highlight;
+
+    public void addHighlightItemKV(String key, String value) {
+        if (this.highlight == null) {
+            this.highlight = new HashMap<>();
+        }
+        List<String> values = this.highlight.containsKey(key) ? this.highlight.get(key) : new ArrayList<>();
+        values.add(value);
+        this.highlight.put(key, values);
+    }
 }

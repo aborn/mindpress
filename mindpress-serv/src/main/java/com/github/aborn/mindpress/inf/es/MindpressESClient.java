@@ -72,6 +72,19 @@ public class MindpressESClient {
         }
     }
 
+    private String getValue(HighlightField nameField) {
+        if (nameField != null) {
+            Text[] fragments = nameField.getFragments();
+            StringBuffer stringBuffer = new StringBuffer();
+            for (Text str : fragments) {
+                stringBuffer.append(str.string());
+            }
+            return stringBuffer.toString();
+        } else {
+            return null;
+        }
+    }
+
     public List<ESMarkdownItem> search(String key) {
         List<ESMarkdownItem> res = new ArrayList<>();
 
@@ -81,22 +94,15 @@ public class MindpressESClient {
             SearchHit[] hits1 = hits.getHits();
             for (SearchHit hit : hits1) {
                 // System.out.println(documentFields.getSourceAsString());
-                String content = "";
+                ESMarkdownItem esMarkdownItem = JSON.parseObject(hit.getSourceAsString(), ESMarkdownItem.class);
                 Map<String, HighlightField> highlightFields = hit.getHighlightFields();
                 if (highlightFields != null) {
-                    HighlightField nameField = highlightFields.get("content");
-                    if (nameField != null) {
-                        Text[] fragments = nameField.getFragments();
-                        StringBuffer stringBuffer = new StringBuffer();
-                        for (Text str : fragments) {
-                            stringBuffer.append(str.string());
+                    for (Map.Entry<String, HighlightField> entry : highlightFields.entrySet()) {
+                        String value = getValue(entry.getValue());
+                        if (value != null) {
+                            esMarkdownItem.addHighlightItemKV(entry.getKey(), value);
                         }
-                        content = stringBuffer.toString();
                     }
-                }
-                ESMarkdownItem esMarkdownItem = JSON.parseObject(hit.getSourceAsString(), ESMarkdownItem.class);
-                if (StringUtils.isNotBlank(content)) {
-                    esMarkdownItem.setContent(content);
                 }
                 res.add(esMarkdownItem);
             }

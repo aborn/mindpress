@@ -3,6 +3,9 @@ package com.github.aborn.mindpress.service.dto;
 import com.github.aborn.mindpress.inf.base.BaseDTO;
 import lombok.Data;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author aborn
@@ -54,4 +57,15 @@ public class MarkdownMetaDto extends BaseDTO implements Serializable {
     private String refArticleid;
 
     private String ext;
+
+    private HashMap<String, List<String>> highlight;
+
+    public void addHighlightItemKV(String key, String value) {
+        if (this.highlight == null) {
+            this.highlight = new HashMap<>();
+        }
+        List<String> values = this.highlight.containsKey(key) ? this.highlight.get(key) : new ArrayList<>();
+        values.add(value);
+        this.highlight.put(key, values);
+    }
 }
