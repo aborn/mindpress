@@ -37,13 +37,14 @@ public class MarkdownMetaServiceImpl implements MarkdownMetaService {
 
     @Override
     public Map<String, Object> queryAll(MarkdownMetaQueryCriteria criteria, Pageable pageable) {
-        // order by from new to oldest.
         Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createTime").descending());
-        Page<MarkdownMeta> page = markdownMetaRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageRequest);
-        // Page<MarkdownMeta> page = markdownMetaRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
-
-        List<ESMarkdownItem> searchResult = mindpressESClient.search(criteria.getQ());
-        if (!searchResult.isEmpty()) {
+        if (!mindpressESClient.checkESConnected()) {
+            // order by from new to oldest.
+            Page<MarkdownMeta> page = markdownMetaRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageRequest);
+            // Page<MarkdownMeta> page = markdownMetaRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
+            return PageUtil.toPage(page.map(markdownMetaMapper::toDto));
+        } else{
+            List<ESMarkdownItem> searchResult = mindpressESClient.search(criteria.getQ());
             List<MarkdownMetaDto> metaDtoList = new ArrayList<>();
             searchResult.forEach(i -> {
                 MarkdownMetaDto dto = new MarkdownMetaDto();
@@ -53,8 +54,6 @@ public class MarkdownMetaServiceImpl implements MarkdownMetaService {
             Page<MarkdownMetaDto> pageEs = new PageImpl<>(metaDtoList, pageRequest, metaDtoList.size());
             return PageUtil.toPage(pageEs);
         }
-
-        return PageUtil.toPage(page.map(markdownMetaMapper::toDto));
     }
 
     @Override

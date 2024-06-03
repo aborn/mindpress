@@ -3,6 +3,7 @@ package com.github.aborn.mindpress.inf.es;
 import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.client.config.RequestConfig;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -68,12 +69,26 @@ public class RestHighLevelClientService {
         return client.indices().create(request, RequestOptions.DEFAULT);
     }
 
-    /**
-     * 判断 index 是否存在
-     */
     public boolean indexExists(String indexName) throws IOException {
         GetIndexRequest request = new GetIndexRequest(indexName);
         return client.indices().exists(request, RequestOptions.DEFAULT);
+    }
+
+    public boolean checkESConnected() {
+        try {
+            RequestConfig requestConfig = RequestConfig.custom()
+                    .setConnectTimeout(1000)
+                    .setSocketTimeout(2000)
+                    .build();
+            RequestOptions options = RequestOptions.DEFAULT.toBuilder()
+                    .setRequestConfig(requestConfig)
+                    .build();
+
+            return client.ping(options);
+        } catch (Exception e) {
+            System.out.println("Can't get status : " + e.getMessage());
+            return false; // Not available
+        }
     }
 
     /**
