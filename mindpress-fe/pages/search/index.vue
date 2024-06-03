@@ -32,7 +32,9 @@ function searchShows(searchKey: string) {
   const url = mp.searchUrl + "?q=" + searchKey
   console.log(url)
 
-  useFetch(url).then(res => {
+  useFetch(url, {
+    key: url + searchKey
+  }).then(res => {
     const data = res.data.value as MarkdownMetaPageResponse
     console.log(data)
 

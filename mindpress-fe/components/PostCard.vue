@@ -6,11 +6,22 @@
     -->
     <div class="card-content">
         <NuxtLink :to="`${link}`" style="text-decoration: none !important;">
-            <h2 class="card-content-title">{{ item.title }}</h2>
+            <h2 class="card-content-title">
+                <h2 v-if="item.highlightTitle" class="card-content-title">
+                    <span v-html="item.highlightTitle"></span>
+                </h2>
+                <h2 v-else class="card-content-title">{{ item.title }}</h2>
+            </h2>
+
             <div>
                 <span class="card-content-tag" v-for="tag in tags" :key="tag">{{ tag }}</span>
             </div>
-            <p class="card-content-desc">{{ formatDesc(item.description) }}</p>
+            <div class="card-content-desc">
+                <p v-if="item.highlightHtml" class="card-content-desc">
+                    <span v-html="item.highlightHtml"></span>
+                </p>
+                <p v-else class="card-content-desc">{{ formatDesc(item.description) }}</p>
+            </div>
         </NuxtLink>
     </div>
 

@@ -26,6 +26,7 @@ export interface MarkdownMetaS extends Base {
     status: number;
     title: string;
     tags: string;    
+    highlight?: object;
 }
 
 export type MarkdownMetaPageResponse = PageResponse<MarkdownMetaS>;
@@ -58,4 +59,6 @@ export interface MarkdownMeta {
     title: string;
     updateTime: number;
     _type: string;    
+    highlightHtml?: string;
+    highlightTitle?: string;
 }

@@ -1,8 +1,9 @@
 
+import { Html } from '#build/components';
 import type { MarkdownMetaS, MarkdownMeta } from './types';
 
 export const mpTransform = (server: MarkdownMetaS): MarkdownMeta => {
-    return {
+    const value = {
         articleid: server.articleid,
         authors: [
             {
@@ -27,7 +28,41 @@ export const mpTransform = (server: MarkdownMetaS): MarkdownMeta => {
         title: server.title,
         updateTime: server.updateTime,
         "_type": "markdown",
+    } as MarkdownMeta;
+
+    if (server.highlight) {
+        // console.log(server.highlight)
+
+        // To avoid logging inherited properties, check with hasOwnProperty :
+        for (let key in server.highlight) {
+            let hlHtml = ''
+            if (server.highlight.hasOwnProperty(key)) {
+                // @ts-ignore
+                hlHtml += server.highlight[key].join(" ")
+            }
+
+            const patten = '<span style="color:red">';
+            const idx = hlHtml.indexOf(patten);
+            const pattenLast = '</span>';
+            const idxLast = hlHtml.lastIndexOf(pattenLast);
+            const step = 100 + patten.length;
+            if (idx >= 0) {
+                const startIdx = idx - 10 > 0 ? idx - 10 : 0
+                let endIdx = idx + step > hlHtml.length ? hlHtml.length - 1 : idx + step;
+                if (idxLast > 0) {
+                    endIdx = (idxLast + pattenLast.length) > hlHtml.length ? hlHtml.length - 1 : (idxLast + pattenLast.length)
+                }
+                const subHlHtml = hlHtml.substring(startIdx, endIdx);
+                if (key === 'content') {
+                    value.highlightHtml = subHlHtml;
+                } else if (key === 'title') {
+                    value.highlightTitle = hlHtml;
+                }
+            }
+        }
     }
+    // console.log(value)
+    return value;
 }
 
 export const staticMdTransform = (md: any) => {
