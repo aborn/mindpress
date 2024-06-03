@@ -36,7 +36,7 @@ public class MindpressController {
     @ApiOperation("query Markdown meta infos")
     @CrossOrigin
     public ResponseEntity<Object> queryMarkdownMeta(MarkdownMetaQueryCriteria criteria, Pageable pageable) {
-        return new ResponseEntity<>(markdownMetaService.queryAll(criteria, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(markdownMetaService.search(criteria, pageable), HttpStatus.OK);
     }
 
     @GetMapping("es")

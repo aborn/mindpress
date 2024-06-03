@@ -24,6 +24,8 @@ public interface MarkdownMetaService {
     */
     Map<String, Object> queryAll(MarkdownMetaQueryCriteria criteria, Pageable pageable);
 
+    Map<String, Object> search(MarkdownMetaQueryCriteria criteria, Pageable pageable);
+
     /**
     * 查询所有数据不分页
     * @param criteria 条件参数
@@ -37,7 +39,7 @@ public interface MarkdownMetaService {
      * @return MarkdownMetaDto
      */
     MarkdownMetaDto findById(Long id);
-    
+
     MarkdownMetaDto findByArticleId(String id);
 
     /**
