@@ -24,6 +24,7 @@ import org.elasticsearch.common.util.concurrent.ListenableFuture;
 import org.elasticsearch.core.TimeValue;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.xcontent.XContentType;
@@ -102,6 +103,15 @@ public class RestHighLevelClientService {
 
         searchSourceBuilder.query(boolQueryBuilder);
         // searchSourceBuilder.query(contentQuery);
+
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        highlightBuilder.preTags("<em>"); // 高亮前缀
+        highlightBuilder.postTags("</em>"); // 高亮后缀
+
+        highlightBuilder.fields().add(new HighlightBuilder.Field("title")); // 高亮字段
+        highlightBuilder.fields().add(new HighlightBuilder.Field("content")); // 高亮字段
+
+        searchSourceBuilder.highlighter(highlightBuilder);
 
         // return part fields
         String[] includeFields = new String[]{"title", "content"};

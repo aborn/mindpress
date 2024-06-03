@@ -12,14 +12,17 @@ import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
 import com.github.aborn.mindpress.service.impl.ContentServiceImpl;
 import com.github.aborn.mindpress.service.mapstruct.MarkdownMetaMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -76,10 +79,29 @@ public class MindpressESClient {
             SearchResponse search = restHighLevelClientService.search(key, 0, 10, MindpressESConfig.MP_ES_INDEX_NAME);
             SearchHits hits = search.getHits();
             SearchHit[] hits1 = hits.getHits();
-            for (SearchHit documentFields : hits1) {
+            for (SearchHit hit : hits1) {
                 // System.out.println(documentFields.getSourceAsString());
-                res.add(JSON.parseObject(documentFields.getSourceAsString(), ESMarkdownItem.class));
+                String content = "";
+                Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+                if (highlightFields != null) {
+                    HighlightField nameField = highlightFields.get("content");
+                    if (nameField != null) {
+                        Text[] fragments = nameField.getFragments();
+                        StringBuffer stringBuffer = new StringBuffer();
+                        for (Text str : fragments) {
+                            stringBuffer.append(str.string());
+                        }
+                        content = stringBuffer.toString();
+                    }
+                }
+                ESMarkdownItem esMarkdownItem = JSON.parseObject(hit.getSourceAsString(), ESMarkdownItem.class);
+                if (StringUtils.isNotBlank(content)) {
+                    esMarkdownItem.setContent(content);
+                }
+                res.add(esMarkdownItem);
             }
+
+
         } catch (IOException ioe) {
 
         } catch (Exception e) {
