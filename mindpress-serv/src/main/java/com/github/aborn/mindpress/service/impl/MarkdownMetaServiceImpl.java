@@ -1,6 +1,8 @@
 package com.github.aborn.mindpress.service.impl;
 
 import com.github.aborn.mindpress.domain.MarkdownMeta;
+import com.github.aborn.mindpress.inf.es.ESMarkdownItem;
+import com.github.aborn.mindpress.inf.es.MindpressESClient;
 import com.github.aborn.mindpress.inf.exception.EntityExistException;
 import com.github.aborn.mindpress.inf.utils.PageUtil;
 import com.github.aborn.mindpress.inf.utils.QueryHelp;
@@ -11,13 +13,12 @@ import com.github.aborn.mindpress.service.dto.MarkdownMetaDto;
 import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
 import com.github.aborn.mindpress.service.mapstruct.MarkdownMetaMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ public class MarkdownMetaServiceImpl implements MarkdownMetaService {
 
     private final MarkdownMetaRepository markdownMetaRepository;
     private final MarkdownMetaMapper markdownMetaMapper;
+    private final MindpressESClient mindpressESClient;
 
     @Override
     public Map<String, Object> queryAll(MarkdownMetaQueryCriteria criteria, Pageable pageable) {
@@ -39,6 +41,18 @@ public class MarkdownMetaServiceImpl implements MarkdownMetaService {
         Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createTime").descending());
         Page<MarkdownMeta> page = markdownMetaRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageRequest);
         // Page<MarkdownMeta> page = markdownMetaRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
+
+        List<ESMarkdownItem> searchResult = mindpressESClient.search(criteria.getQ());
+        if (!searchResult.isEmpty()) {
+            List<MarkdownMetaDto> metaDtoList = new ArrayList<>();
+            searchResult.forEach(i -> {
+                MarkdownMetaDto dto = new MarkdownMetaDto();
+                BeanUtils.copyProperties(i, dto);
+                metaDtoList.add(dto);
+            });
+            Page<MarkdownMetaDto> pageEs = new PageImpl<>(metaDtoList, pageRequest, metaDtoList.size());
+            return PageUtil.toPage(pageEs);
+        }
 
         return PageUtil.toPage(page.map(markdownMetaMapper::toDto));
     }
