@@ -12,6 +12,8 @@ import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
 import com.github.aborn.mindpress.service.impl.ContentServiceImpl;
 import com.github.aborn.mindpress.service.mapstruct.MarkdownMetaMapper;
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.search.SearchResponse;
@@ -114,6 +116,12 @@ public class MindpressESClient {
                     MindpressESConfig.MP_ES_INDEX_NAME, false, esdata);
             if (isSync) {
                 BulkResponse bulkResponse = restHighLevelClientService.sync(request);
+                for (BulkItemResponse bulkItemResponse : bulkResponse) {
+                    if (bulkItemResponse.isFailed()) {
+                        BulkItemResponse.Failure failure = bulkItemResponse.getFailure();
+                        System.out.println("async, failure: " + failure.getMessage());
+                    }
+                }
             } else {
                 restHighLevelClientService.async(request);
             }

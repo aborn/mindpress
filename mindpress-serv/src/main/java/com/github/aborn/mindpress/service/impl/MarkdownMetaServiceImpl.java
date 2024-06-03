@@ -59,7 +59,7 @@ public class MarkdownMetaServiceImpl implements MarkdownMetaService {
     @Override
     public MarkdownMetaDto findByArticleId(String id) {
         MarkdownMeta meta = markdownMetaRepository.findByArticleid(id).orElseGet(MarkdownMeta::new);
-        ValidationUtil.isNull(meta.getId(), "Content", "id", id);
+        ValidationUtil.isNull(meta.getId(), "MarkdownMeta", "id", id);
         return markdownMetaMapper.toDto(meta);
     }
 

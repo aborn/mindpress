@@ -4,11 +4,16 @@ import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.ActionListener;
+import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
@@ -148,7 +153,31 @@ public class RestHighLevelClientService {
         ActionListener<BulkResponse> listener = new ActionListener<BulkResponse>() {
             @Override
             public void onResponse(BulkResponse bulkResponse) {
-                System.out.println("async to es success.");
+                if (bulkResponse.hasFailures()) {
+                    System.out.println("async has failure!");
+                } else {
+                    System.out.println("async transfer success!");
+                }
+                for (BulkItemResponse bulkItemResponse : bulkResponse) {
+                    DocWriteResponse itemResponse = bulkItemResponse.getResponse();
+
+                    if (bulkItemResponse.isFailed()) {
+                        BulkItemResponse.Failure failure = bulkItemResponse.getFailure();
+                        System.out.println("async, failure: " + failure.getMessage());
+                    }
+
+                    switch (bulkItemResponse.getOpType()) {
+                        case INDEX:
+                        case CREATE:
+                            IndexResponse indexResponse = (IndexResponse) itemResponse;
+                            break;
+                        case UPDATE:
+                            UpdateResponse updateResponse = (UpdateResponse) itemResponse;
+                            break;
+                        case DELETE:
+                            DeleteResponse deleteResponse = (DeleteResponse) itemResponse;
+                    }
+                }
             }
 
             @Override

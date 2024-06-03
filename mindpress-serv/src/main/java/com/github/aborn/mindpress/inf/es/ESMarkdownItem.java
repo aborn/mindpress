@@ -1,5 +1,6 @@
 package com.github.aborn.mindpress.inf.es;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import com.github.aborn.mindpress.domain.MarkdownMeta;
 import com.github.aborn.mindpress.inf.base.BaseDTO;
 import com.github.aborn.mindpress.service.dto.ContentDto;
@@ -7,12 +8,15 @@ import com.github.aborn.mindpress.service.dto.MarkdownMetaDto;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
+import java.io.Serializable;
+import java.sql.Timestamp;
+
 /**
  * @author aborn (jiangguobao)
  * @date 2024/06/02 15:33
  */
 @Data
-public class ESMarkdownItem extends BaseDTO {
+public class ESMarkdownItem implements Serializable {
 
     ESMarkdownItem() {}
 
@@ -72,4 +76,13 @@ public class ESMarkdownItem extends BaseDTO {
      */
     private String content;
 
+    private String createBy;
+
+    private String updateBy;
+
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    private Timestamp createTime;
+
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    private Timestamp updateTime;
 }
