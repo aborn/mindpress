@@ -1,6 +1,7 @@
 package com.github.aborn.mindpress.service;
 
 import com.github.aborn.mindpress.domain.MarkdownMeta;
+import com.github.aborn.mindpress.service.dto.ContentDto;
 import com.github.aborn.mindpress.service.dto.MarkdownMetaDto;
 import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,8 @@ public interface MarkdownMetaService {
      * @return MarkdownMetaDto
      */
     MarkdownMetaDto findById(Long id);
+    
+    MarkdownMetaDto findByArticleId(String id);
 
     /**
     * 创建

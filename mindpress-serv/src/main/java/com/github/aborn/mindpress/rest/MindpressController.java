@@ -44,7 +44,8 @@ public class MindpressController {
     @CrossOrigin
     public ResponseEntity<Object> es(String s, String t) {
         if (!StringUtils.isBlank(t)) {
-            mindpressESClient.transferData(true);
+            List<ESMarkdownItem> markdownItems = mindpressESClient.getPageData(0);
+            mindpressESClient.transferData(markdownItems,true);
         }
         List<ESMarkdownItem> detail = mindpressESClient.search(s);
         return new ResponseEntity<>(detail, HttpStatus.OK);

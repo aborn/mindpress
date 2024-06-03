@@ -11,7 +11,6 @@ import com.github.aborn.mindpress.service.dto.MarkdownMetaDto;
 import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
 import com.github.aborn.mindpress.service.mapstruct.MarkdownMetaMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +54,13 @@ public class MarkdownMetaServiceImpl implements MarkdownMetaService {
         MarkdownMeta markdownMeta = markdownMetaRepository.findById(id).orElseGet(MarkdownMeta::new);
         ValidationUtil.isNull(markdownMeta.getId(), "MarkdownMeta", "id", id);
         return markdownMetaMapper.toDto(markdownMeta);
+    }
+
+    @Override
+    public MarkdownMetaDto findByArticleId(String id) {
+        MarkdownMeta meta = markdownMetaRepository.findByArticleid(id).orElseGet(MarkdownMeta::new);
+        ValidationUtil.isNull(meta.getId(), "Content", "id", id);
+        return markdownMetaMapper.toDto(meta);
     }
 
     @Override

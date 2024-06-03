@@ -1,7 +1,9 @@
 package com.github.aborn.mindpress.rest;
 
 import com.github.aborn.mindpress.domain.Content;
+import com.github.aborn.mindpress.domain.MarkdownMeta;
 import com.github.aborn.mindpress.inf.base.BaseResponse;
+import com.github.aborn.mindpress.inf.es.ESMarkdownItem;
 import com.github.aborn.mindpress.inf.es.MindpressESClient;
 import com.github.aborn.mindpress.inf.exception.EntityExistException;
 import com.github.aborn.mindpress.inf.utils.MarkdownUtils;
@@ -9,6 +11,7 @@ import com.github.aborn.mindpress.service.ContentService;
 import com.github.aborn.mindpress.service.MarkdownMetaService;
 import com.github.aborn.mindpress.service.dto.ContentDto;
 import com.github.aborn.mindpress.service.dto.ContentQueryCriteria;
+import com.github.aborn.mindpress.service.dto.MarkdownMetaDto;
 import com.github.aborn.mindpress.service.dto.vo.ContentVo;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +19,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author aborn
@@ -45,6 +52,7 @@ public class ContentController {
     public ResponseEntity<Object> createOrUpdateContent(@RequestBody ContentVo resources) {
         ContentVo dtoRes = null;
         BaseResponse res = BaseResponse.success("success");
+        boolean status = false;
 
         resources.parseExtInfo();
         if (StringUtils.isNotBlank(resources.getArticleid())) {
@@ -54,6 +62,7 @@ public class ContentController {
             if (dto != null) {
                 // update
                 contentService.update(resources);
+                status = true;
                 res.setMsg("save content success, articleid=" + resources.getArticleid());
             } else {
                 res.setSuccess(false);
@@ -69,6 +78,7 @@ public class ContentController {
             try {
                 dtoRes = contentService.create(resources);
                 if (dtoRes != null) {
+                    status = true;
                     res.addExt("articleid", dtoRes.getArticleid());
                     res.setMsg("create file success! articleid=" + resources.getArticleid());
                 } else {
@@ -89,7 +99,14 @@ public class ContentController {
             }
         }
 
-        mindpressESClient.transferData(false);
+        if (status) {
+            ContentDto dto = contentService.findByArticleId(resources.getArticleid());
+            MarkdownMetaDto metaDto = markdownMetaService.findByArticleId(resources.getArticleid());
+            ESMarkdownItem markdownItem = new ESMarkdownItem(metaDto, dto);
+            List<ESMarkdownItem> data = new ArrayList<>();
+            data.add(markdownItem);
+            mindpressESClient.transferData(data, false);
+        }
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 

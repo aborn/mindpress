@@ -16,7 +16,7 @@ public class ESMarkdownItem extends BaseDTO {
 
     ESMarkdownItem() {}
 
-    ESMarkdownItem(MarkdownMetaDto markdownMeta, ContentDto contentDto) {
+    public ESMarkdownItem(MarkdownMetaDto markdownMeta, ContentDto contentDto) {
         BeanUtils.copyProperties(markdownMeta, this);
         if (contentDto != null) {
             this.content = contentDto.getContent();

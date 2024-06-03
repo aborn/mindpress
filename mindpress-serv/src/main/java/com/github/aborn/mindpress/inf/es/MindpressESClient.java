@@ -52,8 +52,8 @@ public class MindpressESClient {
         try {
             boolean exists = restHighLevelClientService.indexExists(MindpressESConfig.MP_ES_INDEX_NAME);
             if (!exists) {
-                JSONObject jsonObjectS = JSONObject.parseObject( MindpressESConfig.MP_ES_SETTINGS);
-                JSONObject jsonObjectM = JSONObject.parseObject( MindpressESConfig.BuildMappings());
+                JSONObject jsonObjectS = JSONObject.parseObject(MindpressESConfig.MP_ES_SETTINGS);
+                JSONObject jsonObjectM = JSONObject.parseObject(MindpressESConfig.BuildMappings());
                 CreateIndexResponse res = restHighLevelClientService.createIndex(MindpressESConfig.MP_ES_INDEX_NAME,
                         MindpressESConfig.MP_ES_SETTINGS,
                         MindpressESConfig.BuildMappings());
@@ -86,13 +86,9 @@ public class MindpressESClient {
         return res;
     }
 
-    public boolean transferData(boolean isSync) {
-        if (!init()) {
-            return false;
-        }
-        MarkdownMetaQueryCriteria criteria = MarkdownMetaQueryCriteria.builder()
-                .build();
-        Pageable pageRequest = PageRequest.of(0, 10, Sort.by("createTime").descending());
+    public List<ESMarkdownItem> getPageData(int pageNumber) {
+        MarkdownMetaQueryCriteria criteria = MarkdownMetaQueryCriteria.builder().build();
+        Pageable pageRequest = PageRequest.of(pageNumber, 10, Sort.by("createTime").descending());
         Page<MarkdownMeta> page = markdownMetaRepository.findAll((root, criteriaQuery, criteriaBuilder) ->
                 QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageRequest);
         Page<MarkdownMetaDto> pageDTO = page.map(markdownMetaMapper::toDto);
@@ -102,14 +98,20 @@ public class MindpressESClient {
         Map<String, ContentDto> contentDtoMap = tastes.stream().collect(Collectors.toMap(ContentDto::getArticleid, Function.identity()));
 
         List<ESMarkdownItem> esdata = new ArrayList<>(metaDtoList.size());
-
         for (MarkdownMetaDto metaDto : metaDtoList) {
             esdata.add(new ESMarkdownItem(metaDto, contentDtoMap.get(metaDto.getArticleid())));
         }
+        return esdata;
+    }
+
+    public boolean transferData(List<ESMarkdownItem> esdata, boolean isSync) {
+        if (!init()) {
+            return false;
+        }
 
         try {
-            BulkRequest request = restHighLevelClientService.buildImportRequest(MindpressESConfig.MP_ES_INDEX_NAME,
-                    false, esdata);
+            BulkRequest request = restHighLevelClientService.buildImportRequest(
+                    MindpressESConfig.MP_ES_INDEX_NAME, false, esdata);
             if (isSync) {
                 BulkResponse bulkResponse = restHighLevelClientService.sync(request);
             } else {
