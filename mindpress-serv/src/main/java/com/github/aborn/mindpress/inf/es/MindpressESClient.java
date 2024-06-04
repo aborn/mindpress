@@ -2,6 +2,7 @@ package com.github.aborn.mindpress.inf.es;
 
 import com.alibaba.fastjson2.JSON;
 import com.github.aborn.mindpress.domain.MarkdownMeta;
+import com.github.aborn.mindpress.inf.es.mapings.MindpressESMapping;
 import com.github.aborn.mindpress.inf.utils.QueryHelp;
 import com.github.aborn.mindpress.repository.ContentRepository;
 import com.github.aborn.mindpress.repository.MarkdownMetaRepository;
@@ -55,11 +56,11 @@ public class MindpressESClient {
 
     public boolean init() {
         try {
-            boolean exists = restHighLevelClientService.indexExists(MindpressESConfig.MP_ES_INDEX_NAME);
+            boolean exists = restHighLevelClientService.indexExists(MindpressESMapping.MP_ES_INDEX_NAME);
             if (!exists) {
-                restHighLevelClientService.createIndex(MindpressESConfig.MP_ES_INDEX_NAME,
-                        MindpressESConfig.MP_ES_SETTINGS,
-                        MindpressESConfig.BuildMappings());
+                restHighLevelClientService.createIndex(MindpressESMapping.MP_ES_INDEX_NAME,
+                        MindpressESMapping.MP_ES_SETTINGS,
+                        MindpressESMapping.BuildMappings());
             }
             return true;
         } catch (IOException e) {
@@ -86,7 +87,7 @@ public class MindpressESClient {
         List<ESMarkdownItem> res = new ArrayList<>();
 
         try {
-            SearchResponse search = restHighLevelClientService.search(key, 0, 10, MindpressESConfig.MP_ES_INDEX_NAME);
+            SearchResponse search = restHighLevelClientService.search(key, 0, 10, MindpressESMapping.MP_ES_INDEX_NAME);
             SearchHits hits = search.getHits();
             SearchHit[] hits1 = hits.getHits();
             for (SearchHit hit : hits1) {
@@ -143,7 +144,7 @@ public class MindpressESClient {
 
         try {
             BulkRequest request = restHighLevelClientService.buildImportRequest(
-                    MindpressESConfig.MP_ES_INDEX_NAME, false, esdata);
+                    MindpressESMapping.MP_ES_INDEX_NAME, false, esdata);
             if (isSync) {
                 BulkResponse bulkResponse = restHighLevelClientService.sync(request);
                 for (BulkItemResponse bulkItemResponse : bulkResponse) {

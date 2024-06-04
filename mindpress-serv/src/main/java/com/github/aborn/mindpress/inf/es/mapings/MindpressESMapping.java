@@ -1,4 +1,4 @@
-package com.github.aborn.mindpress.inf.es;
+package com.github.aborn.mindpress.inf.es.mapings;
 
 import com.alibaba.fastjson2.JSONObject;
 
@@ -6,7 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
  * @author aborn (jiangguobao)
  * @date 2024/06/02 15:46
  */
-public class MindpressESConfig {
+public class MindpressESMapping {
     public static String MP_ES_INDEX_NAME = "mindpress";
     public static String MP_ES_SETTINGS = "" +
             "  {\n" +
