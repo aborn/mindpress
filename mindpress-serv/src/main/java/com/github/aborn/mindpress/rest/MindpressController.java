@@ -8,6 +8,7 @@ import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import java.util.Map;
  * @author aborn
  * @date 2022/05/28 06:52
  */
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "markdown space管理")
@@ -42,6 +44,7 @@ public class MindpressController {
     @ApiOperation("query Markdown meta infos")
     @CrossOrigin
     public ResponseEntity<Object> queryMarkdownMeta(MarkdownMetaQueryCriteria criteria, Pageable pageable) {
+        log.info("search contents. 检索");
         return new ResponseEntity<>(markdownMetaService.search(criteria, pageable), HttpStatus.OK);
     }
 

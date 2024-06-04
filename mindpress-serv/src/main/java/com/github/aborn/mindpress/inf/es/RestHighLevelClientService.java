@@ -1,6 +1,7 @@
 package com.github.aborn.mindpress.inf.es;
 
 import com.alibaba.fastjson2.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.elasticsearch.action.ActionListener;
@@ -47,6 +48,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2024/06/02 14:28
  */
 @Service
+@Slf4j
 public class RestHighLevelClientService {
 
     @Resource
@@ -110,10 +112,10 @@ public class RestHighLevelClientService {
                            @Override
                            public void run() {
                                String ds = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-                               System.out.println(ds + ": check... previous status=" + config.isStatus());
+                               log.info(ds + ": check... previous status=" + config.isStatus());
                                boolean status = health();
                                config.setStatus(status);
-                               System.out.println(ds + ": now status... " + status);
+                               log.info(ds + ": now status... " + status);
                            }
                        },
                 5000L, 15000L);
@@ -151,7 +153,7 @@ public class RestHighLevelClientService {
 
             return client.ping(options);
         } catch (Exception e) {
-            System.out.println("Can't get status : " + e.getMessage());
+            log.error("Can't get status : " + e.getMessage());
             return false; // Not available
         }
     }
@@ -244,16 +246,16 @@ public class RestHighLevelClientService {
             @Override
             public void onResponse(BulkResponse bulkResponse) {
                 if (bulkResponse.hasFailures()) {
-                    System.out.println("async has failure!");
+                    log.error("async has failure!");
                 } else {
-                    System.out.println("async transfer success!");
+                    log.info("async transfer success!");
                 }
                 for (BulkItemResponse bulkItemResponse : bulkResponse) {
                     DocWriteResponse itemResponse = bulkItemResponse.getResponse();
 
                     if (bulkItemResponse.isFailed()) {
                         BulkItemResponse.Failure failure = bulkItemResponse.getFailure();
-                        System.out.println("async, failure: " + failure.getMessage());
+                        log.error("async, failure: " + failure.getMessage());
                     }
 
                     switch (bulkItemResponse.getOpType()) {
@@ -272,7 +274,7 @@ public class RestHighLevelClientService {
 
             @Override
             public void onFailure(Exception e) {
-                System.out.println("async to es failed.");
+                log.error("async to es failed.");
             }
         };
 

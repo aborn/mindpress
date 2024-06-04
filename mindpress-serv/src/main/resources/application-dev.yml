@@ -57,4 +57,4 @@ logging:
   level:
     root: INFO
     com.sancaiwulian: DEBUG
-  config: classpath:logback.xml
+  config: classpath:logback-spring.xml

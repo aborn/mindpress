@@ -7,6 +7,7 @@ import com.github.aborn.mindpress.domain.Content;
 import com.github.aborn.mindpress.service.dto.ContentDto;
 import com.github.aborn.mindpress.service.dto.MarkdownMetaDto;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.json.JacksonJsonParser;
 
@@ -22,6 +23,7 @@ import java.util.Map;
  * @date 2022/05/30 21:37
  */
 @Data
+@Slf4j
 public class ContentVo extends MarkdownMetaDto implements Serializable {
 
     public static final int MAX_DESC_LENGTH = 1000;
@@ -102,7 +104,7 @@ public class ContentVo extends MarkdownMetaDto implements Serializable {
                 this.setDesc(desc);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 }

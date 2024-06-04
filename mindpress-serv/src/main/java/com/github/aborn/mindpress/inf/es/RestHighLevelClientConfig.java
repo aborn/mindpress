@@ -1,6 +1,7 @@
 package com.github.aborn.mindpress.inf.es;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
@@ -21,6 +22,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource("classpath:es-config.properties")
 @Data
+@Slf4j
 public class RestHighLevelClientConfig {
 
     @Value("${es.host}")
@@ -54,7 +56,7 @@ public class RestHighLevelClientConfig {
         restClientBuilder.setFailureListener(new RestClient.FailureListener() {
             @Override
             public void onFailure(Node node) {
-                System.out.println("监听某个es节点失败" + node.toString());
+                log.warn("监听某个es节点失败" + node.toString());
                 status = false;
             }
         });

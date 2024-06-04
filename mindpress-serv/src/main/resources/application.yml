@@ -28,7 +28,7 @@ swagger:
   description: mindpress api
   enable: true
   license: MIT
-  licenseUrl: https://github.com/aborn/mindpress-serv
+  licenseUrl: https://github.com/aborn/mindpress
   title: Mindpress API
   version: 1.0.0
 
