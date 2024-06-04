@@ -1,6 +1,7 @@
 package com.github.aborn.mindpress.inf.es;
 
 import com.alibaba.fastjson2.JSONObject;
+import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.DocWriteResponse;
@@ -13,8 +14,8 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateResponse;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.*;
+import org.elasticsearch.client.core.MainResponse;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
@@ -31,9 +32,14 @@ import org.elasticsearch.xcontent.XContentType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,6 +51,9 @@ public class RestHighLevelClientService {
 
     @Resource
     private RestHighLevelClient client;
+
+    @Resource
+    private RestHighLevelClientConfig config;
 
     /**
      * 创建索引
@@ -71,8 +80,67 @@ public class RestHighLevelClientService {
         return client.indices().exists(request, RequestOptions.DEFAULT);
     }
 
+    public String checkNodeHealth() {
+        HttpHost httpHost = new HttpHost(config.getHost(), config.getPort(), "http");
+        Request request = new Request("GET", "/_cluster/health");
+        try {
+            Response response = client.getLowLevelClient().performRequest(request);
+            int statusCode = response.getStatusLine().getStatusCode();
+
+            if (statusCode == 200) {
+                return "node:" + config.getHost() + ":" + config.getPort() + " active";
+            }
+        } catch (ResponseException e) {
+            // 节点不健康或下线
+            System.out.println("Node " + httpHost + " is unhealthy or offline.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "node failed!";
+    }
+
+    public boolean isLive() {
+        return config.isStatus();
+    }
+
+    @PostConstruct
+    public void doCheck() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+                           @Override
+                           public void run() {
+                               String ds = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+                               System.out.println(ds + ": check... previous status=" + config.isStatus());
+                               boolean status = health();
+                               config.setStatus(status);
+                               System.out.println(ds + ": now status... " + status);
+                           }
+                       },
+                5000L, 15000L);
+    }
+
+    public boolean health() {
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(500)
+                .setSocketTimeout(1000)
+                .build();
+        RequestOptions options = RequestOptions.DEFAULT.toBuilder()
+                .setRequestConfig(requestConfig)
+                .build();
+
+        try {
+            MainResponse mainResponse = client.info(options);
+            return true;
+        } catch (IOException ioException) {
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public boolean checkESConnected() {
         try {
+
             RequestConfig requestConfig = RequestConfig.custom()
                     .setConnectTimeout(1000)
                     .setSocketTimeout(2000)

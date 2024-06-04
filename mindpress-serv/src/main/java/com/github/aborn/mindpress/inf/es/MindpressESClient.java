@@ -53,8 +53,8 @@ public class MindpressESClient {
     private final MarkdownMetaMapper markdownMetaMapper;
     private final ContentServiceImpl contentService;
 
-    public boolean checkESConnected() {
-        return restHighLevelClientService.checkESConnected();
+    public boolean isLive() {
+        return restHighLevelClientService.isLive();
     }
 
     public boolean init() {
@@ -139,7 +139,7 @@ public class MindpressESClient {
     }
 
     public boolean transferData(List<ESMarkdownItem> esdata, boolean isSync) {
-        if (!checkESConnected()) {
+        if (!isLive()) {
             System.out.println("es not connected, pls make sure es running!!");
             return false;
         }
