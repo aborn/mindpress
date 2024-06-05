@@ -15,7 +15,13 @@ mvn clean
 mvn package -DskipTests
 
 # 将jar包copy到指定目录
-cp ./target/mindpress-serv-0.0.1-SNAPSHOT.jar /Users/aborn/docker/packages
+if [ ! -d "~/docker/packages" ];then
+    mkdir ~/docker/packages
+else
+    echo "~/docker/packages exists."
+fi
+
+cp ./target/mindpress-serv-0.0.1-SNAPSHOT.jar ~/docker/packages
 
 # 重启动容器，让jar包生效
-docker restart mindpress-serv
+# docker restart mindpress-serv

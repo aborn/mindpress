@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+cd $DIR
+
 # 构建后端服务的docker镜像, FROM openjdk:17-oracle
 docker build -t mindpress_serv:v1 .
 
