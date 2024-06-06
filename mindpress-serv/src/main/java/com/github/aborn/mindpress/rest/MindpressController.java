@@ -31,7 +31,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "markdown space管理")
-@RequestMapping("/api/mindpress")
+@RequestMapping("/api/v1/mindpress")
 public class MindpressController {
 
     private final MarkdownMetaService markdownMetaService;

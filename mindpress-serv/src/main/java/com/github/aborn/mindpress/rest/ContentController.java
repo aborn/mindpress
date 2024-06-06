@@ -33,7 +33,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "Markdown file content controller")
-@RequestMapping("/api/mindpress/content")
+@RequestMapping("/api/v1/mindpress/content")
 public class ContentController {
 
     private final ContentService contentService;
