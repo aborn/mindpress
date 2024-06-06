@@ -8,9 +8,11 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 cd $DIR
 cd ../../../
-#git pull
 
-# 打jar包
+# update to latest code version.
+git pull
+
+# use maven to build jar.
 mvn clean
 mvn package -DskipTests
 
@@ -18,7 +20,7 @@ mvn package -DskipTests
 if [ ! -d "$HOME/docker/packages" ];then
     mkdir $HOME/docker/packages
 else
-    echo "$HOME/docker/packages exists, no need create."
+    echo "$HOME/docker/packages exists, no need to create it!"
 fi
 
 cp ./target/mindpress-serv-0.0.1-SNAPSHOT.jar $HOME/docker/packages

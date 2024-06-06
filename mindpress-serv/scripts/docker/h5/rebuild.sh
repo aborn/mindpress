@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ########################################
-# 后端代码更新后重新运行下该脚本
-# /Users/aborn/github/mindpress/mindpress-serv/scripts/rebuild.sh
+# front-end rebuild package and boot it!
+# /Users/aborn/github/mindpress/docker/h5/scripts/rebuild.sh
 #########################################
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
@@ -10,11 +10,11 @@ cd $DIR
 cd ../../../../mindpress-fe
 git pull
 
-# 打jar包，如果出现 /bin/sh: vite: command not found ，则需要重新yarn install下
+# building ，如果出现 /bin/sh: vite: command not found ，则需要重新yarn install下
 yarn build
 
-# 将文件copy到指定目录
-cp -r dist/ /Users/aborn/docker/h5/mindpress/
+# copy dist files.
+cp -r dist/ $HOME/docker/h5/mindpress/
 
-# 重启动容器，让jar包生效
+# restart container, make change active.
 docker restart mindpress_h5
