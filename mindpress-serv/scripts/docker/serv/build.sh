@@ -7,4 +7,4 @@ cd $DIR
 docker build -t mindpress_serv:v1 .
 
 # boot up container，jar in folder: $HOME/docker/packages
-docker run --name mindpress_serv -it -v $HOME/docker/packages:/app -d -p 3014:3012 --net=mindpress_net mindpress_serv:v1
+docker run --name mindpress-serv -it -v $HOME/docker/packages:/app -d -p 3014:3012 --net=mindpress_net mindpress_serv:v1

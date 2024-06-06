@@ -24,7 +24,8 @@ import { mpConfig } from '~~/composables/utils';
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
 const articleids = route.params.id
-
+const useReqURL = useRequestURL()
+const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const articleid = (mp.mode === MINDPRESS_MODE.static && 'undefined' === articleids[0]) ?
     ref(null) : ref(articleids[0]);
@@ -35,11 +36,11 @@ const title = ref('')
 const toolbarsExclude = ['github']
 
 console.log('articleid === ' + articleid.value)
-const url = mp.contentUrl + '/' + articleid.value
+const url = apiBaseURL + mp.contentUrl + '/' + articleid.value
 console.log(url)
 // console.log(data)
 
-async function getData() {
+async function getDataAx() {
     return await request({
         url: url,
         method: "get",
@@ -49,11 +50,26 @@ async function getData() {
     }) as any;
 }
 
+async function getData() {
+    return await useFetch(
+        url,
+        {
+            method: "get",
+            headers: {
+                uid: ''
+            }
+        }) as any;
+}
+
 if (articleid.value) {
-    const dataS = await getData()
-    mkdContent.value = dataS.content
-    title.value = dataS.title
-} else {
+    const dataAx = await getDataAx()
+    mkdContent.value = dataAx.content
+    title.value = dataAx.title
+
+    // console.log(dataAx)
+    // const { data: dataS } = await getData()
+    // mkdContent.value = dataS.value.content
+    // title.value = dataS.value.title
 }
 
 function changeAction(e: any) {
