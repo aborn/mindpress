@@ -12,6 +12,10 @@ export default defineNuxtConfig({
             ]
         }
     },
+    routeRules: {
+        '/api/v1/**': { cors: true },
+        '/_nuxt/**': { cors: true },
+    },
     css: [
         '@/assets/css/app.css',
     ],
