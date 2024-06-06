@@ -17,7 +17,9 @@
     "preview": "nuxt preview",
     "start": "nuxt build && PORT=8001 node .output/server/index.mjs",
     "deploy": "touch ./dist/.nojekyll && push-dir --dir=dist --branch=gh-pages --cleanup",
-    "gh": "npx nuxi generate && npx serve -s ./dist"
+    "gh": "npx nuxi generate && npx serve -s ./dist",
+    "dockerbuild":"BUILD_MODE=docker nuxt build",
+    "dockerdeploy": "PORT=3010 node .output/server/index.mjs"
   },
   "devDependencies": {
     "@nuxt/content": "2.12.1",

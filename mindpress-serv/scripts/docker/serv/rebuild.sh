@@ -10,11 +10,11 @@ cd $DIR
 $DIR/package.sh
 
 # reboot container，make change jar active
-CONTAINER="mindpress-serv"
+CONTAINER="mindpress_serv"
 
 if [ "$(docker ps -a | grep -c $CONTAINER)" -gt 0 ]; then
-  echo "[---- Container with name: $CONTAINER  exist, now  it! ]"
-  docker restart mindpress-serv
+  echo "[---- Container with name: $CONTAINER  exist, now restart it! ]"
+  docker restart $CONTAINER
 else
   echo "[---- Container with name: $CONTAINER  doesn't exist. ]"
 fi

@@ -31,7 +31,7 @@ export default defineNuxtConfig({
         public: {
             minpress: {
                 mode: process.env.MINDPRESS_MODE === 'ghpages' ? 'static' : 'server',   // 'static' (default) or 'server'
-                baseUrl: 'http://localhost:3012/api/v1/mindpress/'
+                baseUrl: process.env.BUILD_MODE === 'docker' ? 'http://mindpress_serv:3012/api/v1/mindpress/' : 'http://localhost:3012/api/v1/mindpress/'
             }
         }
     }
