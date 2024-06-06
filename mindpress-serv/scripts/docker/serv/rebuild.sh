@@ -5,17 +5,16 @@
 #########################################
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-
+echo "running path=${DIR}"
 cd $DIR
-cd ../../../
-#git pull
+$DIR/package.sh
 
-# 打jar包
-mvn clean
-mvn package -DskipTests
+# reboot container，make change jar active
+CONTAINER="mindpress_serv"
 
-# 将jar包copy到指定目录
-cp ./target/mindpress-serv-0.0.1-SNAPSHOT.jar /Users/aborn/docker/packages
-
-# 重启动容器，让jar包生效
-docker restart mindpress-serv
+if [ "$(docker ps -a | grep -c $CONTAINER)" -gt 0 ]; then
+  echo "[---- Container with name: $CONTAINER  exist, now restart it! ]"
+  docker restart $CONTAINER
+else
+  echo "[---- Container with name: $CONTAINER  doesn't exist. ]"
+fi

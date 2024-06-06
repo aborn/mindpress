@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+cd $DIR
+
 # 构建数据库的docker镜像 （含有初始化数据）
 docker build -t mindpress_db:v1 .
 

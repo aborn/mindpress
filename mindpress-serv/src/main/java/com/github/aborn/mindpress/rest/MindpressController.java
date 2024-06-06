@@ -31,7 +31,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "markdown space管理")
-@RequestMapping("/api/mindpress")
+@RequestMapping("/api/v1/mindpress")
 public class MindpressController {
 
     private final MarkdownMetaService markdownMetaService;
@@ -67,6 +67,7 @@ public class MindpressController {
         Map<String, Object> res = new HashMap<String, Object>();
         boolean health = restHighLevelClientService.health();
         res.put("es_status", health);
+        res.put("live", true);
 
         // String noHealth = restHighLevelClientService.checkNodeHealth();
         // res.put("no_health", noHealth);

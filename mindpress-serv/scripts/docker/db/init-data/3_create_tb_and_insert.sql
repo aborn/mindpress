@@ -1,4 +1,6 @@
-DROP TABLE IF EXISTS `mp_markdown_content`;
+-- mindpress.mp_markdown_content definition
+USE `mindpress`;
+
 CREATE TABLE `mp_markdown_content`
 (
     `id`          bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -11,12 +13,13 @@ CREATE TABLE `mp_markdown_content`
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uniq_articleid` (`articleid`),
     KEY           `log_create_time_index` (`create_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='Markdown content info'
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='Markdown content info';
 
-DROP TABLE IF EXISTS `mp_markdown_meta`;
+-- mindpress.mp_markdown_meta definition
+
 CREATE TABLE `mp_markdown_meta`
 (
-    `id`          bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `id`            bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
     `articleid`     varchar(128)  NOT NULL DEFAULT '' COMMENT 'markdown article uniq id',
     `title`         varchar(255)  NOT NULL DEFAULT '' COMMENT 'title',
     `description`   varchar(1024) NOT NULL DEFAULT '' COMMENT 'description',
@@ -28,15 +31,16 @@ CREATE TABLE `mp_markdown_meta`
     `create_time`   datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'create time',
     `update_time`   datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
     `category`      varchar(256)  NOT NULL DEFAULT '' COMMENT 'category',
-    `status`        int(11) NOT NULL DEFAULT '0' COMMENT 'status',
+    `status`        int           NOT NULL DEFAULT '0' COMMENT 'status',
     `ref_articleid` varchar(128)  NOT NULL DEFAULT '' COMMENT 'ref articleid',
     `ext`           varchar(2048) NOT NULL DEFAULT '' COMMENT 'ext',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uniq_articleid` (`articleid`),
     KEY             `log_create_time_index` (`create_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='Markdown meta infos'
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='Markdown meta infos';
 
-DROP TABLE IF EXISTS `mp_markdown_space`;
+-- mindpress.mp_markdown_space definition
+
 CREATE TABLE `mp_markdown_space`
 (
     `id`          bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -50,8 +54,5 @@ CREATE TABLE `mp_markdown_space`
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uniq_name` (`name`),
     KEY           `log_create_time_index` (`create_time`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='Markdown space info';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='Markdown space info';
 

@@ -12,6 +12,10 @@ export default defineNuxtConfig({
             ]
         }
     },
+    routeRules: {
+        '/api/v1/**': { proxy: process.env.BUILD_MODE === 'docker' ? 'http://mindpress-serv:3012/api/v1/**' : 'http://localhost:3012/api/v1/**' },
+        '/_nuxt/**': { cors: true },
+    },
     css: [
         '@/assets/css/app.css',
     ],
@@ -31,7 +35,7 @@ export default defineNuxtConfig({
         public: {
             minpress: {
                 mode: process.env.MINDPRESS_MODE === 'ghpages' ? 'static' : 'server',   // 'static' (default) or 'server'
-                baseUrl: 'http://localhost:3012/api/mindpress/'
+                baseUrl: '/api/v1/mindpress/'
             }
         }
     }

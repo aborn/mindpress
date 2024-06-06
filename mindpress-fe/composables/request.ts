@@ -17,7 +17,9 @@ service.interceptors.response.use(
     },
     async (error) => {
         // 未授权
-        if (error.response.status === 401) {
+        if (error.response == null) {
+            console.log(error.message)
+        } else if (error.response.status === 401) {
             // TODO 跳到登录页面
             location.href = "/";
         } else {
