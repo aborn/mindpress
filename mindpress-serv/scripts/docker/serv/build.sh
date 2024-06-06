@@ -3,8 +3,8 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $DIR
 
-# 构建后端服务的docker镜像, FROM openjdk:17-oracle
+# build docker image, FROM openjdk:17-oracle
 docker build -t mindpress_serv:v1 .
 
-# 启动容器，jar包放在宿主机的 /Users/aborn/docker/packages 目录下
-docker run --name mindpress-serv -it -v /Users/aborn/docker/packages:/app -d -p 3012:3012 --net=mindpress_net mindpress_serv:v1
+# boot up container，jar in folder: $HOME/docker/packages
+docker run --name mindpress-serv -it -v $HOME/docker/packages:/app -d -p 3014:3012 --net=mindpress_net mindpress_serv:v1

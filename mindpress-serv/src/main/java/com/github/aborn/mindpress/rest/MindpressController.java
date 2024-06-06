@@ -67,6 +67,7 @@ public class MindpressController {
         Map<String, Object> res = new HashMap<String, Object>();
         boolean health = restHighLevelClientService.health();
         res.put("es_status", health);
+        res.put("live", true);
 
         // String noHealth = restHighLevelClientService.checkNodeHealth();
         // res.put("no_health", noHealth);
