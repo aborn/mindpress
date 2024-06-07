@@ -21,6 +21,7 @@ public class ExtInfo {
     private String date;
     private String permalink;
     private String desc;
+    private String mode;
 
     ExtInfo() {
     }
@@ -34,6 +35,7 @@ public class ExtInfo {
         this.date = (String) objectMap.get("date");
         this.permalink = (String) objectMap.get("permalink");
         this.desc = (String) objectMap.get("desc");
+        this.mode = (String) objectMap.get("mode");
         LinkedHashMap map = (LinkedHashMap) objectMap.get("author");
         if (map != null && map.containsKey("name")) {
             this.author = new ExtInfoAuthor();

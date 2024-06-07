@@ -89,6 +89,8 @@ function saveAction(text: string) {
     console.log('--- now save event triggled. articleid=' + articleid.value + '---')
     // console.log(text)            
     const requestSpace = articleid + "t" + new Date()
+    // static mode for save to local files !!
+    extInfo.mode = mp.mode;
 
     const bodyContent = {
         articleid: articleid.value,

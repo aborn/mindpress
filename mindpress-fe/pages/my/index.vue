@@ -69,6 +69,7 @@ if (mp.mode === MINDPRESS_MODE.static) {
     const tdata = data.value.map((value) => {
         return staticMdTransform(value)
     })    
+    console.log(tdata)
     articles.value = tdata;
 } else {
     console.log('server mode')
