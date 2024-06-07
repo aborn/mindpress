@@ -15,7 +15,10 @@
 import { ref } from "vue"
 const articles = ref([]);
 const mp = mpConfig(useRuntimeConfig().public.minpress)
+const useReqURL = useRequestURL()
+const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
 console.log(mp)
+console.log(apiBaseURL)
 
 if (mp.mode === MINDPRESS_MODE.static) {
   console.log('static mode')
