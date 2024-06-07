@@ -2,6 +2,8 @@ package com.github.aborn.mindpress.inf.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author aborn
@@ -18,6 +20,13 @@ public class MarkdownUtils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static String generateRandomId() {
+        String pattern = "EEEEE dd MMMMM yyyy HH:mm:ss.SSSZ";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String datStr = simpleDateFormat.format(new Date());
+        return getId(datStr);
     }
 
     public static void main(String[] args) {

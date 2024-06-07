@@ -13,6 +13,7 @@ import com.github.aborn.mindpress.service.dto.ContentDto;
 import com.github.aborn.mindpress.service.dto.ContentQueryCriteria;
 import com.github.aborn.mindpress.service.dto.MarkdownMetaDto;
 import com.github.aborn.mindpress.service.dto.vo.ContentVo;
+import com.github.aborn.mindpress.service.dto.vo.ExtInfo;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +58,33 @@ public class ContentController {
         BaseResponse res = BaseResponse.success("success");
         boolean status = false;
 
-        resources.parseExtInfo();
+        ExtInfo extInfo = resources.parseExtInfo();
+        if (extInfo != null && "static".equals(extInfo.getMode())){
+            // Static Mode Saving to files.
+            String id = MarkdownUtils.generateRandomId().substring(0, 8);
+            String headContent = String.format("---\n" +
+                    "title: '%s'\n" +
+                    "description: '%s'\n" +
+                    "author: {name: aborn, link: aborn}\n" +
+                    "permalink: /article/%s\n" +
+                    "---\n\n<!-- Content of the page -->\n", resources.getTitle(), resources.getDesc(), id);
+            // TODO  to be configured!!! 
+            String fileName = "/Users/aborn/github/mindpress/mindpress-fe/content/test/" + resources.getTitle() + ".md";
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(fileName), "utf-8"))) {
+                writer.write(headContent + resources.getContent());
+                res.setSuccess(true);
+                res.setCode(200);
+                res.setMsg("file created: " + fileName);
+            } catch (IOException e) {
+                res.setSuccess(false);
+                res.setCode(500);
+                res.setMsg("file created failed: " + e.getMessage());
+                log.warn("save file exception");
+            }
+            return new ResponseEntity<>(res, HttpStatus.CREATED);
+        }
+
         if (StringUtils.isNotBlank(resources.getArticleid())) {
             log.info("createOrUpdateContent, update action, articleid={}", resources.getArticleid());
             ContentDto dto = contentService.findByArticleId(resources.getArticleid());

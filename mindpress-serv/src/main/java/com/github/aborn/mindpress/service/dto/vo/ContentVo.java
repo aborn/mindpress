@@ -68,13 +68,13 @@ public class ContentVo extends MarkdownMetaDto implements Serializable {
     // only for front-end post, json string
     private String extInfo;
 
-    public void parseExtInfo() {
+    public ExtInfo parseExtInfo() {
         if (this.getTags() == null) {
             this.setTags("");
         }
 
         if (StringUtils.isBlank(this.getExtInfo())) {
-            return;
+            return null;
         }
 
         try {
@@ -103,9 +103,11 @@ public class ContentVo extends MarkdownMetaDto implements Serializable {
             }
 
             parseContentToDesc(extInfo);
+            return extInfo;
         } catch (Exception e) {
             log.error("parseExtInfo exception. {}", e.getMessage());
         }
+        return null;
     }
 
     public void parseContentToDesc(ExtInfo extInfo) {

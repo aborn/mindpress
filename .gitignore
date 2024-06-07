@@ -8,4 +8,5 @@ node_modules
 .DS_Store
 .*/
 content/magazine/
+mindpress-fe/content/test/
 dist
