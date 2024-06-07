@@ -70,17 +70,17 @@ if (mp.mode === MINDPRESS_MODE.static) {
     console.log('static mode.')
     const articleid = route.params.slug[0];
     const permalink = '/article/' + articleid
-    const dataL = await queryContent().where({ permalink: { $eq: permalink } }).findOne()
-    console.log(dataL)
+    console.log(permalink)
+    const dataL = await queryContent().where({ _id: { $eq: articleid } }).findOne()
+    // console.log(dataL)
     articles.value = dataL
     articles.value.time = dataL.date
     articles.value.author = getAuthor(dataL)
     articles.value.articleid = articleid
     toc.value = dataL.body.toc;
-    console.log('toc value....')
-    console.log(toc.value)
-    // console.log('--------after.')
-    // console.log(articles)
+
+    // console.log('toc value....')
+    // console.log(toc.value)
 } else {
     console.log('server mode.')
     const articleid = route.params.slug[0]

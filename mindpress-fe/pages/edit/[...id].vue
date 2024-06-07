@@ -37,6 +37,7 @@ const toolbarsExclude = ['github']
 console.log('articleid === ' + articleid.value)
 const url = apiBaseURL + mp.contentUrl + '/' + articleid.value
 console.log(url)
+console.log('^^^^^^^^^^-----')
 // console.log(data)
 
 async function getDataAx() {
@@ -62,36 +63,34 @@ async function getData() {
 
 if (articleid.value) {
     if (mp.mode === MINDPRESS_MODE.static) {
-        console.log('static mode.  222')
+        console.log('static mode.')
         const permalink = '/article/' + articleid.value
         console.log(permalink)
-        const dataL = await queryContent().where({ permalink: { $eq: permalink } }).findOne()
-        //console.log(dataL)
+        const dataL = await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
+        // console.log('^^^^^^^^^^')
+        // console.log(dataL)
         //console.log(JSON.stringify(dataL.body))
-        
         // mkdContent.value = JSON.stringify(dataL.body.children)
         title.value = dataL.title
 
-        $fetch('/api/md/mdparser',
-        {
-            key: articleid,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: {
-                file: dataL._file,
-                articleid: articleid.value
-            }
-        }).then((res: any) => {
-            // console.log('result....')
-            // console.log(res)
-            mkdContent.value = res.md
-        }, error => {
-            console.log('exception...')
-            console.log(error)
-            hint.value = "request exception" + error
-        })
+        $fetch('/api/md/mdcontent',
+            {
+                key: articleid,
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: {
+                    file: dataL._file,
+                    articleid: articleid.value
+                }
+            }).then((res: any) => {
+                mkdContent.value = res.md
+            }, error => {
+                console.log('exception...')
+                console.log(error)
+                hint.value = "request exception" + error
+            })
 
         // articles.value.time = dataL.date
         // articles.value.author = getAuthor(dataL)

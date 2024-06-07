@@ -69,11 +69,13 @@ export const staticMdTransform = (md: any) => {
     return {
         title: md.title,
         description: md.description,
-        permalink: md.permalink ? md.permalink : md._path,
+        permalink: md._id ? "/article/" + md._id : (md.permalink ? md.permalink : md._path),
         date: md.date ? md.date : new Date(),
         createTime: md.date ? md.date : new Date(),
         id: md._id,
-        articleid: md._id
+        articleid: md._id,
+        author: md.author,
+        authors: md.authors ? md.authors : (md.author ? [md.author] : [])
     }
 }
 

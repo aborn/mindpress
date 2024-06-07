@@ -68,7 +68,7 @@ public class ContentController {
                     "author: {name: aborn, link: aborn}\n" +
                     "permalink: /article/%s\n" +
                     "---\n\n<!-- Content of the page -->\n", resources.getTitle(), resources.getDesc(), id);
-            // TODO  to be configured!!! 
+            // TODO  to be configured!!!
             String fileName = "/Users/aborn/github/mindpress/mindpress-fe/content/test/" + resources.getTitle() + ".md";
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(fileName), "utf-8"))) {
