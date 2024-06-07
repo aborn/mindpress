@@ -278,3 +278,23 @@ nav>ul:first-of-type li:nth-of-type(2) {
 .card-footer-author-item {
   margin-left: .5rem;
 }
+
+.main-container {
+  position: relative;
+  max-width: 1110px;
+  width: 100%;
+  display: block;
+}
+
+.content-container {
+  width: 820px;
+  max-width: 100%;
+}
+
+.siderbar-container {
+  position: absolute;
+  top: 6.5rem;
+  right: 0;
+  bottom: 0;
+  width: 12.5rem;
+}
