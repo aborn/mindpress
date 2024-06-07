@@ -2,7 +2,6 @@ package com.github.aborn.mindpress.rest;
 
 import com.github.aborn.mindpress.inf.es.ESMarkdownItem;
 import com.github.aborn.mindpress.inf.es.MindpressESClient;
-import com.github.aborn.mindpress.inf.es.RestHighLevelClientService;
 import com.github.aborn.mindpress.service.MarkdownMetaService;
 import com.github.aborn.mindpress.service.dto.MarkdownMetaQueryCriteria;
 import io.swagger.annotations.Api;
@@ -38,8 +37,6 @@ public class MindpressController {
 
     private final MindpressESClient mindpressESClient;
 
-    private final RestHighLevelClientService restHighLevelClientService;
-
     @GetMapping("search")
     @ApiOperation("query Markdown meta infos")
     @CrossOrigin
@@ -67,10 +64,6 @@ public class MindpressController {
         boolean health = mindpressESClient.isActived();
         res.put("es_status", health);
         res.put("live", true);
-
-        // String noHealth = restHighLevelClientService.checkNodeHealth();
-        // res.put("no_health", noHealth);
-
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

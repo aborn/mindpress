@@ -2,7 +2,6 @@ package com.github.aborn.mindpress.service.dto.vo;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.aborn.mindpress.domain.Content;
 import com.github.aborn.mindpress.service.dto.ContentDto;
@@ -103,20 +102,20 @@ public class ContentVo extends MarkdownMetaDto implements Serializable {
                 this.setCreateBy(extInfo.getAuthor().getName());
             }
 
-            parseContentToDesc();
+            parseContentToDesc(extInfo);
         } catch (Exception e) {
             log.error("parseExtInfo exception. {}", e.getMessage());
         }
     }
 
-    public void parseContentToDesc() {
+    public void parseContentToDesc(ExtInfo extInfo) {
         Parser parser = Parser.builder().build();
         Node document = parser.parse(content);
         HtmlRenderer renderer = HtmlRenderer.builder().build();
         String htmlContent = renderer.render(document);  // "<p>This is <em>Markdown</em></p>\n"
         Document parse = Jsoup.parse(htmlContent);
         Elements elements = parse.getElementsByTag("p");
-        if (elements != null && !elements.isEmpty()) {
+        if (!elements.isEmpty()) {
             for (int i = 0; i < elements.size(); i++) {
                 Element element = elements.get(i);
                 if (StringUtils.isNotBlank(element.text())) {
@@ -126,8 +125,7 @@ public class ContentVo extends MarkdownMetaDto implements Serializable {
             }
         }
 
-        // 根据 extInfo 解析
-        ExtInfo extInfo = JSONObject.parseObject(this.getExtInfo(), ExtInfo.class);
+        // parse by extInfo
         if (StringUtils.isNotBlank(extInfo.getDesc())) {
             String desc = extInfo.getDesc();
             if (extInfo.getDesc().length() > MAX_DESC_LENGTH) {
