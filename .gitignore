@@ -9,4 +9,5 @@ node_modules
 .*/
 content/magazine/
 mindpress-fe/content/test/
+mdparser/
 dist

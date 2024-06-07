@@ -66,10 +66,33 @@ if (articleid.value) {
         const permalink = '/article/' + articleid.value
         console.log(permalink)
         const dataL = await queryContent().where({ permalink: { $eq: permalink } }).findOne()
-        console.log(dataL.body)
-        console.log(JSON.stringify(dataL.body))
-        mkdContent.value = JSON.stringify(dataL.body.children)
+        //console.log(dataL)
+        //console.log(JSON.stringify(dataL.body))
+        
+        // mkdContent.value = JSON.stringify(dataL.body.children)
         title.value = dataL.title
+
+        $fetch('/api/md/mdparser',
+        {
+            key: articleid,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: {
+                file: dataL._file,
+                articleid: articleid.value
+            }
+        }).then((res: any) => {
+            // console.log('result....')
+            // console.log(res)
+            mkdContent.value = res.md
+        }, error => {
+            console.log('exception...')
+            console.log(error)
+            hint.value = "request exception" + error
+        })
+
         // articles.value.time = dataL.date
         // articles.value.author = getAuthor(dataL)
     } else {
