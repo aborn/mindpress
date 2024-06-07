@@ -32,7 +32,7 @@ cp -r .output $HOME/docker/nuxt/mindpress/
 cp *.json $HOME/docker/nuxt/mindpress/
 
 # restart container, make change active.
-CONTAINER="mindpress_nuxt"
+CONTAINER="mindpress-nuxt"
 
 if [ "$(docker ps -a | grep -c $CONTAINER)" -gt 0 ]; then
   echo "[---- Container with name: $CONTAINER  exist, now restart it! ]"

@@ -37,71 +37,63 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        item: {
-            type: Object,
-            required: true
-        }
-    },
-    data: function () {
-        return {
-            tags: this.assembyTags(),
-            authors: this.assembyAuthors(),
-            link: this.prelink()
-        }
-    },
-    methods: {
-        prelink() {
-            return this.item.permalink || this.item._path
-        },
-        assembyAuthors() {
-            let authors = [];
-            if (this.item.author) {
-                authors.push(this.item.author)
-            }
-
-            if (Array.isArray(this.item.authors)) {
-                this.item.authors.forEach((item) => {
-                    authors.push(item)
-                })
-            }
-            let pureAuthors = [];
-            const len = authors.length;
-            authors.forEach((item, idx) => {
-                pureAuthors.push(item.name);
-                if (idx !== len - 1) {
-                    pureAuthors.push("|")
-                }
-            })
-            return pureAuthors
-        },
-        assembyTags() {
-            let tags = this.item.tag || this.item.tags || this.item.category;
-            return tags ? tags : ["MindPress"]
-        },
-        formatDesc(des) {
-            const maxLength = 50
-            const cjkMatch = des.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/)
-            const trimmedString = des.trim().substr(0, maxLength * 2)
-            let trimmedStringPad = ''
-            if (des.trim().length > maxLength * 2) {
-                trimmedStringPad = "..."
-            }
-            const cjkTrim = des.trim().substr(0, maxLength);
-            let cjkTrimPad = ''
-            if (cjkMatch && des.trim().length > maxLength) {
-                cjkTrimPad = "..."
-            }
-            //const desCutWord = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
-            return cjkMatch ? cjkTrim + cjkTrimPad : trimmedString + trimmedStringPad
-        },
-        formatDate(date) {
-            if (!date) { return '' }
-            const options = { year: 'numeric', month: 'long', day: 'numeric' }
-            return new Date(date).toLocaleDateString('en', options)
-        }
+<script lang="ts" setup>
+const props = defineProps({
+    item: {
+        type: Object,
+        required: true
     }
+})
+
+const tags = assembyTags();
+const authors = assembyAuthors();
+const link = prelink()
+
+function prelink() {
+    return props.item.permalink || this.item._path
+}
+
+function assembyAuthors() {
+    const authors = props.item.authors;
+    const len = authors.length;
+    const authorsArr = [] as string[];
+    authors.forEach((item: any, idx: number) => {
+        if (authorsArr.length < 5) {
+            // 列表页最多显示前3个作者
+            authorsArr.push(item.name)
+            if (idx !== len - 1 && idx !== 2) {
+                authorsArr.push("|")
+            }
+        }
+    })
+    return authorsArr
+}
+
+function assembyTags() {
+    let tags = props.item.tags || this.item.category;
+    return tags ? tags : ["MindPress"]
+}
+
+function formatDesc(des) {
+    const maxLength = 50
+    const cjkMatch = des.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/)
+    const trimmedString = des.trim().substr(0, maxLength * 2)
+    let trimmedStringPad = ''
+    if (des.trim().length > maxLength * 2) {
+        trimmedStringPad = "..."
+    }
+    const cjkTrim = des.trim().substr(0, maxLength);
+    let cjkTrimPad = ''
+    if (cjkMatch && des.trim().length > maxLength) {
+        cjkTrimPad = "..."
+    }
+    //const desCutWord = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
+    return cjkMatch ? cjkTrim + cjkTrimPad : trimmedString + trimmedStringPad
+}
+
+function formatDate(date) {
+    if (!date) { return '' }
+    const options = { year: 'numeric', month: 'long', day: 'numeric' }
+    return new Date(date).toLocaleDateString('en', options)
 }
 </script>
