@@ -58,6 +58,10 @@ const toc = ref('')
 const formatDate = mpFormatDate;
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 
+const articleids = route.params.slug
+const articleid = (mp.mode === MINDPRESS_MODE.static && 'undefined' === articleids[0]) ?
+    ref(null) : ref(articleids[0]);
+
 if (mp.mode === MINDPRESS_MODE.static) {
     hint.value = 'No content found.'
     const getAuthor = (dataL) => {
@@ -68,30 +72,28 @@ if (mp.mode === MINDPRESS_MODE.static) {
         }
     }
     console.log('static mode.')
-    const articleid = route.params.slug[0];
-    const permalink = '/article/' + articleid
+    const permalink = '/article/' + articleid.value
     console.log(permalink)
-    const dataL = await queryContent().where({ _id: { $eq: articleid } }).findOne()
+    const dataL = await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
     // console.log(dataL)
     articles.value = dataL
     articles.value.time = dataL.date
     articles.value.author = getAuthor(dataL)
-    articles.value.articleid = articleid
+    articles.value.articleid = articleid.value
     toc.value = dataL.body.toc;
 
     // console.log('toc value....')
     // console.log(toc.value)
 } else {
     console.log('server mode.')
-    const articleid = route.params.slug[0]
-    const url = mp.contentUrl + "/" + articleid
+    const url = mp.contentUrl + "/" + articleid.value
     // console.log(url)
 
     const { data } = await useFetch(url)
     // console.log(data.value)
     const content = ref(data.value.content)
 
-    const { data: doc, refresh } = await useAsyncData(articleid, async () => {
+    const { data: doc, refresh } = await useAsyncData(articleid.value, async () => {
         try {
             return await $fetch('/api/parse', {
                 method: 'POST',
