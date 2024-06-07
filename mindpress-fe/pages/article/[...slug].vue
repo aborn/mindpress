@@ -53,12 +53,14 @@ if (mp.mode === MINDPRESS_MODE.static) {
         }
     }
     console.log('static mode.')
-    const permalink = '/article/' + route.params.slug[0];
+    const articleid = route.params.slug[0];
+    const permalink = '/article/' + articleid
     const dataL = await queryContent().where({ permalink: { $eq: permalink } }).findOne()
     // console.log(dataL)
     articles.value = dataL
     articles.value.time = dataL.date
     articles.value.author = getAuthor(dataL)
+    articles.value.articleid = articleid
     // console.log('--------after.')
     // console.log(articles)
 } else {

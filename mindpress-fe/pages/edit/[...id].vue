@@ -20,7 +20,6 @@ import { ref } from 'vue';
 import { MdEditor, type Themes, type ToolbarNames } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css';
 import { mpConfig } from '~~/composables/utils';
-
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
 const articleids = route.params.id
@@ -62,14 +61,27 @@ async function getData() {
 }
 
 if (articleid.value) {
-    const dataAx = await getDataAx()
-    mkdContent.value = dataAx.content
-    title.value = dataAx.title
+    if (mp.mode === MINDPRESS_MODE.static) {
+        console.log('static mode.  222')
+        const permalink = '/article/' + articleid.value
+        console.log(permalink)
+        const dataL = await queryContent().where({ permalink: { $eq: permalink } }).findOne()
+        console.log(dataL.body)
+        console.log(JSON.stringify(dataL.body))
+        mkdContent.value = JSON.stringify(dataL.body.children)
+        title.value = dataL.title
+        // articles.value.time = dataL.date
+        // articles.value.author = getAuthor(dataL)
+    } else {
+        const dataAx = await getDataAx()
+        mkdContent.value = dataAx.content
+        title.value = dataAx.title
 
-    // console.log(dataAx)
-    // const { data: dataS } = await getData()
-    // mkdContent.value = dataS.value.content
-    // title.value = dataS.value.title
+        // console.log(dataAx)
+        // const { data: dataS } = await getData()
+        // mkdContent.value = dataS.value.content
+        // title.value = dataS.value.title
+    }
 }
 
 function changeAction(e: any) {
@@ -101,7 +113,7 @@ function saveAction(text: string) {
     }
     hint.value = "保存中......"
     console.log(bodyContent)
-    
+
     console.log(mp.contentUrl)
     // this.hint = "save action triggled."
     $fetch(mp.contentUrl,
