@@ -53,8 +53,7 @@ public class MindpressController {
     @CrossOrigin
     public ResponseEntity<Object> es(String s, String t) {
         if (!StringUtils.isBlank(t)) {
-            List<ESMarkdownItem> markdownItems = mindpressESClient.getPageData(0);
-            mindpressESClient.transferData(markdownItems, true);
+            mindpressESClient.importAllDataToES(false);
         }
         List<ESMarkdownItem> detail = mindpressESClient.search(s);
         return new ResponseEntity<>(detail, HttpStatus.OK);
@@ -65,7 +64,7 @@ public class MindpressController {
     @CrossOrigin
     public ResponseEntity<Object> status() throws IOException {
         Map<String, Object> res = new HashMap<String, Object>();
-        boolean health = restHighLevelClientService.health();
+        boolean health = mindpressESClient.isActived();
         res.put("es_status", health);
         res.put("live", true);
 

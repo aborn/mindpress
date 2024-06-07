@@ -27,10 +27,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -46,34 +46,62 @@ public class MindpressESClient {
     private final RestHighLevelClientService restHighLevelClientService;
     private final MarkdownMetaRepository markdownMetaRepository;
 
-    private final ContentRepository contentRepository;
     private final MarkdownMetaMapper markdownMetaMapper;
     private final ContentServiceImpl contentService;
 
-    public boolean isLive() {
+    public boolean isActived() {
         return restHighLevelClientService.isLive();
     }
 
     public boolean init() {
         try {
             boolean exists = restHighLevelClientService.indexExists(MindpressESMapping.MP_ES_INDEX_NAME);
-            if (!exists) {
-                restHighLevelClientService.createIndex(MindpressESMapping.MP_ES_INDEX_NAME,
-                        MindpressESMapping.MP_ES_SETTINGS,
-                        MindpressESMapping.BuildMappings());
+            if (exists) {
+                return true;
             }
+
+            restHighLevelClientService.createIndex(MindpressESMapping.MP_ES_INDEX_NAME,
+                    MindpressESMapping.MP_ES_SETTINGS,
+                    MindpressESMapping.BuildMappings());
             return true;
         } catch (IOException e) {
+            log.warn("es init io exception ex. {}", e.getMessage());
             return false;
         } catch (Exception e) {
+            log.warn("es init exception ex. {}", e.getMessage());
             return false;
         }
+    }
+
+    @PostConstruct
+    public void doInitCheck() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+                           @Override
+                           public void run() {
+                               String ds = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+                               boolean isActive = isActived();
+                               if (isActive) {
+                                   try {
+                                       boolean exists = restHighLevelClientService.indexExists(MindpressESMapping.MP_ES_INDEX_NAME);
+                                       if (!exists) {
+                                           log.info("{} Now init with all data!", ds);
+                                           importAllDataToES(true);
+                                       }
+                                   } catch (IOException e) {
+                                       log.warn("indexExists error {}", e.getMessage());
+                                   }
+                               }
+                           }
+                       },
+                5000L,
+                15000L);
     }
 
     private String getValue(HighlightField nameField) {
         if (nameField != null) {
             Text[] fragments = nameField.getFragments();
-            StringBuffer stringBuffer = new StringBuffer();
+            StringBuilder stringBuffer = new StringBuilder();
             for (Text str : fragments) {
                 stringBuffer.append(str.string());
             }
@@ -84,14 +112,13 @@ public class MindpressESClient {
     }
 
     public List<ESMarkdownItem> search(String key) {
+        log.info("Call ESClient search, key {}", key);
         List<ESMarkdownItem> res = new ArrayList<>();
-
         try {
             SearchResponse search = restHighLevelClientService.search(key, 0, 10, MindpressESMapping.MP_ES_INDEX_NAME);
             SearchHits hits = search.getHits();
             SearchHit[] hits1 = hits.getHits();
             for (SearchHit hit : hits1) {
-                // System.out.println(documentFields.getSourceAsString());
                 ESMarkdownItem esMarkdownItem = JSON.parseObject(hit.getSourceAsString(), ESMarkdownItem.class);
                 Map<String, HighlightField> highlightFields = hit.getHighlightFields();
                 if (highlightFields != null) {
@@ -104,14 +131,27 @@ public class MindpressESClient {
                 }
                 res.add(esMarkdownItem);
             }
-
-
         } catch (IOException ioe) {
-
+            log.warn("Call ESClient search, io exception, key {}, error msg: {}", key, ioe.getMessage());
         } catch (Exception e) {
-
+            log.warn("Call ESClient search, exception, key {}, error msg: {}", key, e.getMessage());
         }
         return res;
+    }
+
+    public void importAllDataToES(boolean isSync) {
+        init();
+        MarkdownMetaQueryCriteria criteria = MarkdownMetaQueryCriteria.builder().build();
+        Pageable pageRequest = PageRequest.of(0, 10, Sort.by("createTime").descending());
+        Page<MarkdownMeta> page = markdownMetaRepository.findAll((root, criteriaQuery, criteriaBuilder) ->
+                QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageRequest);
+        int totalPage = page.getTotalPages();
+        log.info("Now transfer all data to es. totalPage:{}", totalPage);
+        for (int i = 0; i < totalPage; i++) {
+            List<ESMarkdownItem> pageData = getPageData(i);
+            boolean status = transferData(pageData, isSync);
+            log.info("Page {}, status: {}", i, status);
+        }
     }
 
     public List<ESMarkdownItem> getPageData(int pageNumber) {
@@ -133,7 +173,7 @@ public class MindpressESClient {
     }
 
     public boolean transferData(List<ESMarkdownItem> esdata, boolean isSync) {
-        if (!isLive()) {
+        if (!isActived()) {
             log.warn("es not connected, pls make sure es running!!");
             return false;
         }
@@ -158,9 +198,11 @@ public class MindpressESClient {
             }
 
             return true;
-        } catch (IOException ioException) {
+        } catch (IOException ioe) {
+            log.warn("transferData io exception, isSync:{}, {}", isSync, ioe.getMessage());
             return false;
         } catch (Exception e) {
+            log.warn("transferData  exception, isSync:{}, {}", isSync, e.getMessage());
             return false;
         }
     }

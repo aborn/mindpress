@@ -112,16 +112,17 @@ public class RestHighLevelClientService {
                            @Override
                            public void run() {
                                String ds = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-                               log.info(ds + ": check... previous status=" + config.isStatus());
+                               boolean previousStatus = config.isStatus();
                                boolean status = health();
                                config.setStatus(status);
-                               log.info(ds + ": now status... " + status);
+                               log.info(ds + ": check... previous status={}, now status={}", previousStatus, status);
                            }
                        },
-                5000L, 15000L);
+                5000L,
+                15000L);
     }
 
-    public boolean health() {
+    private boolean health() {
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(500)
                 .setSocketTimeout(1000)
@@ -187,8 +188,8 @@ public class RestHighLevelClientService {
         // searchSourceBuilder.query(contentQuery);
 
         HighlightBuilder highlightBuilder = new HighlightBuilder();
-        highlightBuilder.preTags("<span style=\"color:red\">"); // 高亮前缀
-        highlightBuilder.postTags("</span>"); // 高亮后缀
+        highlightBuilder.preTags("<span style=\"color:red\">");  // 高亮前缀
+        highlightBuilder.postTags("</span>");                    // 高亮后缀
 
         highlightBuilder.fields().add(new HighlightBuilder.Field("title")); // 高亮字段
         highlightBuilder.fields().add(new HighlightBuilder.Field("content")); // 高亮字段
@@ -206,7 +207,7 @@ public class RestHighLevelClientService {
         searchSourceBuilder.sort(new FieldSortBuilder("updateTime").order(SortOrder.DESC));
         request.source(searchSourceBuilder);
 
-        // log.info("[search query:{}]",request.source().toString());
+        log.info("[search query:{}]", request.source().toString());
         return client.search(request, RequestOptions.DEFAULT);
     }
 

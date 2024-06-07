@@ -49,7 +49,7 @@ public class MarkdownMetaServiceImpl implements MarkdownMetaService {
         Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createTime").descending());
         String searchEngine = "default";
         Map<String, Object> result;
-        if (!mindpressESClient.isLive()) {
+        if (!mindpressESClient.isActived()) {
             result = queryAll(criteria, pageable);
         } else {
             searchEngine = "es";
