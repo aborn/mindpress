@@ -33,6 +33,7 @@ const mkdContent = ref('')
 const hint = ref('')
 const title = ref('')
 const toolbarsExclude = ['github']
+let file = '';
 
 console.log('articleid === ' + articleid.value)
 const url = apiBaseURL + mp.contentUrl + '/' + articleid.value
@@ -67,6 +68,7 @@ if (articleid.value) {
         const permalink = '/article/' + articleid.value
         console.log(permalink)
         const dataL = await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
+        file = dataL._file;
         // console.log('^^^^^^^^^^')
         // console.log(dataL)
         //console.log(JSON.stringify(dataL.body))
@@ -81,7 +83,7 @@ if (articleid.value) {
                     "Content-Type": "application/json"
                 },
                 body: {
-                    file: dataL._file,
+                    file: file,
                     articleid: articleid.value
                 }
             }).then((res: any) => {
@@ -122,7 +124,7 @@ function saveAction(text: string) {
     console.log('title:' + title.value)
     console.log('--- now save event triggled. articleid=' + articleid.value + '---')
     // console.log(text)            
-    const requestSpace = articleid + "t" + new Date()
+    const requestSpace = articleid.value + "t" + new Date()
     // static mode for save to local files !!
     extInfo.mode = mp.mode;
 
@@ -131,14 +133,14 @@ function saveAction(text: string) {
         content: text,
         title: title.value,
         extInfo: JSON.stringify(extInfo),
+        file: file,
         pub: true, // default value
     }
     hint.value = "保存中......"
     console.log(bodyContent)
-
     console.log(mp.contentUrl)
     // this.hint = "save action triggled."
-    $fetch(mp.contentUrl,
+    $fetch(mp.mode === MINDPRESS_MODE.static ? '/api/md/savecontent' : mp.contentUrl,
         {
             key: requestSpace,
             method: "POST",
@@ -161,6 +163,7 @@ function saveAction(text: string) {
             console.log('exception...')
             console.log(error)
         })
+
 }
 
 </script>

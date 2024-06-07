@@ -2,7 +2,7 @@ import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 
 export default defineEventHandler(async (event) => {
-    console.log("nitro: req comming...")
+    console.log("nitro: req comming...(mdcontent)")
     const req = event.node.req
     const query = getQuery(event)
     let data = '';
@@ -30,6 +30,6 @@ export default defineEventHandler(async (event) => {
 
     return {
         md: data,
-        api: 'nuxt-openid-connect api works'
+        api: 'mdcontent api works',
     }
 })
