@@ -10,13 +10,14 @@ import com.github.aborn.mindpress.service.dto.MarkdownMetaDto;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.json.JacksonJsonParser;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.pegdown.Extensions;
-import org.pegdown.PegDownProcessor;
+import org.springframework.boot.json.JacksonJsonParser;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -104,14 +105,15 @@ public class ContentVo extends MarkdownMetaDto implements Serializable {
 
             parseContentToDesc();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("parseExtInfo exception. {}", e.getMessage());
         }
     }
 
     public void parseContentToDesc() {
-        PegDownProcessor pdp = new PegDownProcessor(Integer.MAX_VALUE);
-        // 根据内容解析
-        String htmlContent = pdp.markdownToHtml(content);
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(content);
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+        String htmlContent = renderer.render(document);  // "<p>This is <em>Markdown</em></p>\n"
         Document parse = Jsoup.parse(htmlContent);
         Elements elements = parse.getElementsByTag("p");
         if (elements != null && !elements.isEmpty()) {
