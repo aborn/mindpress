@@ -2,6 +2,7 @@ package com.github.aborn.mindpress.service.dto.vo;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.aborn.mindpress.domain.Content;
 import com.github.aborn.mindpress.service.dto.ContentDto;
@@ -10,6 +11,12 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.json.JacksonJsonParser;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.pegdown.Extensions;
+import org.pegdown.PegDownProcessor;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -29,7 +36,6 @@ public class ContentVo extends MarkdownMetaDto implements Serializable {
     public static final int MAX_DESC_LENGTH = 1000;
 
     private static final long serialVersionUID = 2371591328857612229L;
-
     public ContentVo() {
     }
 
@@ -74,7 +80,7 @@ public class ContentVo extends MarkdownMetaDto implements Serializable {
         try {
             Map<String, Object> objectMap = new JacksonJsonParser().parseMap(this.getExtInfo());
             ExtInfo extInfo = new ExtInfo(objectMap);
-            if (StringUtils.isNotBlank(extInfo.getTitle())) {
+            if (StringUtils.isNotBlank(extInfo.getTitle()) && StringUtils.isBlank(this.getTitle())) {
                 this.setTitle(extInfo.getTitle());
             }
             if (StringUtils.isNotBlank(extInfo.getDate())) {
@@ -96,15 +102,39 @@ public class ContentVo extends MarkdownMetaDto implements Serializable {
                 this.setCreateBy(extInfo.getAuthor().getName());
             }
 
-            if (StringUtils.isNotBlank(extInfo.getDesc())) {
-                String desc = extInfo.getDesc();
-                if (extInfo.getDesc().length() > MAX_DESC_LENGTH) {
-                    desc = desc.substring(0, MAX_DESC_LENGTH);
-                }
-                this.setDesc(desc);
-            }
+            parseContentToDesc();
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+    }
+
+    public void parseContentToDesc() {
+        PegDownProcessor pdp = new PegDownProcessor(Integer.MAX_VALUE);
+        // 根据内容解析
+        String htmlContent = pdp.markdownToHtml(content);
+        Document parse = Jsoup.parse(htmlContent);
+        Elements elements = parse.getElementsByTag("p");
+        if (elements != null && !elements.isEmpty()) {
+            for (int i = 0; i < elements.size(); i++) {
+                Element element = elements.get(i);
+                if (StringUtils.isNotBlank(element.text())) {
+                    setDesc(element.text());
+                    return;
+                }
+            }
+        }
+
+        // 根据 extInfo 解析
+        ExtInfo extInfo = JSONObject.parseObject(this.getExtInfo(), ExtInfo.class);
+        if (StringUtils.isNotBlank(extInfo.getDesc())) {
+            String desc = extInfo.getDesc();
+            if (extInfo.getDesc().length() > MAX_DESC_LENGTH) {
+                desc = desc.substring(0, MAX_DESC_LENGTH);
+            }
+            this.setDesc(desc);
+            return;
+        }
+
+        this.setDesc(getTitle());
     }
 }

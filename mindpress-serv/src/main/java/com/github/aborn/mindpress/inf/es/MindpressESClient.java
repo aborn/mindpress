@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.JSON;
 import com.github.aborn.mindpress.domain.MarkdownMeta;
 import com.github.aborn.mindpress.inf.es.mapings.MindpressESMapping;
 import com.github.aborn.mindpress.inf.utils.QueryHelp;
-import com.github.aborn.mindpress.repository.ContentRepository;
 import com.github.aborn.mindpress.repository.MarkdownMetaRepository;
 import com.github.aborn.mindpress.service.dto.ContentDto;
 import com.github.aborn.mindpress.service.dto.MarkdownMetaDto;

@@ -80,7 +80,8 @@ function saveAction(text: string) {
     const route = useRoute()
     const extInfo = simpleParser(text)
     console.log(extInfo)
-    if (extInfo.title && extInfo.title !== '') {
+
+    if ((!title.value || title.value.trim().length === 0) && extInfo.title && extInfo.title !== '') {
         title.value = extInfo.title
     }
 
@@ -94,15 +95,14 @@ function saveAction(text: string) {
         content: text,
         title: title.value,
         extInfo: JSON.stringify(extInfo),
-        pub: true, // 默认都为开文档
+        pub: true, // default value
     }
     hint.value = "保存中......"
-
-    console.log(mp)
-
+    console.log(bodyContent)
+    
     console.log(mp.contentUrl)
     // this.hint = "save action triggled."
-    useFetch(mp.contentUrl,
+    $fetch(mp.contentUrl,
         {
             key: requestSpace,
             method: "POST",
@@ -110,19 +110,14 @@ function saveAction(text: string) {
                 "Content-Type": "application/json"
             },
             body: bodyContent
-        }).then(res => {
-            const data = res.data.value as any
-            const error = res.error.value
-            // res.refresh()   // TODO: Cannot undstand why must it?
-            console.log(data)
-            console.log(error)
-
-            hint.value = data ? data.msg : error
-            if (data && data.success) {
-                hint.value = data.msg + " ,Time:" + new Date();
-                if (data.ext && data.ext.articleid) {
-                    console.log(data.ext.articleid)
-                    articleid.value = data.ext.articleid // begin edit it when file created success.
+        }).then((res: any) => {
+            console.log(res)
+            hint.value = res.msg
+            if (res && res.success) {
+                hint.value = res.msg + " ,Time:" + new Date();
+                if (res.ext && res.ext.articleid) {
+                    console.log(res.ext.articleid)
+                    articleid.value = res.ext.articleid // begin edit it when file created success.
                     console.log('saved articleid: ' + articleid.value)
                 }
             }

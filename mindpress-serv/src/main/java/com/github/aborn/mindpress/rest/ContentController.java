@@ -15,6 +15,7 @@ import com.github.aborn.mindpress.service.dto.MarkdownMetaDto;
 import com.github.aborn.mindpress.service.dto.vo.ContentVo;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Api(tags = "Markdown file content controller")
 @RequestMapping("/api/v1/mindpress/content")
+@Slf4j
 public class ContentController {
 
     private final ContentService contentService;
@@ -56,7 +58,7 @@ public class ContentController {
 
         resources.parseExtInfo();
         if (StringUtils.isNotBlank(resources.getArticleid())) {
-            // update action
+            log.info("createOrUpdateContent, update action, articleid={}", resources.getArticleid());
             ContentDto dto = contentService.findByArticleId(resources.getArticleid());
 
             if (dto != null) {
@@ -70,7 +72,7 @@ public class ContentController {
                 res.setMsg("file doesn't exists.");
             }
         } else {
-            // create action
+            log.info("createOrUpdateContent, create action, articleid={}", resources.getArticleid());
             resources.setCreateBy("aborn");
             resources.setUpdateBy("aborn");
             resources.setArticleid(MarkdownUtils.getId(resources.getContent()));
