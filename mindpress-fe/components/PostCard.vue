@@ -50,28 +50,30 @@ const authors = assembyAuthors();
 const link = prelink()
 
 function prelink() {
-    return props.item.permalink || this.item._path
+    return props.item._path || props.item.permalink
 }
 
 function assembyAuthors() {
-    const authors = props.item.authors;
-    const len = authors.length;
     const authorsArr = [] as string[];
-    authors.forEach((item: any, idx: number) => {
-        if (authorsArr.length < 5) {
-            // 列表页最多显示前3个作者
-            authorsArr.push(item.name)
-            if (idx !== len - 1 && idx !== 2) {
-                authorsArr.push("|")
+    const authors = props.item.authors;
+    if (authors) {
+        const len = authors.length;
+        authors.forEach((item: any, idx: number) => {
+            if (authorsArr.length < 5) {
+                // 列表页最多显示前3个作者
+                authorsArr.push(item.name)
+                if (idx !== len - 1 && idx !== 2) {
+                    authorsArr.push("|")
+                }
             }
-        }
-    })
+        })
+    }
     return authorsArr
 }
 
 function assembyTags() {
-    let tags = props.item.tags || this.item.category;
-    return tags ? tags : ["MindPress"]
+    let tags = props.item.tag || props.item.tags || props.item.category;
+    return tags ? tags : []
 }
 
 function formatDesc(des) {
@@ -98,8 +100,7 @@ function formatDate(date) {
 }
 
 function onClickNavTo(link) {
-      // e.stopPropagation();
-      navigateTo({ path: link });
-      console.log('click', link)
-    }
+    navigateTo({ path: link });
+    console.log('click', link)
+}
 </script>
