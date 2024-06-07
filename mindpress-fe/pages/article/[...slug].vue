@@ -1,9 +1,6 @@
 <template>
     <div>
         <NavBar />
-        <template>
-
-        </template>
         <main class="container">
             <div class="main-container">
                 <div class="content-container">
