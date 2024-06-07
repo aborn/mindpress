@@ -19,7 +19,7 @@ console.log(mp)
 
 if (mp.mode === MINDPRESS_MODE.static) {
   console.log('static mode')
-  const { data } = await useAsyncData('home', () => queryContent().find())
+  const { data } = await useAsyncData('home', () => queryContent().sort({ _id: 1}).find())
   // console.log(data.value)
   const tdata = data.value.map((value) => {
     return staticMdTransform(value)
