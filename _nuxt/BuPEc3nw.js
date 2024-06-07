@@ -1,0 +1,1 @@
+import r from"./DW_dLbgF.js";import{i as o,S as u,A as f,$ as c}from"./DUVEoVI9.js";const p=o({name:"Markdown",extends:r,setup(t){const{parent:e}=c(),{between:n,default:a}=u(),s=f(()=>typeof t.unwrap=="string"?t.unwrap.split(" "):["*"]);return{fallbackSlot:a,tags:s,between:n,parent:e}}});export{p as default};
