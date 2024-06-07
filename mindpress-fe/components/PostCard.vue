@@ -4,7 +4,7 @@
         <img src="/assets/img/flex.JPG" alt="flex demo" loading="lazy" class="card-image-item" />
     </div> 
     -->
-    <div class="card-content">
+    <div class="card-content" @click="onClickNavTo(`${link}`)">
         <NuxtLink :to="`${link}`" style="text-decoration: none !important;">
             <h2 class="card-content-title">
                 <h2 v-if="item.highlightTitle" class="card-content-title">
@@ -96,4 +96,10 @@ function formatDate(date) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' }
     return new Date(date).toLocaleDateString('en', options)
 }
+
+function onClickNavTo(link) {
+      // e.stopPropagation();
+      navigateTo({ path: link });
+      console.log('click', link)
+    }
 </script>
