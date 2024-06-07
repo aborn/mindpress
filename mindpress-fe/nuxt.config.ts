@@ -34,7 +34,7 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             minpress: {
-                mode: process.env.MINDPRESS_MODE === 'ghpages' ? 'static' : 'server',   // 'static' (default) or 'server'
+                mode: (process.env.MINDPRESS_MODE === 'ghpages' || process.env.MINDPRESS_MODE === 'static') ? 'static' : 'server',   // 'static' (default) or 'server'
                 baseUrl: '/api/v1/mindpress/'
             }
         }
