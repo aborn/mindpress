@@ -27,6 +27,13 @@ export default defineEventHandler(async (event) => {
         `---\ntitle: '` + body.title + `'\n---\n\n<!-- Content of the page -->\n`
     console.log(body)
 
+    let isCreateFile = false;
+    if (!file || file.length == 0) {
+        file = "test/" + body.title + ".md"
+        isCreateFile = true;
+        console.log("create new file, file name=" + file)
+    }
+
     let content = body.content
     if (body.content) {
         const modestr = '<!-- Content of the page -->';
@@ -50,7 +57,7 @@ export default defineEventHandler(async (event) => {
         success: true,
         msg: 'articleid=' + articleid + ", save success!",
         ext: {
-
+            file: file
         }
     }
 })

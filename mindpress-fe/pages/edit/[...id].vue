@@ -33,7 +33,7 @@ const mkdContent = ref('')
 const hint = ref('')
 const title = ref('')
 const toolbarsExclude = ['github']
-let file = '';
+let file = ref('');
 
 console.log('articleid === ' + articleid.value)
 const url = apiBaseURL + mp.contentUrl + '/' + articleid.value
@@ -68,7 +68,7 @@ if (articleid.value) {
         const permalink = '/article/' + articleid.value
         console.log(permalink)
         const dataL = await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
-        file = dataL._file;
+        file.value = dataL._file;
         // console.log('^^^^^^^^^^')
         // console.log(dataL)
         //console.log(JSON.stringify(dataL.body))
@@ -83,7 +83,7 @@ if (articleid.value) {
                     "Content-Type": "application/json"
                 },
                 body: {
-                    file: file,
+                    file: file.value,
                     articleid: articleid.value
                 }
             }).then((res: any) => {
@@ -133,7 +133,7 @@ function saveAction(text: string) {
         content: text,
         title: title.value,
         extInfo: JSON.stringify(extInfo),
-        file: file,
+        file: file.value,
         pub: true, // default value
     }
     hint.value = "保存中......"
@@ -157,6 +157,11 @@ function saveAction(text: string) {
                     console.log(res.ext.articleid)
                     articleid.value = res.ext.articleid // begin edit it when file created success.
                     console.log('saved articleid: ' + articleid.value)
+                }
+
+                if (res.ext && res.ext.file) {
+                    file.value = res.ext.file
+                    console.log('static mode, save articleid:' + file.value)
                 }
             }
         }, error => {
