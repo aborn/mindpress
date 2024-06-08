@@ -24,6 +24,7 @@ import { mpConfig } from '~~/composables/utils';
 const route = useRoute()
 const articleids = route.params.id
 const useReqURL = useRequestURL()
+let isDev = isDevMode(useReqURL.hostname);
 const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const articleid = (mp.mode === MINDPRESS_MODE.static && 'undefined' === articleids[0]) ?
@@ -94,6 +95,10 @@ if (articleid.value) {
                 console.log('exception...')
                 console.log(error)
                 hint.value = "request exception" + error
+                if (isDev) {
+                    hint.value = "Static Mode cannot save md content! "
+                    mkdContent.value = JSON.stringify(dataL.body.children)
+                }
             })
 
         // articles.value.time = dataL.date

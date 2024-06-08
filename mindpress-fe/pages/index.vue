@@ -31,8 +31,8 @@ if (mp.mode === MINDPRESS_MODE.static) {
     return staticMdTransform(value, isDev)
   })
 
-  // console.log('***************')
-  // console.log(tdata)
+  console.log('***************')
+  console.log(tdata)
   articles.value = tdata; //data.value;
 } else {
   console.log('server mode')

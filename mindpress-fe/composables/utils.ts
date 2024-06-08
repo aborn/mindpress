@@ -65,9 +65,8 @@ export const mpTransform = (server: MarkdownMetaS): MarkdownMeta => {
     return value;
 }
 
-export const isDevMode = (host: string) => {
-    console.log(host)
-    if (host === 'localhost' || host === '127.0.0.1') {
+export const isDevMode = (hoatname: string) => {
+    if (hoatname === 'localhost' || hoatname === '127.0.0.1') {
         return true;
     }
     return false;
@@ -78,12 +77,16 @@ export const staticMdTransform = (md: any, isDevMode: boolean) => {
         title: md.title,
         description: md.description,
         permalink: md.permalink,
+        link: md.permalink ? md.permalink :
+            (isDevMode ? (md._id ? "/article/" + md._id : md._path) :
+                (md._path ? md._path : "/article/" + md._id)),
         date: md.date ? md.date : new Date(),
         createTime: md.date ? md.date : new Date(),
         id: md._id,
         articleid: md._id,
         author: md.author,
         _path: md._path,
+        _id: md._id,
         authors: md.authors ? md.authors : (md.author ? [md.author] : [])
     }
 }
