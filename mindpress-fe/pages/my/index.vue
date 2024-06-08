@@ -62,14 +62,15 @@ import { ref } from "vue"
 const articles = ref([]);
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const formatDate = mpFormatDate;
+const useReqURL = useRequestURL()
 
 if (mp.mode === MINDPRESS_MODE.static) {
     console.log('static mode')
     const { data } = await useAsyncData('home', () => queryContent().find())
     const tdata = data.value.map((value) => {
-        return staticMdTransform(value)
-    })    
-    console.log(tdata)
+        return staticMdTransform(value, isDevMode(useReqURL.hostname))
+    })
+    // console.log(tdata)
     articles.value = tdata;
 } else {
     console.log('server mode')
@@ -87,4 +88,3 @@ if (mp.mode === MINDPRESS_MODE.static) {
 }
 
 </script>
-

@@ -16,16 +16,19 @@ import { ref } from "vue"
 const articles = ref([]);
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const useReqURL = useRequestURL()
+// console.log(useReqURL)
 const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
 console.log(mp)
 console.log(apiBaseURL)
+let isDev = isDevMode(useReqURL.hostname);
+console.log('isDevMode:' + isDev)
 
 if (mp.mode === MINDPRESS_MODE.static) {
   console.log('static mode')
   const { data } = await useAsyncData('home', () => queryContent().sort({ _id: 1}).find())
   // console.log(data.value)
   const tdata = data.value.map((value) => {
-    return staticMdTransform(value)
+    return staticMdTransform(value, isDev)
   })
 
   // console.log('***************')
