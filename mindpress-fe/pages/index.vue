@@ -32,7 +32,7 @@ if (mp.mode === MINDPRESS_MODE.static) {
   })
 
   // console.log('***************')
-  //console.log(tdata)
+  // console.log(tdata)
   articles.value = tdata; //data.value;
 } else {
   console.log('server mode')

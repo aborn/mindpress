@@ -75,7 +75,7 @@ async function getData() {
 
 if (articleid.value) {
     if (mp.mode === MINDPRESS_MODE.static) {
-        console.log('static mode.')
+        console.log('static mode. articleid:' + articleid.value)
         const permalink = '/article/' + articleid.value
         console.log(permalink)
         const dataL = articleid.value.indexOf(':') >= 0 ?

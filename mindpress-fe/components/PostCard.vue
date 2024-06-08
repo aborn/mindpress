@@ -100,7 +100,23 @@ function formatDate(date) {
 }
 
 function onClickNavTo(link) {
-    navigateTo({ path: link });
-    console.log('click', link)
+    // console.log('->' + link)
+    const arr = link.split('=');
+    let id
+    if (arr.length > 1) {
+        id = arr[1];
+    }
+    
+    if (id) {
+        navigateTo({
+            path: link,
+            query: {
+                id: id
+            }
+        });
+    } else {
+        navigateTo({ path: link });
+    }
+    // console.log('click', link)
 }
 </script>
