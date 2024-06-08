@@ -102,11 +102,10 @@ function formatDate(date) {
 function onClickNavTo(link) {
     // console.log('->' + link)
     const arr = link.split('=');
-    let id
-    if (arr.length > 1) {
-        id = arr[1];
-    }
-    
+    const urlParams = new URL("http://localhost/" + link).searchParams;
+    const id = urlParams.get('id')
+    console.log('link:' + link + '  id:' + id)
+
     if (id) {
         navigateTo({
             path: link,
