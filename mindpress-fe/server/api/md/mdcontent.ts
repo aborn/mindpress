@@ -28,6 +28,14 @@ export default defineEventHandler(async (event) => {
         console.error(err);
     }
 
+    if (data) {
+        const modestr = '<!-- Content of the page -->';
+        let idx = data.lastIndexOf(modestr);
+        if (idx >= 0) {
+            data = data.substring(idx + modestr.length + 1)
+        }
+    }
+
     return {
         md: data,
         api: 'mdcontent api works',
