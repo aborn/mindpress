@@ -95,8 +95,8 @@ if (articleid.value) {
                 console.log('exception...')
                 console.log(error)
                 hint.value = "request exception" + error
-                if (isDev) {
-                    hint.value = "Static Mode cannot save md content! "
+                if (!isDev) {
+                    hint.value = "Tips: Static Mode cannot save md content! "
                     mkdContent.value = JSON.stringify(dataL.body.children)
                 }
             })
