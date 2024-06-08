@@ -22,13 +22,23 @@ import 'md-editor-v3/lib/style.css';
 import { mpConfig } from '~~/composables/utils';
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
+console.log(route)
+
 const articleids = route.params.id
+const queryV = route.query
+console.log(queryV)
+
 const useReqURL = useRequestURL()
+console.log(useReqURL)
+
 let isDev = isDevMode(useReqURL.hostname);
 const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const articleid = (mp.mode === MINDPRESS_MODE.static && 'undefined' === articleids[0]) ?
     ref(null) : ref(articleids[0]);
+if (!articleid.value && queryV.id) {
+    articleid.value = queryV.id
+}
 
 const mkdContent = ref('')
 const hint = ref('')
