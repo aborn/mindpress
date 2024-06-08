@@ -76,8 +76,8 @@ export const staticMdTransform = (md: any, isDevMode: boolean) => {
     return {
         title: md.title,
         description: md.description,
-        //permalink: md.permalink,
-        permalink: md.permalink ? md.permalink :
+        permalink: md.permalink,
+        link: md.permalink ? md.permalink :
             (isDevMode ? (md._id ? "/article/" + md._id : md._path) :
                 (md._path ? md._path : "/article/" + md._id)),
         date: md.date ? md.date : new Date(),
@@ -104,6 +104,29 @@ export const mpConfig = (config: any) => {
 export const mpFormatDate = (date: any, lang: string) => {
     if (!date) { return '' }
     return new Date(date).toLocaleDateString(lang || 'en', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+}
+
+export const mpFormatAuthor = (doc: any) => {
+    console.log(doc)
+    const authorsArr = [] as string[]
+    let authors = doc.authors
+    if (!authors && doc.author) {
+        authors = [doc.author]
+    }
+
+    if (authors) {
+        const len = authors.length;
+        authors.forEach((item: any, idx: number) => {
+            if (authorsArr.length < 5) {
+                // 列表页最多显示前3个作者
+                authorsArr.push(item.name)
+                if (idx !== len - 1 && idx !== 2) {
+                    authorsArr.push("|")
+                }
+            }
+        })
+    }
+    return authorsArr.join(' ')
 }
 
 export const simpleParser = (text: string) => {
