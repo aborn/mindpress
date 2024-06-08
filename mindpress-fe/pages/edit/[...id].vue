@@ -67,7 +67,9 @@ if (articleid.value) {
         console.log('static mode.')
         const permalink = '/article/' + articleid.value
         console.log(permalink)
-        const dataL = await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
+        const dataL = articleid.value.indexOf(':') >= 0 ?
+            await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
+            : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
         file.value = dataL._file;
         // console.log('^^^^^^^^^^')
         // console.log(dataL)
