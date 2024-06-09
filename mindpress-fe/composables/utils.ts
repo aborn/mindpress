@@ -79,8 +79,9 @@ export const staticMdTransform = (md: any, isDevMode: boolean) => {
         permalinkOrigin: md.permalink,
         permalink: md.permalink ? md.permalink :
             (md._id ? ("/article?id=" + md._id) : md._path),
-        date: md.date ? md.date : new Date(),
-        createTime: md.date ? md.date : new Date(),
+        date: md.date ? md.date : (md.createTime ? md.createTime : new Date()),
+        createTime: md.createTime ? md.createTime : new Date(),
+        updateTime: md.updateTime ? md.updateTime : (md.date ? md.date : new Date()),
         id: md._id,
         articleid: md._id,
         author: md.author,

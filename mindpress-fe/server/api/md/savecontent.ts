@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
 
     let file;
     let articleid;
-    let body;
+    let body: any;
     if (req.method === 'POST') {
         // response_mode=form_post ('POST' method)
         body = await readBody(event)
@@ -23,19 +23,43 @@ export default defineEventHandler(async (event) => {
         file = query.file;
         articleid = query.articleid;
     }
-
-    const todayDate = dateFormat();
-    const header =
+    
+    const todayDate = dateFormat(new Date());
+    let header =
         `---\ntitle: '` + body.title + `'\n` +
-        `date: '` + todayDate + `'\n` +
-        `---\n\n<!-- Content of the page -->\n`
-    console.log(body)
+        `date: '` + todayDate + `'\n`;
+
+    const idxNames = ['author', 'authors', 'permalink']
+    idxNames.forEach(item => {
+        if (body.hasOwnProperty(item)) {
+            if ('permalink' === item && item.indexOf(':') < 0) {
+                header = header + `permalink: '` + body[item] + `'\n`
+            } else {
+                if ('author' === item || 'authors' === item) {
+                    const value = JSON.stringify(body[item])
+                    header = header + item + `: ` + value + `\n`
+                } else {
+                    header = header + item + `: '` + body[item] + `'\n`
+                }
+            }
+        }
+    })
 
     let isCreateFile = false;
-    if (!file || file.length == 0) {
+    const baseDir = '/Users/aborn/github/mindpress/mindpress-fe/content/';
+    if (!file || file.length == 0) { // create new file.
         file = "test/" + body.title + ".md"
         isCreateFile = true;
         console.log("create new file, file name=" + file)
+    } else { // file exists!
+        if (fs.existsSync(baseDir + file)) {
+            const stats = fs.statSync(baseDir + file);
+            if (stats.birthtime) {
+                header = header +
+                    `createTime: '` + dateFormat(new Date(stats.birthtime)) + `'\n`
+            }
+            // console.log(stats);
+        }
     }
 
     let content = body.content
@@ -43,13 +67,14 @@ export default defineEventHandler(async (event) => {
         const modestr = '<!-- Content of the page -->';
         let idx = body.content.lastIndexOf(modestr);
         if (idx >= 0) {
-            console.log('find it!!!' + idx)
+            // console.log('find it!!!' + idx)
             content = body.content.substring(idx + modestr.length + 1)
-            console.log(content)
+            // console.log(content)
         }
     }
+    header = header + `---\n\n<!-- Content of the page -->\n`;
     try {
-        fs.writeFileSync('/Users/aborn/github/mindpress/mindpress-fe/content/' + file, header + content);
+        fs.writeFileSync(baseDir + file, header + content);
         // console.log(data);
     } catch (err) {
         console.error(err);

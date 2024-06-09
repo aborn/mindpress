@@ -1,7 +1,9 @@
 ---
 title: 'Demo Page'
-author: {name: aborn, link: aborn}
-description: 'A markdown demo page.'
+date: '2024-06-09 22:15:59'
+author: {"name":"aborn","link":"aborn"}
+permalink: '/article/content:drafts:Demo.md'
+createTime: '2024-06-05 22:29:37'
 ---
 
 <!-- Content of the page -->

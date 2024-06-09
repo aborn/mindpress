@@ -1,9 +1,10 @@
 ---
 title: 'SSG：Static Mode'
-date: '2024-06-09 20:10:21'
+date: '2024-06-09 21:25:06'
+createTime: '2024-06-07 22:00:35'
 ---
 
 <!-- Content of the page -->
-# Static Mode
+# SSG Mode
 
-SSG Static Mode
+SSG Mode is static page mode. All pages are genereated by nuxt 3. And, thid site can be deploy at nginx static page server.

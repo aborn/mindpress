@@ -73,6 +73,7 @@ async function getData() {
         }) as any;
 }
 
+const bodyExtra: any = {};
 if (articleid.value) {
     if (mp.mode === MINDPRESS_MODE.static) {
         console.log('static mode. articleid:' + articleid.value)
@@ -84,6 +85,13 @@ if (articleid.value) {
         file.value = dataL._file;
         // console.log('^^^^^^^^^^')
         // console.log(dataL)
+        const idxNames = ['author', 'authors', 'permalink']
+        idxNames.forEach(item => {
+            if (dataL.hasOwnProperty(item)) {
+                bodyExtra[item] = dataL[item]
+            }
+        })
+
         //console.log(JSON.stringify(dataL.body))
         // mkdContent.value = JSON.stringify(dataL.body.children)
         title.value = dataL.title
@@ -100,14 +108,14 @@ if (articleid.value) {
                     articleid: articleid.value
                 }
             }).then((res: any) => {
-                console.log(res)
+                // console.log(res)
                 mkdContent.value = res.md
             }, error => {
                 console.log('exception...')
                 console.log(error)
                 hint.value = "request exception" + error
                 if (!isDev) {
-                    hint.value = "Tips: Static Mode cannot save md content! "
+                    hint.value = "Tips: SSG Mode cannot save md content!! "
                     mkdContent.value = JSON.stringify(dataL.body.children)
                 }
             })
@@ -152,7 +160,9 @@ function saveAction(text: string) {
         title: title.value,
         extInfo: JSON.stringify(extInfo),
         file: file.value,
+        permalink: '/article/' + articleid.value,
         pub: true, // default value
+        ...bodyExtra
     }
     hint.value = "保存中......"
     console.log(bodyContent)

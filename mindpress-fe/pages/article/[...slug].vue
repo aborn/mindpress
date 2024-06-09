@@ -13,7 +13,7 @@
                             <img style="max-width: 23px;"
                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAABQElEQVRoge2aWwqDMBBFb4u76DraNfjl5lvpv49VCLYfTiRiHkajGWUOBDEOM7l5DYYAy8kB1AB+VCqqi8Xe/kcqLYge7Cz+R5Rz23tS//eIDUmKLqQA0GI+vL6esdmHllD/LbV5hkuEKWAsAVv8Ny7lvp5Zah9KqP/J90uuER81PfWeqC22a4jm3zeUOaZ7/R4JMcS/tb2x5/zeyBphTWaoO9P0Grn0iNwOb8U6JjPnMiMiQrghQrghQrghQrghQrghQriRQsgLQAn/mVVJtsEc9c++RIQqH4ef5IcPPcUx/QspMrLpHTbJhSyNIyeNp0aEcEOEbEDtNL7tV7f1kkLIl54d7ImwI5tyTYCj8sgLQ8b2ZfU3gKfDT/KEGAtJiKwRIdzQ9/IWwAPnWvCtqbLAcJNgrxsNsUsDyxUOgQN/Ae4C203zZCwAAAAASUVORK5CYII=">
                         </picture>
-                        <span class="article-meta">{{ formatDate(articles.time, 'en') }} </span>
+                        <span class="article-meta">{{ formatDate(articles.createTime, 'en') }} </span>
                         <span class="article-meta" style="margin-left:0.3rem">{{ articles.author }}</span>
                         <NuxtLink :to="'/edit?id=' + articles.articleid">
                             <picture style="max-width: 23px;margin-left: 0.5rem;">
@@ -82,7 +82,7 @@ if (mp.mode === MINDPRESS_MODE.static) {
     console.log(dataL)
     articles.value = dataL
     articles.value.time = dataL.date
-    articles.value.author = getAuthor(dataL)
+    articles.value.author =  mpFormatAuthor(dataL)
     articles.value.articleid = articleid.value
     toc.value = dataL.body.toc;
 

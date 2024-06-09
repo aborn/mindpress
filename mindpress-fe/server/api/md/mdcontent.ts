@@ -23,8 +23,8 @@ export default defineEventHandler(async (event) => {
     }
     let mdcontent
     try {
-        mdcontent = fs.readFileSync('/Users/aborn/github/mindpress/mindpress-fe/content/' + file, 'utf8');
-        // console.log(data);
+        const baseDir = '/Users/aborn/github/mindpress/mindpress-fe/content/';
+        mdcontent = fs.readFileSync( baseDir + file, 'utf8');
     } catch (err) {
         console.error(err);
     }
@@ -40,8 +40,6 @@ export default defineEventHandler(async (event) => {
             data = mdcontent;
         }
     }
-    console.log('$$$$$')
-    console.log(mdheader)
 
     return {
         md: data,
