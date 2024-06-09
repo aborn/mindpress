@@ -21,23 +21,31 @@ export default defineEventHandler(async (event) => {
         file = query.file;
         articleid = query.articleid;
     }
+    let mdcontent
     try {
-        data = fs.readFileSync('/Users/aborn/github/mindpress/mindpress-fe/content/' + file, 'utf8');
+        mdcontent = fs.readFileSync('/Users/aborn/github/mindpress/mindpress-fe/content/' + file, 'utf8');
         // console.log(data);
     } catch (err) {
         console.error(err);
     }
 
-    if (data) {
+    let mdheader = '';
+    if (mdcontent) {
         const modestr = '<!-- Content of the page -->';
-        let idx = data.lastIndexOf(modestr);
+        let idx = mdcontent.lastIndexOf(modestr);
         if (idx >= 0) {
-            data = data.substring(idx + modestr.length + 1)
+            mdheader = mdcontent.substring(0, idx)
+            data = mdcontent.substring(idx + modestr.length + 1)
+        } else {
+            data = mdcontent;
         }
     }
+    console.log('$$$$$')
+    console.log(mdheader)
 
     return {
         md: data,
+        mdheader,
         api: 'mdcontent api works',
     }
 })

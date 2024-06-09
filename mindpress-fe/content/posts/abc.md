@@ -1,7 +1,9 @@
 ---
-title: '标题3'
+title: 'SSG：Static Mode'
+date: '2024-06-09 20:10:21'
 ---
 
 <!-- Content of the page -->
-# title
-这是第三个标题
+# Static Mode
+
+SSG Static Mode

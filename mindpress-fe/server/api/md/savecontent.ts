@@ -1,5 +1,6 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
+import { dateFormat } from '../../utils/date'
 
 export default defineEventHandler(async (event) => {
     console.log("nitro: req comming...(savecontent)")
@@ -23,8 +24,11 @@ export default defineEventHandler(async (event) => {
         articleid = query.articleid;
     }
 
+    const todayDate = dateFormat();
     const header =
-        `---\ntitle: '` + body.title + `'\n---\n\n<!-- Content of the page -->\n`
+        `---\ntitle: '` + body.title + `'\n` +
+        `date: '` + todayDate + `'\n` +
+        `---\n\n<!-- Content of the page -->\n`
     console.log(body)
 
     let isCreateFile = false;

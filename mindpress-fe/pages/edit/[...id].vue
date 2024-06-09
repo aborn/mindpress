@@ -100,6 +100,7 @@ if (articleid.value) {
                     articleid: articleid.value
                 }
             }).then((res: any) => {
+                console.log(res)
                 mkdContent.value = res.md
             }, error => {
                 console.log('exception...')
