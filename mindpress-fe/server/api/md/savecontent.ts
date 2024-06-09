@@ -23,17 +23,20 @@ export default defineEventHandler(async (event) => {
         file = query.file;
         articleid = query.articleid;
     }
-    
+
     const todayDate = dateFormat(new Date());
     let header =
         `---\ntitle: '` + body.title + `'\n` +
         `date: '` + todayDate + `'\n`;
 
     const idxNames = ['author', 'authors', 'permalink']
+
     idxNames.forEach(item => {
         if (body.hasOwnProperty(item)) {
-            if ('permalink' === item && item.indexOf(':') < 0) {
-                header = header + `permalink: '` + body[item] + `'\n`
+            if ('permalink' === item) {
+                if (body[item].indexOf(':') < 0) {
+                    header = header + `permalink: '` + body[item] + `'\n`
+                }
             } else {
                 if ('author' === item || 'authors' === item) {
                     const value = JSON.stringify(body[item])

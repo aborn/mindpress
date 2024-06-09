@@ -1,8 +1,7 @@
 ---
 title: 'Demo Page'
-date: '2024-06-09 22:15:59'
+date: '2024-06-09 22:24:34'
 author: {"name":"aborn","link":"aborn"}
-permalink: '/article/content:drafts:Demo.md'
 createTime: '2024-06-05 22:29:37'
 ---
 
