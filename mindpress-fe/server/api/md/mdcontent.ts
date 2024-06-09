@@ -1,5 +1,6 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
+import os  from 'node:os';
 
 export default defineEventHandler(async (event) => {
     console.log("nitro: req comming...(mdcontent)")
@@ -9,6 +10,9 @@ export default defineEventHandler(async (event) => {
 
     console.log(req.url)
     //console.log(query)
+
+    const computerName = os.hostname()
+    console.log('cccccccnnnnn->' + computerName)
 
     let file;
     let articleid;

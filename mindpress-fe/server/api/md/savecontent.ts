@@ -1,5 +1,7 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
+import os  from 'node:os';
+
 import { dateFormat } from '../../utils/date'
 
 export default defineEventHandler(async (event) => {
