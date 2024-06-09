@@ -12,7 +12,8 @@ export default defineEventHandler(async (event) => {
     //console.log(query)
 
     const computerName = os.hostname()
-    console.log('cccccccnnnnn->' + computerName)
+    const __rootDir = process.cwd();
+    console.log('cccccccnnnnn->' + computerName + ",,,," + __rootDir)
 
     let file;
     let articleid;
@@ -27,7 +28,7 @@ export default defineEventHandler(async (event) => {
     }
     let mdcontent
     try {
-        const baseDir = '/Users/aborn/github/mindpress/mindpress-fe/content/';
+        const baseDir = __rootDir + '/content/';
         mdcontent = fs.readFileSync( baseDir + file, 'utf8');
     } catch (err) {
         console.error(err);

@@ -51,7 +51,11 @@ export default defineEventHandler(async (event) => {
     })
 
     let isCreateFile = false;
-    const baseDir = '/Users/aborn/github/mindpress/mindpress-fe/content/';
+    const computerName = os.hostname()
+    const __rootDir = process.cwd();
+    console.log('cccccccnnnnn->' + computerName + ",,,," + __rootDir)
+
+    const baseDir = __rootDir + '/content/';
     if (!file || file.length == 0) { // create new file.
         file = "test/" + body.title + ".md"
         isCreateFile = true;
