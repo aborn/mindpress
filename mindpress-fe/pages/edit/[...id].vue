@@ -83,8 +83,8 @@ if (articleid.value) {
             await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
             : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
         file.value = dataL._file;
-        // console.log('^^^^^^^^^^')
-        // console.log(dataL)
+        console.log('^^^^^^^^^^')
+        console.log(dataL)
         const idxNames = ['author', 'authors', 'permalink']
         idxNames.forEach(item => {
             if (dataL.hasOwnProperty(item)) {
