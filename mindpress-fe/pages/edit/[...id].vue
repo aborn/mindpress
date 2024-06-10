@@ -93,7 +93,7 @@ if (articleid.value) {
         })
 
         const markdownContent = compileHastToStringify(dataL.body)
-        console.log('%%%%%%%')
+        console.log('!!!!')
         console.log(markdownContent)
 
         //console.log(JSON.stringify(dataL.body))

@@ -1,6 +1,6 @@
 ---
 title: 'Demo Page'
-date: '2024-06-09 22:24:34'
+date: '2024-06-11 00:13:33'
 author: {"name":"aborn","link":"aborn"}
 createTime: '2024-06-05 22:29:37'
 ---
@@ -14,7 +14,7 @@ This is a **demo** markdown file, quote example:
 >[MindPress](https://github.com/aborn/mindpress "MindPress")
 
 ## Secondary title
-Secondary content, *dealing* content，~~strikethrough~~。
+Secondary content, *dealing* content。
 
 ### Third title 
 Image demo：
