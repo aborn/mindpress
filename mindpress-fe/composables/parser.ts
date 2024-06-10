@@ -3,7 +3,6 @@ import { toString } from 'hast-util-to-string'
 import { toMdast } from 'hast-util-to-mdast'
 import { toHtml } from 'hast-util-to-html'
 import { fromHtml } from 'hast-util-from-html'
-import { raw } from 'hast-util-raw'
 import { toText } from 'hast-util-to-text'
 
 type MDCParserResult = /*unresolved*/ any
@@ -16,16 +15,17 @@ export function compileHastToStringify(mdcResult: MDCParserResult) {
     console.log(hast)
     //const html = toHtml(ast);
     //const hast = fromHtml(html, { fragment: true })
-    const mdast = toMdast(hast)
-    const markdown = toMarkdown(mdast)
 
-    //const rawV = raw(ast);
-
-    return markdown
-    //return toText(ast)
+    try {
+        const mdast = toMdast(hast)
+        const markdown = toMarkdown(mdast)
+        //const rawV = raw(ast);
+        return markdown
+    } catch (err) {
+        console.log(err)
+        return toText(mdcResult)
+    }
 }
-
-
 
 function toHast(node: any) {
     if (node.type === 'root') {
@@ -33,7 +33,7 @@ function toHast(node: any) {
             type: 'root',
             children: node.children.map((child: any) => toHast(child)).filter(Boolean)
         }
-    } else if (node.type == 'element'){
+    } else if (node.type == 'element') {
         return {
             type: 'element',
             tagName: node.tag,
