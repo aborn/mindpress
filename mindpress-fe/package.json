@@ -19,7 +19,7 @@
     "start": "nuxt build && PORT=8001 node .output/server/index.mjs",
     "deploy": "touch ./dist/.nojekyll && push-dir --dir=dist --branch=gh-pages --cleanup",
     "gh": "npx nuxi generate && npx serve -s ./dist",
-    "dockerbuild":"BUILD_MODE=docker nuxt build",
+    "dockerbuild": "BUILD_MODE=docker nuxt build",
     "dockerdeploy": "PORT=3010 node .output/server/index.mjs"
   },
   "devDependencies": {
@@ -29,7 +29,9 @@
     "push-dir": "^0.4.1"
   },
   "dependencies": {
-    "md-editor-v3": "^4.15.6",
-    "axios": "^1.1.3"
+    "axios": "^1.1.3",
+    "hast-util-from-html": "^2.0.1",
+    "hast-util-to-mdast": "^10.1.0",
+    "md-editor-v3": "^4.15.6"
   }
 }
