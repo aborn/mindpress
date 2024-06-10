@@ -92,6 +92,10 @@ if (articleid.value) {
             }
         })
 
+        const markdownContent = compileHastToStringify(dataL.body)
+        console.log('%%%%%%%')
+        console.log(markdownContent)
+
         //console.log(JSON.stringify(dataL.body))
         // mkdContent.value = JSON.stringify(dataL.body.children)
         title.value = dataL.title
@@ -116,7 +120,7 @@ if (articleid.value) {
                 hint.value = "request exception" + error
                 if (!isDev) {
                     hint.value = "Tips: SSG Mode cannot save md content!! "
-                    mkdContent.value = JSON.stringify(dataL.body.children)
+                    mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
                 }
             })
 
