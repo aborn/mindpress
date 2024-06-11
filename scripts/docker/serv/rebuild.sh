@@ -7,6 +7,11 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 echo "running path=${DIR}"
 cd $DIR
+cd ../../..
+SRC_DIR="`pwd`"
+
+cd $SRC_DIR/mindpress-serv
+
 $DIR/package.sh
 
 # reboot container，make change jar active

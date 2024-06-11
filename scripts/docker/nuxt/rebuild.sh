@@ -5,10 +5,13 @@
 #########################################
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-
+echo "running path=${DIR}"
 cd $DIR
-cd ../../../../mindpress-fe
-git pull
+cd ../../..
+SRC_DIR="`pwd`"
+
+cd $SRC_DIR/mindpress-fe
+# git pull
 
 # building ，如果出现 /bin/sh: vite: command not found ，则需要重新yarn install下
 yarn dockerbuild

@@ -5,12 +5,15 @@
 #########################################
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-
+echo "running path=${DIR}"
 cd $DIR
-cd ../../../
+cd ../../..
+SRC_DIR="`pwd`"
+
+cd $SRC_DIR/mindpress-serv
 
 # update to latest code version.
-git pull
+# git pull
 
 # use maven to build jar.
 mvn clean
