@@ -1,1 +1,0 @@
-import{u as e}from"./CFyBQ38z.js";async function u(){const s="/api/md/status";let a="ssg";try{const{data:t}=await e(s,"$2JojaEZXAl"),o=t.value;o.mode&&(a=o.mode)}catch(t){console.warn(t)}return a}export{u as q};
