@@ -25,7 +25,8 @@ console.log('isDevMode:' + isDev)
 
 if (mp.mode === MINDPRESS_MODE.static) {
   const mode = await queryMode();
-  if ('fcm' === mode && !isDev) {
+  console.log('mode===>' + mode)
+  if ('fcm' === mode) {
     try {
       const { data: dataQ } = await useFetch('/api/md/query');
       const tdata = dataQ.value.map((value) => {
