@@ -70,7 +70,7 @@ if (mp.mode === MINDPRESS_MODE.static) {
             const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
             console.log('***************')
             const dataL = dataQ.value
-            // console.log(dataL)
+            console.log(dataL)
             articles.value = dataL
             articles.value.time = dataL.date
             articles.value.author = mpFormatAuthor(dataL)

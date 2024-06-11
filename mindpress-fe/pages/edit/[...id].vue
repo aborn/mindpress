@@ -73,12 +73,26 @@ async function getData() {
 const bodyExtra: any = {};
 if (articleid.value) {
     if (mp.mode === MINDPRESS_MODE.static) {
-        console.log('static mode. articleid:' + articleid.value)
-        const permalink = '/article/' + articleid.value
-        console.log(permalink)
-        const dataL = articleid.value.indexOf(':') >= 0 ?
-            await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
-            : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
+        let dataL: any;
+        const mode = await queryMode();
+        if ('fcm' === mode) {
+            try {
+                const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
+                console.log('***************')
+                dataL = dataQ.value
+                console.log(dataL)
+            } catch (error) {
+                console.warn(error)
+            }
+        } else {
+            console.log('static mode. articleid:' + articleid.value)
+            const permalink = '/article/' + articleid.value
+            console.log(permalink)
+            dataL = articleid.value.indexOf(':') >= 0 ?
+                await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
+                : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
+        }
+        
         file.value = dataL._file;
         console.log(dataL)
         const idxNames = ['author', 'authors', 'permalink']
@@ -88,7 +102,6 @@ if (articleid.value) {
             }
         })
 
-        const markdownContent = compileHastToStringify(dataL.body)
         //console.log(JSON.stringify(dataL.body))
         // mkdContent.value = JSON.stringify(dataL.body.children)
         title.value = dataL.title
@@ -113,6 +126,7 @@ if (articleid.value) {
                 hint.value = "request exception" + error
                 if (!isDev) {
                     hint.value = "Tips: SSG Mode cannot save md content!! "
+                    const markdownContent = compileHastToStringify(dataL.body)
                     mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
                 }
             })
