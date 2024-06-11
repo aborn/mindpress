@@ -58,33 +58,6 @@ public class ContentController {
         BaseResponse res = BaseResponse.success("success");
         boolean status = false;
 
-        ExtInfo extInfo = resources.parseExtInfo();
-        if (extInfo != null && "static".equals(extInfo.getMode())){
-            // Static Mode Saving to files.
-            String id = MarkdownUtils.generateRandomId().substring(0, 8);
-            String headContent = String.format("---\n" +
-                    "title: '%s'\n" +
-                    "description: '%s'\n" +
-                    "author: {name: aborn, link: aborn}\n" +
-                    "permalink: /article/%s\n" +
-                    "---\n\n<!-- Content of the page -->\n", resources.getTitle(), resources.getDesc(), id);
-            // TODO  to be configured!!!
-            String fileName = "/Users/aborn/github/mindpress/mindpress-fe/content/test/" + resources.getTitle() + ".md";
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(fileName), "utf-8"))) {
-                writer.write(headContent + resources.getContent());
-                res.setSuccess(true);
-                res.setCode(200);
-                res.setMsg("file created: " + fileName);
-            } catch (IOException e) {
-                res.setSuccess(false);
-                res.setCode(500);
-                res.setMsg("file created failed: " + e.getMessage());
-                log.warn("save file exception");
-            }
-            return new ResponseEntity<>(res, HttpStatus.CREATED);
-        }
-
         if (StringUtils.isNotBlank(resources.getArticleid())) {
             log.info("createOrUpdateContent, update action, articleid={}", resources.getArticleid());
             ContentDto dto = contentService.findByArticleId(resources.getArticleid());
