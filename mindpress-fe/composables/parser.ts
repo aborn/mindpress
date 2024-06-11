@@ -9,19 +9,10 @@ import {gfmFromMarkdown, gfmToMarkdown} from 'mdast-util-gfm'
 type MDCParserResult = /*unresolved*/ any
 
 export function compileHastToStringify(mdcResult: MDCParserResult) {
-    console.log('bbbbbbb')
-    console.log(mdcResult)
     const hast = toHast(mdcResult);
-    console.log('afffffff')
-    console.log(hast)
-    //const html = toHtml(ast);
-    //const hast = fromHtml(html, { fragment: true })
-
     const mdast = toMdast(hast)
     try {
-        console.log('eeee')
         const markdown = toMarkdown(mdast, {extensions: [gfmToMarkdown()]})
-        //const rawV = raw(ast);
         return markdown
     } catch (err) {
         console.log(err)
@@ -29,7 +20,7 @@ export function compileHastToStringify(mdcResult: MDCParserResult) {
     }
 }
 
-function toHast(node: any) {
+function toHast(node: MDCParserResult) {
     if (node.type === 'root') {
         return {
             type: 'root',
