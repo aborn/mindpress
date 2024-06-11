@@ -26,19 +26,20 @@ console.log('isDevMode:' + isDev)
 if (mp.mode === MINDPRESS_MODE.static) {
   const mode = await queryMode();
   console.log('mode===>' + mode)
-  if ('fcm' === mode) {
-    try {
-      const { data: dataQ } = await useFetch('/api/md/query');
-      const tdata = dataQ.value.map((value) => {
-        return staticMdTransform(value, isDev)
-      })
-      articles.value = tdata
-      console.log('***************')
-      console.log(tdata)
-    } catch (error) {
-      console.warn(error)
-    }
-  } else {
+
+  try {
+    const { data: dataQ } = await useFetch('/api/md/query');
+    const tdata = dataQ.value.map((value) => {
+      return staticMdTransform(value, isDev)
+    })
+    articles.value = tdata
+    console.log('***************')
+    console.log(tdata)
+  } catch (error) {
+    console.warn(error)
+  }
+
+  if (articles.value.length <= 0) {
     console.log('static mode')
     const { data } = await useAsyncData('home', () => queryContent().sort({ _id: 1 }).find())
     console.log('--------dataVVVVVVV-----')

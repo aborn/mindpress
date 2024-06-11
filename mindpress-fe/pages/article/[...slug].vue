@@ -65,26 +65,27 @@ if (!articleid.value && queryV.id) {
 
 if (mp.mode === MINDPRESS_MODE.static) {
     const mode = await queryMode();
-    if ('fcm' === mode) {
-        try {
-            const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
-            console.log('***************')
-            const dataL = dataQ.value
-            console.log(dataL)
-            articles.value = dataL
-            articles.value.time = dataL.date
-            articles.value.author = mpFormatAuthor(dataL)
-            articles.value.articleid = articleid.value
-            toc.value = dataL.body.toc;
-        } catch (error) {
-            console.warn(error)
-        }
-    } else {
+    let dataL;
+    try {
+        const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
+        console.log('***************')
+        dataL = dataQ.value
+        console.log(dataL)
+        articles.value = dataL
+        articles.value.time = dataL.date
+        articles.value.author = mpFormatAuthor(dataL)
+        articles.value.articleid = articleid.value
+        toc.value = dataL.body.toc;
+    } catch (error) {
+        console.warn(error)
+    }
+
+    if (!dataL) {
         hint.value = 'No content found.'
         console.log('static mode.')
         const permalink = '/article/' + articleid.value
         console.log(permalink)
-        const dataL = articleid.value.indexOf(':') >= 0 ?
+        dataL = articleid.value.indexOf(':') >= 0 ?
             await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
             : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
         console.log(dataL)

@@ -75,16 +75,17 @@ if (articleid.value) {
     if (mp.mode === MINDPRESS_MODE.static) {
         let dataL: any;
         const mode = await queryMode();
-        if ('fcm' === mode) {
-            try {
-                const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
-                console.log('***************')
-                dataL = dataQ.value
-                console.log(dataL)
-            } catch (error) {
-                console.warn(error)
-            }
-        } else {
+
+        try {
+            const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
+            console.log('***************')
+            dataL = dataQ.value
+            console.log(dataL)
+        } catch (error) {
+            console.warn(error)
+        }
+
+        if (!dataL) {
             console.log('static mode. articleid:' + articleid.value)
             const permalink = '/article/' + articleid.value
             console.log(permalink)
@@ -92,7 +93,7 @@ if (articleid.value) {
                 await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
                 : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
         }
-        
+
         file.value = dataL._file;
         console.log(dataL)
         const idxNames = ['author', 'authors', 'permalink']
