@@ -75,7 +75,7 @@ if (articleid.value) {
     if (mp.mode === MINDPRESS_MODE.static) {
         let dataL: any;
         const mode = await queryMode();
-
+        console.log('11mode=>' + mode)
         try {
             const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
             console.log('***************')
