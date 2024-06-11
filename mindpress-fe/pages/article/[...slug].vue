@@ -78,7 +78,7 @@ if (mp.mode === MINDPRESS_MODE.static) {
     const dataL = articleid.value.indexOf(':') >= 0 ?
         await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
         : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
-    // console.log(dataL)
+    console.log(dataL)
     articles.value = dataL
     articles.value.time = dataL.date
     articles.value.author =  mpFormatAuthor(dataL)
