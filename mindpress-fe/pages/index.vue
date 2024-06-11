@@ -24,20 +24,7 @@ let isDev = isDevMode(useReqURL.hostname);
 console.log('isDevMode:' + isDev)
 
 if (mp.mode === MINDPRESS_MODE.static) {
-  const url = '/api/md/status'
-  console.log(url)
-  let mode = 'ssg'
-  try {
-    const { data: dataStatus } = await useFetch(url);
-    const status = dataStatus.value
-    if (status.mode) {
-      mode = status.mode
-    }
-    console.log(status.mode)
-  } catch (error) {
-    console.warn(error)
-  }
-
+  const mode = await queryMode();
   if ('fcm' === mode && !isDev) {
     try {
       const { data: dataQ } = await useFetch('/api/md/query');

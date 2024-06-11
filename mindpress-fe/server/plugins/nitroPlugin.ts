@@ -6,6 +6,8 @@ export default defineNitroPlugin(async (nitroApp) => {
     //console.log('Nitro plugin', nitroApp)
     const storage = prefixStorage(useStorage(), 'markdown:source'); // createStorage()
     const cacheParsedStorage = prefixStorage(useStorage(), 'cache:markdown:parsed')
+    const cacheParsedStorageLocal = prefixStorage(useStorage(), 'cache:content:parsed')
+
     const sources = {} as any;
     sources['markdown:source'] = {
         driver: 'fs',
@@ -26,10 +28,12 @@ export default defineNitroPlugin(async (nitroApp) => {
             // console.log('------pkey')
             // console.log(pKey)
             const parsedKey = `cache:markdown:parsed:${pKey}`;
-            const parsedValue = await parseContent( 'content:'+ pKey, value)
+            const parsedKeyLocal = `cache:content:parsed:${pKey}`;
+            const parsedValue = await parseContent('content:' + pKey, value)
             // console.log(key)
             // console.log(parsedValue)
             await cacheParsedStorage.setItem(parsedKey, parsedValue)
+            // await cacheParsedStorageLocal.setItem(parsedKeyLocal, parsedValue)
         })
     )
 

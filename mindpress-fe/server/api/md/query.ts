@@ -13,23 +13,33 @@ export default defineEventHandler(async (event) => {
     const cacheParsedStorage: Storage = prefixStorage(useStorage(), 'cache:markdown:parsed')
     const markdownStorage: Storage = prefixStorage(useStorage(), 'markdown:source')
     let keys = await markdownStorage.getKeys('markdown:source')
+    let keys2 = await cacheParsedStorage.getKeys('cache:markdown:parsed')
+    // console.log(keys)
+    // console.log(keys2)
 
-    console.log('kkkkkkkkkkk------')
-    console.log(keys)
+    // const contentId = 'markdown:source:中国文化展.md';
+    //let body = await markdownStorage.getItem(contentId);
+    //console.log(body)
 
-    const contentId = 'markdown:source:中国文化展.md';
-    let body = await markdownStorage.getItem(contentId);
-    console.log(body)
+    if (query._id) {
+        const realId = query._id.substring('content:'.length)
+        const parsedKey = `cache:markdown:parsed:${realId}`;
+        const paserdValue = await cacheParsedStorage.getItem(parsedKey);
+        // console.log(paserdValue)
+        // console.log(parsedKey)
+        // console.log('*******88')
+        if (paserdValue) {
+            return paserdValue;
+        }
+    }
 
-    const paserdV = await cacheParsedStorage.getItem('cache:markdown:parsed:中国文化展.md')
-    let keys2 = await markdownStorage.getKeys('cache:markdown:parsed')
-
+    // const paserdV = await cacheParsedStorage.getItem('cache:markdown:parsed:中国文化展.md')
+    // console.log(paserdV)
     // const parsed = await parseContent(contentId, body)
     console.log('###########')
     //console.log(parsed)
 
     const length = 'markdown:source'.length;
-
     const res: any[] = []
 
     await Promise.all(
@@ -45,5 +55,11 @@ export default defineEventHandler(async (event) => {
     //    res.push(await cacheParsedStorage.getItem(parsedKey))
     //})
 
+    if (query._id) {
+        const fond = res.find(i => i.permalink === ('/article/' + query._id))
+        if (fond) {
+            return fond
+        }
+    }
     return res
 })
