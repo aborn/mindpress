@@ -4,6 +4,7 @@ import { toMdast } from 'hast-util-to-mdast'
 import { toHtml } from 'hast-util-to-html'
 import { fromHtml } from 'hast-util-from-html'
 import { toText } from 'hast-util-to-text'
+import {gfmFromMarkdown, gfmToMarkdown} from 'mdast-util-gfm'
 
 type MDCParserResult = /*unresolved*/ any
 
@@ -16,9 +17,10 @@ export function compileHastToStringify(mdcResult: MDCParserResult) {
     //const html = toHtml(ast);
     //const hast = fromHtml(html, { fragment: true })
 
+    const mdast = toMdast(hast)
     try {
-        const mdast = toMdast(hast)
-        const markdown = toMarkdown(mdast)
+        console.log('eeee')
+        const markdown = toMarkdown(mdast, {extensions: [gfmToMarkdown()]})
         //const rawV = raw(ast);
         return markdown
     } catch (err) {
