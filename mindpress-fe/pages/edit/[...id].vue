@@ -22,7 +22,6 @@ import 'md-editor-v3/lib/style.css';
 import { mpConfig } from '~~/composables/utils';
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
-console.log(route)
 
 const articleids = route.params.id
 const queryV = route.query
@@ -37,20 +36,18 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 const articleid = (mp.mode === MINDPRESS_MODE.static && 'undefined' === articleids[0]) ?
     ref(null) : ref(articleids[0]);
 if (!articleid.value && queryV.id) {
-    articleid.value = queryV.id
+    articleid.value = queryV.id as string
 }
 
 const mkdContent = ref('')
 const hint = ref('')
-const title = ref('')
+const title = ref<string | undefined>('')
 const toolbarsExclude = ['github']
-let file = ref('');
+let file = ref<string | undefined>('');
 
 console.log('articleid === ' + articleid.value)
 const url = apiBaseURL + mp.contentUrl + '/' + articleid.value
 console.log(url)
-console.log('^^^^^^^^^^-----')
-// console.log(data)
 
 async function getDataAx() {
     return await request({
@@ -83,7 +80,6 @@ if (articleid.value) {
             await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
             : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
         file.value = dataL._file;
-        console.log('^^^^^^^^^^')
         console.log(dataL)
         const idxNames = ['author', 'authors', 'permalink']
         idxNames.forEach(item => {
@@ -93,9 +89,6 @@ if (articleid.value) {
         })
 
         const markdownContent = compileHastToStringify(dataL.body)
-        console.log('!!!!')
-        console.log(markdownContent)
-
         //console.log(JSON.stringify(dataL.body))
         // mkdContent.value = JSON.stringify(dataL.body.children)
         title.value = dataL.title
@@ -202,6 +195,5 @@ function saveAction(text: string) {
         })
 
 }
-
 </script>
 <style scoped></style>

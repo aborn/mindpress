@@ -76,7 +76,7 @@ function assembyTags() {
     return tags ? tags : []
 }
 
-function formatDesc(des) {
+function formatDesc(des: string) {
     const maxLength = 50
     const cjkMatch = des.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/)
     const trimmedString = des.trim().substr(0, maxLength * 2)
@@ -93,13 +93,13 @@ function formatDesc(des) {
     return cjkMatch ? cjkTrim + cjkTrimPad : trimmedString + trimmedStringPad
 }
 
-function formatDate(date) {
+function formatDate(date: Date) {
     if (!date) { return '' }
-    const options = { year: 'numeric', month: 'long', day: 'numeric' }
+    const options = { year: 'numeric', month: 'long', day: 'numeric' } as any
     return new Date(date).toLocaleDateString('en', options)
 }
 
-function onClickNavTo(link) {
+function onClickNavTo(link: string) {
     // console.log('->' + link)
     const arr = link.split('=');
     const urlParams = new URL("http://localhost/" + link).searchParams;

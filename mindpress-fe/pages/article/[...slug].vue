@@ -55,7 +55,6 @@ const toc = ref('')
 const formatDate = mpFormatDate;
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const queryV = route.query
-console.log(queryV)
 
 const articleids = route.params.slug
 const articleid = (mp.mode === MINDPRESS_MODE.static && 'undefined' === articleids[0]) ?
@@ -79,7 +78,7 @@ if (mp.mode === MINDPRESS_MODE.static) {
     const dataL = articleid.value.indexOf(':') >= 0 ?
         await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
         : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
-    console.log(dataL)
+    // console.log(dataL)
     articles.value = dataL
     articles.value.time = dataL.date
     articles.value.author =  mpFormatAuthor(dataL)

@@ -107,7 +107,6 @@ export const mpFormatDate = (date: any, lang: string) => {
 }
 
 export const mpFormatAuthor = (doc: any) => {
-    console.log(doc)
     const authorsArr = [] as string[]
     let authors = doc.authors
     if (!authors && doc.author) {
