@@ -10,5 +10,7 @@ export default defineEventHandler(async (event) => {
     return {
         md: data,
         api: 'mindpress works',
+        fcm: true,
+        mode: 'fcm'
     }
 })

@@ -3,8 +3,9 @@ import fsDriver from "unstorage/drivers/fs";
 import { parseContent } from '#content/server'
 
 export default defineNitroPlugin(async (nitroApp) => {
-    console.log('Nitro plugin', nitroApp)
+    //console.log('Nitro plugin', nitroApp)
     const storage = prefixStorage(useStorage(), 'markdown:source'); // createStorage()
+    const cacheParsedStorage = prefixStorage(useStorage(), 'cache:markdown:parsed')
     const sources = {} as any;
     sources['markdown:source'] = {
         driver: 'fs',
@@ -21,11 +22,16 @@ export default defineNitroPlugin(async (nitroApp) => {
         keys.map(async (key: string) => {
             const value = await storage.getItem(key);
             const meta = await storage.getMeta(key);
-            const parsedKey = `cache:markdown:parsed:${key.substring(length + 1)}`;
-            const parsedValue = await parseContent(key, value)
-            await storage.setItem(parsedKey, parsedValue)
+            const pKey = `${key.substring(length + 1)}`;
+            // console.log('------pkey')
+            // console.log(pKey)
+            const parsedKey = `cache:markdown:parsed:${pKey}`;
+            const parsedValue = await parseContent( 'content:'+ pKey, value)
+            // console.log(key)
+            // console.log(parsedValue)
+            await cacheParsedStorage.setItem(parsedKey, parsedValue)
         })
     )
 
-    console.log(keys)
+    // console.log(keys)
 })

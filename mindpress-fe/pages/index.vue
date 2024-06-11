@@ -24,16 +24,44 @@ let isDev = isDevMode(useReqURL.hostname);
 console.log('isDevMode:' + isDev)
 
 if (mp.mode === MINDPRESS_MODE.static) {
-  console.log('static mode')
-  const { data } = await useAsyncData('home', () => queryContent().sort({ _id: 1}).find())
-  // console.log(data.value)
-  const tdata = data.value.map((value) => {
-    return staticMdTransform(value, isDev)
-  })
+  const url = '/api/md/status'
+  console.log(url)
+  let mode = 'ssg'
+  try {
+    const { data: dataStatus } = await useFetch(url);
+    const status = dataStatus.value
+    if (status.mode) {
+      mode = status.mode
+    }
+    console.log(status.mode)
+  } catch (error) {
+    console.warn(error)
+  }
 
-  // console.log('***************')
-  // console.log(tdata)
-  articles.value = tdata; //data.value;
+  if ('fcm' === mode && !isDev) {
+    try {
+      const { data: dataQ } = await useFetch('/api/md/query');
+      const tdata = dataQ.value.map((value) => {
+        return staticMdTransform(value, isDev)
+      })
+      articles.value = tdata
+      console.log('***************')
+      console.log(tdata)
+    } catch (error) {
+      console.warn(error)
+    }
+  } else {
+    console.log('static mode')
+    const { data } = await useAsyncData('home', () => queryContent().sort({ _id: 1 }).find())
+    console.log('--------dataVVVVVVV-----')
+    console.log(data.value)
+    const tdata = data.value.map((value) => {
+      return staticMdTransform(value, isDev)
+    })
+    // console.log('***************')
+    // console.log(tdata)
+    articles.value = tdata; //data.value;
+  }
 } else {
   console.log('server mode')
   const { data: dataServer } = await useFetch(mp.metaUrl)

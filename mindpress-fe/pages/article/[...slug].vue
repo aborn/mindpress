@@ -65,13 +65,6 @@ if (!articleid.value && queryV.id) {
 
 if (mp.mode === MINDPRESS_MODE.static) {
     hint.value = 'No content found.'
-    const getAuthor = (dataL) => {
-        if (!dataL) { return '' }
-        if (dataL.author) { return dataL.author.name }
-        if (dataL.authors) {
-            return dataL.authors[0].name
-        }
-    }
     console.log('static mode.')
     const permalink = '/article/' + articleid.value
     console.log(permalink)
