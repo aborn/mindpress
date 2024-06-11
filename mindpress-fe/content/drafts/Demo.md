@@ -1,6 +1,6 @@
 ---
-title: 'Demo Page'
-date: '2024-06-11 00:13:33'
+title: 'MindPress Manual'
+date: '2024-06-11 10:18:08'
 author: {"name":"aborn","link":"aborn"}
 createTime: '2024-06-05 22:29:37'
 ---
