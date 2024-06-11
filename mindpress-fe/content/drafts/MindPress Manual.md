@@ -1,13 +1,14 @@
 ---
 title: 'MindPress Manual'
-date: '2024-06-11 10:18:08'
+date: '2024-06-11 10:32:19'
 author: {"name":"aborn","link":"aborn"}
+permalink: '/article/8dd818'
 createTime: '2024-06-05 22:29:37'
 ---
 
 <!-- Content of the page -->
-# Primary title
-This is a **demo** markdown file, quote example:
+# MindPress
+Press your mind gracefully, which is powered by **nuxt.js 3.0** and **nuxt.js content 2.0**.
 
 >MindPress based on Nuxt and Nuxt Content.  
 >Please install it first.  
