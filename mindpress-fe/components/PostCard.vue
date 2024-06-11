@@ -79,12 +79,12 @@ function assembyTags() {
 function formatDesc(des: string) {
     const maxLength = 50
     const cjkMatch = des.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/)
-    const trimmedString = des.trim().substr(0, maxLength * 2)
+    const trimmedString = des.trim().substring(0, maxLength * 2)
     let trimmedStringPad = ''
     if (des.trim().length > maxLength * 2) {
         trimmedStringPad = "..."
     }
-    const cjkTrim = des.trim().substr(0, maxLength);
+    const cjkTrim = des.trim().substring(0, maxLength);
     let cjkTrimPad = ''
     if (cjkMatch && des.trim().length > maxLength) {
         cjkTrimPad = "..."
