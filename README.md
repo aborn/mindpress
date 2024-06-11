@@ -80,7 +80,7 @@ Boot up `mindpress-serv` backed api server.
 ## 4. Deploy in production env.
 
 ### 4.1 Docker deploy (Recommended)
-<!-- All docker deploy scripts in `mindpress-serv/scripts/docker` -->
+All docker deploy scripts in `scripts/docker`
 
 ### 4.2 Deploy from source
 
