@@ -30,7 +30,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     console.log('--------dataVVVVVVV-----')
     console.log(data.value)
     const tdata = data.value.map((value) => {
-      return staticMdTransform(value, isDev)
+      return staticMdTransform(value)
     })
     // console.log('***************')
     // console.log(tdata)
@@ -40,7 +40,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
   try {
     const { data: dataQ } = await useFetch('/api/md/query');
     const tdata = dataQ.value.map((value) => {
-      return staticMdTransform(value, isDev)
+      return staticMdTransform(value)
     })
     articles.value = tdata
     // console.log('***************')

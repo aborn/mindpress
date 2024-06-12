@@ -72,7 +72,7 @@ export const isDevMode = (hoatname: string) => {
     return false;
 }
 
-export const staticMdTransform = (md: any, isDevMode: boolean) => {
+export const staticMdTransform = (md: any) => {
     return {
         title: md.title,
         description: md.description,
@@ -87,6 +87,7 @@ export const staticMdTransform = (md: any, isDevMode: boolean) => {
         author: md.author,
         _path: md._path,
         _id: md._id,
+        editlink: "/edit/" + md._id,
         authors: md.authors ? md.authors : (md.author ? [md.author] : [])
     }
 }

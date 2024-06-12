@@ -69,10 +69,22 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     console.log('static mode')
     const { data } = await useAsyncData('home', () => queryContent().find())
     const tdata = data.value.map((value) => {
-        return staticMdTransform(value, isDevMode(useReqURL.hostname))
+        return staticMdTransform(value)
     })
     // console.log(tdata)
     articles.value = tdata;
+} else if (mp.mode === MINDPRESS_MODE.FCM) {
+  try {
+    const { data: dataQ } = await useFetch('/api/md/query');
+    const tdata = dataQ.value.map((value) => {
+      return staticMdTransform(value)
+    })
+    articles.value = tdata
+    // console.log('***************')
+    // console.log(tdata)
+  } catch (error) {
+    console.warn(error)
+  }
 } else {
     console.log('server mode')
     const { data: dataServer } = await useFetch(mp.metaUrl)
