@@ -1,10 +1,12 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
-import os  from 'node:os';
+import os from 'node:os';
 
 import { dateFormat } from '../../utils/date'
+import { updateCache } from '../../storage'
 
 export default defineEventHandler(async (event) => {
+    console.log("----------- nitro ------------")
     console.log("nitro: req comming...(savecontent)")
     const req = event.node.req
     const query = getQuery(event)
@@ -86,6 +88,7 @@ export default defineEventHandler(async (event) => {
     header = header + `---\n\n<!-- Content of the page -->\n`;
     try {
         fs.writeFileSync(baseDir + file, header + content);
+        await updateCache(file)
         // console.log(data);
     } catch (err) {
         console.error(err);

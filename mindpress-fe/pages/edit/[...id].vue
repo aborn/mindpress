@@ -50,11 +50,13 @@ const url = apiBaseURL + mp.contentUrl + '/' + articleid.value
 console.log(url)
 
 async function getDataAx() {
+    console.log(' ---- getDataAx')
+    console.log(url)
     return await request({
         url: url,
         method: "get",
-        headers: {
-            uid: ''
+        params: {
+            articleid: articleid.value || file.value
         }
     }) as any;
 }

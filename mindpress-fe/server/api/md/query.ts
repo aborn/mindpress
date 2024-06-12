@@ -5,11 +5,12 @@ import { parseContent } from '#content/server'
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
-    console.log("nitro: req comming...(status)")
+    console.log("nitro: req comming...(query)")
     const req = event.node.req
     const query = getQuery(event)
     let data = '';
     console.log(req.url)
+    console.log(query)
 
     const cacheParsedStorage: Storage = prefixStorage(useStorage(), 'cache:markdown:parsed')
     const markdownStorage: Storage = prefixStorage(useStorage(), 'markdown:source')

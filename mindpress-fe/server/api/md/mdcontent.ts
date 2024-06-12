@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os  from 'node:os';
 
 export default defineEventHandler(async (event) => {
+    console.log("----------- nitro ------------")
     console.log("nitro: req comming...(mdcontent)")
     const req = event.node.req
     const query = getQuery(event)
