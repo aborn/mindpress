@@ -57,7 +57,7 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 const queryV = route.query
 
 const articleids = route.params.slug
-const articleid = (mp.mode === MINDPRESS_MODE.SSG && 'undefined' === articleids[0]) ?
+const articleid = ((mp.mode === MINDPRESS_MODE.SSG || mp.mode === MINDPRESS_MODE.FCM) && 'undefined' === articleids[0]) ?
     ref(null) : ref(articleids[0]);
 if (!articleid.value && queryV.id) {
     articleid.value = queryV.id

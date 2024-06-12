@@ -33,7 +33,7 @@ console.log(useReqURL)
 let isDev = isDevMode(useReqURL.hostname);
 const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
 const mp = mpConfig(useRuntimeConfig().public.minpress)
-const articleid = (mp.mode === MINDPRESS_MODE.SSG && 'undefined' === articleids[0]) ?
+const articleid = ((mp.mode === MINDPRESS_MODE.SSG || mp.mode === MINDPRESS_MODE.FCM) && 'undefined' === articleids[0]) ?
     ref(null) : ref(articleids[0]);
 if (!articleid.value && queryV.id) {
     articleid.value = queryV.id as string
@@ -96,49 +96,49 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     }
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
     let dataL: any;
-    try {
-        const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
-        console.log('***************')
-        dataL = dataQ.value
-        console.log(dataL)
-    } catch (error) {
-        console.warn(error)
-    }
-    file.value = dataL._file;
-    console.log(dataL)
-    const idxNames = ['author', 'authors', 'permalink']
-    idxNames.forEach(item => {
-        if (dataL.hasOwnProperty(item)) {
-            bodyExtra[item] = dataL[item]
+    if (articleid.value) {
+        try {
+            const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
+            console.log('***************')
+            dataL = dataQ.value
+            console.log(dataL)
+        } catch (error) {
+            console.warn(error)
         }
-    })
-    title.value = dataL.title
-    $fetch('/api/md/mdcontent',
-        {
-            key: articleid,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: {
-                file: file.value,
-                articleid: articleid.value
-            }
-        }).then((res: any) => {
-            // console.log(res)
-            mkdContent.value = res.md
-        }, error => {
-            console.log('exception...')
-            console.log(error)
-            hint.value = "request exception" + error
-            if (!isDev) {
-                hint.value = "Tips: SSG Mode cannot save md content!! "
-                const markdownContent = compileHastToStringify(dataL.body)
-                mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
+        file.value = dataL._file;
+        console.log(dataL)
+        const idxNames = ['author', 'authors', 'permalink']
+        idxNames.forEach(item => {
+            if (dataL.hasOwnProperty(item)) {
+                bodyExtra[item] = dataL[item]
             }
         })
-    // articles.value.time = dataL.date
-    // articles.value.author = getAuthor(dataL)
+        title.value = dataL.title
+        $fetch('/api/md/mdcontent',
+            {
+                key: articleid,
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: {
+                    file: file.value,
+                    articleid: articleid.value
+                }
+            }).then((res: any) => {
+                // console.log(res)
+                mkdContent.value = res.md
+            }, error => {
+                console.log('exception...')
+                console.log(error)
+                hint.value = "request exception" + error
+                if (!isDev) {
+                    hint.value = "Tips: SSG Mode cannot save md content!! "
+                    const markdownContent = compileHastToStringify(dataL.body)
+                    mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
+                }
+            })
+    }
 } else {
     const dataAx = await getDataAx()
     mkdContent.value = dataAx.content
@@ -176,7 +176,7 @@ function saveAction(text: string) {
         title: title.value,
         extInfo: JSON.stringify(extInfo),
         file: file.value,
-        permalink: '/article/' + articleid.value,
+        permalink: articleid.value ? '/article/' + articleid.value : undefined,
         pub: true, // default value
         ...bodyExtra
     }
@@ -196,15 +196,17 @@ function saveAction(text: string) {
             hint.value = res.msg
             if (res && res.success) {
                 hint.value = res.msg + " ,Time:" + new Date();
+                // scm mode
                 if (res.ext && res.ext.articleid) {
                     console.log(res.ext.articleid)
                     articleid.value = res.ext.articleid // begin edit it when file created success.
-                    console.log('saved articleid: ' + articleid.value)
+                    console.log('scm mode, saved articleid: ' + articleid.value)
                 }
 
+                // fcm mode
                 if (res.ext && res.ext.file) {
                     file.value = res.ext.file
-                    console.log('static mode, save articleid:' + file.value)
+                    console.log('fcm mode, save articleid:' + file.value)
                 }
             }
         }, error => {

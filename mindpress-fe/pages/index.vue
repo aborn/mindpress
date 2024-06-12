@@ -43,8 +43,8 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
       return staticMdTransform(value, isDev)
     })
     articles.value = tdata
-    console.log('***************')
-    console.log(tdata)
+    // console.log('***************')
+    // console.log(tdata)
   } catch (error) {
     console.warn(error)
   }

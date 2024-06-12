@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
     idxNames.forEach(item => {
         if (body.hasOwnProperty(item)) {
             if ('permalink' === item) {
-                if (body[item].indexOf(':') < 0) {
+                if (body[item] && body[item].indexOf(':') < 0) {
                     header = header + `permalink: '` + body[item] + `'\n`
                 }
             } else {
@@ -93,9 +93,8 @@ export default defineEventHandler(async (event) => {
 
     return {
         md: data,
-        api: 'savecontent api works',
         success: true,
-        msg: 'articleid=' + articleid + ", save success!",
+        msg: 'articleid=' + (articleid || file) + ", save success!",
         ext: {
             file: file
         }
