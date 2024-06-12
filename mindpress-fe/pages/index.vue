@@ -20,8 +20,6 @@ const useReqURL = useRequestURL()
 const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
 console.log(mp)
 console.log(apiBaseURL)
-let isDev = isDevMode(useReqURL.hostname);
-console.log('isDevMode:' + isDev)
 console.log('mode===>' + mp.mode)
 
 if (mp.mode === MINDPRESS_MODE.SSG) {

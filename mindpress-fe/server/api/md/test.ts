@@ -4,7 +4,7 @@ import { createStorage, type WatchEvent, prefixStorage } from 'unstorage'
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
-    console.log("nitro: req comming...(status)")
+    console.log("nitro: req comming...(test)")
     const req = event.node.req
     const query = getQuery(event)
     let data: any = '';

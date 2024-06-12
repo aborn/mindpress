@@ -10,12 +10,21 @@ For `FCM` and `SCM`, you can edit/save markdown file upstream from another api s
 ## 1. MindPress Modes
 ### 1.1 SSG
 SSG, Static Site Generation. Mindpress use nuxt SSG generate static pages. SSG can be deployed in Github Pages, here is an example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/).
+```
+yarn dev:ssg
+```
 
 ### 1.2 FCM
 FCM, File-based Content Management System. This mode deployed in node server.
+```
+yarn dev:fcm
+```
 
 ### 1.3 SCM
 SCM, Server-based Content Management). This mode deployed in another server. [mindpress-serv](https://github.com/aborn/mindpress/mindpress-serv) is the implementation server api.
+```
+yarn dev:scm
+```
 
 ## 2. Preview
 1. The home page `/`  

@@ -30,7 +30,6 @@ console.log(queryV)
 const useReqURL = useRequestURL()
 console.log(useReqURL)
 
-let isDev = isDevMode(useReqURL.hostname);
 const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const articleid = ((mp.mode === MINDPRESS_MODE.SSG || mp.mode === MINDPRESS_MODE.FCM) && 'undefined' === articleids[0]) ?
@@ -142,11 +141,6 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                 console.log('exception...')
                 console.log(error)
                 hint.value = "request exception" + error
-                if (!isDev) {
-                    hint.value = "Tips: SSG Mode cannot save the edit content!!"
-                    const markdownContent = compileHastToStringify(dataL.body)
-                    mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
-                }
             })
     }
 } else {
