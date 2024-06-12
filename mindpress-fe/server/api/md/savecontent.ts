@@ -1,7 +1,7 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import os from 'node:os';
-
+import { generatePermalinkHash } from '../../utils/markdownUtils'
 import { dateFormat } from '../../utils/date'
 import { updateCache } from '../../storage'
 
@@ -61,12 +61,17 @@ export default defineEventHandler(async (event) => {
     console.log('cccccccnnnnn->' + computerName + ",,,," + __rootDir)
 
     const baseDir = __rootDir + '/content/';
-    if (!file || file.length == 0) { // create new file. TODO: deal with file name exits.
+    if (!file || file.length == 0) { // create new file.
+        const permalinkHash = generatePermalinkHash();
         file = "test/" + body.title + ".md"
+        if (fs.existsSync(baseDir + file)) { // if file exists, generate new random name!
+            file = "test/" + permalinkHash + ".md"
+        }
         isCreateFile = true;
         console.log("create new file, file name=" + file)
         header = header +
-            `createTime: '` + dateFormat(new Date()) + `'\n`
+            `createTime: '` + dateFormat(new Date()) + `'\n` +
+            `permalink: '/article/` + permalinkHash + `'\n`
     } else { // file exists!
         if (body.header && body.header.createTime) {
             header = header + `createTime: '` + body.header.createTime + `'\n`
@@ -111,6 +116,7 @@ export default defineEventHandler(async (event) => {
         msg: 'articleid=' + (articleid || file) + ", save success!",
         ext: {
             file: file
-        }
+        },
+        isCreateFile
     }
 })
