@@ -22,11 +22,21 @@ console.log(mp)
 console.log(apiBaseURL)
 let isDev = isDevMode(useReqURL.hostname);
 console.log('isDevMode:' + isDev)
+console.log('mode===>' + mp.mode)
 
-if (mp.mode === MINDPRESS_MODE.static) {
-  const mode = await queryMode();
-  console.log('mode===>' + mode)
-
+if (mp.mode === MINDPRESS_MODE.SSG) {
+  if (articles.value.length <= 0) {
+    const { data } = await useAsyncData('home', () => queryContent().sort({ _id: 1 }).find())
+    console.log('--------dataVVVVVVV-----')
+    console.log(data.value)
+    const tdata = data.value.map((value) => {
+      return staticMdTransform(value, isDev)
+    })
+    // console.log('***************')
+    // console.log(tdata)
+    articles.value = tdata; //data.value;
+  }
+} else if (mp.mode === MINDPRESS_MODE.FCM) {
   try {
     const { data: dataQ } = await useFetch('/api/md/query');
     const tdata = dataQ.value.map((value) => {
@@ -38,21 +48,7 @@ if (mp.mode === MINDPRESS_MODE.static) {
   } catch (error) {
     console.warn(error)
   }
-
-  if (articles.value.length <= 0) {
-    console.log('static mode')
-    const { data } = await useAsyncData('home', () => queryContent().sort({ _id: 1 }).find())
-    console.log('--------dataVVVVVVV-----')
-    console.log(data.value)
-    const tdata = data.value.map((value) => {
-      return staticMdTransform(value, isDev)
-    })
-    // console.log('***************')
-    // console.log(tdata)
-    articles.value = tdata; //data.value;
-  }
 } else {
-  console.log('server mode')
   const { data: dataServer } = await useFetch(mp.metaUrl)
   // console.log(dataServer.value)
 

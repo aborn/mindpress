@@ -1,7 +1,7 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
     app: {
-        baseURL: process.env.MINDPRESS_MODE === 'ghpages' ? '/mindpress/' : '/',   // default '/'  (change to your need.)
+        baseURL: process.env.BUILD_MODE === 'ghpages' ? '/mindpress/' : '/',   // default '/'  (change to your need.)
         head: {
             title: 'MindPress, Press your mind gracefully.',
             link: [
@@ -34,8 +34,9 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             minpress: {
-                mode: (process.env.MINDPRESS_MODE === 'ghpages' || process.env.MINDPRESS_MODE === 'static') ? 'static' : 'server',   // 'static' (default) or 'server'
-                baseUrl: '/api/v1/mindpress/'
+                //mode: (process.env.MINDPRESS_MODE === 'SSG' || process.env.MINDPRESS_MODE === 'static') ? 'static' : 'server',   // 'static' (default) or 'server'
+                baseUrl: '/api/v1/mindpress/',
+                mode: process.env.MINDPRESS_MODE === 'SSG' ? 'SSG' : (process.env.MINDPRESS_MODE === 'FCM' ? 'FCM' : 'SCM') 
             }
         }
     }

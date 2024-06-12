@@ -13,15 +13,15 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --port=7001",
-    "devstatic": "MINDPRESS_MODE=static nuxt dev --port=7001",
-    "generate": "MINDPRESS_MODE=ghpages nuxt generate",
+    "devstatic": "MINDPRESS_MODE=FCM nuxt dev --port=7001",
+    "generate": "BUILD_MODE=ghpages MINDPRESS_MODE=SSG nuxt generate",
     "preview": "nuxt preview",
     "start": "nuxt build && PORT=8001 node .output/server/index.mjs",
     "deploy": "touch ./dist/.nojekyll && push-dir --dir=dist --branch=gh-pages --cleanup",
     "gh": "npx nuxi generate && npx serve -s ./dist",
-    "docker:build:fcm": "BUILD_MODE=docker MINDPRESS_MODE=static nuxt build",
+    "docker:build:fcm": "BUILD_MODE=docker MINDPRESS_MODE=FCM nuxt build",
     "docker:deploy:fcm": "PORT=7010 node .output/server/index.mjs",
-    "docker:build:scm": "BUILD_MODE=docker MINDPRESS_MODE=server nuxt build",
+    "docker:build:scm": "BUILD_MODE=docker MINDPRESS_MODE=SCM nuxt build",
     "docker:deploy:scm": "PORT=3010 node .output/server/index.mjs"
   },
   "devDependencies": {

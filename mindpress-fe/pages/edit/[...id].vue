@@ -33,7 +33,7 @@ console.log(useReqURL)
 let isDev = isDevMode(useReqURL.hostname);
 const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
 const mp = mpConfig(useRuntimeConfig().public.minpress)
-const articleid = (mp.mode === MINDPRESS_MODE.static && 'undefined' === articleids[0]) ?
+const articleid = (mp.mode === MINDPRESS_MODE.SSG && 'undefined' === articleids[0]) ?
     ref(null) : ref(articleids[0]);
 if (!articleid.value && queryV.id) {
     articleid.value = queryV.id as string
@@ -71,79 +71,83 @@ async function getData() {
 }
 
 const bodyExtra: any = {};
-if (articleid.value) {
-    if (mp.mode === MINDPRESS_MODE.static) {
-        let dataL: any;
-        const mode = await queryMode();
-        console.log('11mode=>' + mode)
-        try {
-            const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
-            console.log('***************')
-            dataL = dataQ.value
-            console.log(dataL)
-        } catch (error) {
-            console.warn(error)
-        }
 
-        if (!dataL) {
-            console.log('static mode. articleid:' + articleid.value)
-            const permalink = '/article/' + articleid.value
-            console.log(permalink)
-            dataL = articleid.value.indexOf(':') >= 0 ?
-                await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
-                : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
+console.log('mode===>' + mp.mode)
+if (mp.mode === MINDPRESS_MODE.SSG) {
+    console.log('SSG mode. articleid:' + articleid.value)
+    const permalink = '/article/' + articleid.value
+    console.log(permalink)
+    const dataL = articleid.value.indexOf(':') >= 0 ?
+        await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
+        : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
+    file.value = dataL._file;
+    console.log(dataL)
+    const idxNames = ['author', 'authors', 'permalink']
+    idxNames.forEach(item => {
+        if (dataL.hasOwnProperty(item)) {
+            bodyExtra[item] = dataL[item]
         }
+    })
 
-        file.value = dataL._file;
+    if (!isDev) {
+        hint.value = "Tips: SSG Mode cannot save md content!! "
+        const markdownContent = compileHastToStringify(dataL.body)
+        mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
+    }
+} else if (mp.mode === MINDPRESS_MODE.FCM) {
+    let dataL: any;
+    try {
+        const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
+        console.log('***************')
+        dataL = dataQ.value
         console.log(dataL)
-        const idxNames = ['author', 'authors', 'permalink']
-        idxNames.forEach(item => {
-            if (dataL.hasOwnProperty(item)) {
-                bodyExtra[item] = dataL[item]
+    } catch (error) {
+        console.warn(error)
+    }
+    file.value = dataL._file;
+    console.log(dataL)
+    const idxNames = ['author', 'authors', 'permalink']
+    idxNames.forEach(item => {
+        if (dataL.hasOwnProperty(item)) {
+            bodyExtra[item] = dataL[item]
+        }
+    })
+    title.value = dataL.title
+    $fetch('/api/md/mdcontent',
+        {
+            key: articleid,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: {
+                file: file.value,
+                articleid: articleid.value
+            }
+        }).then((res: any) => {
+            // console.log(res)
+            mkdContent.value = res.md
+        }, error => {
+            console.log('exception...')
+            console.log(error)
+            hint.value = "request exception" + error
+            if (!isDev) {
+                hint.value = "Tips: SSG Mode cannot save md content!! "
+                const markdownContent = compileHastToStringify(dataL.body)
+                mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
             }
         })
+    // articles.value.time = dataL.date
+    // articles.value.author = getAuthor(dataL)
+} else {
+    const dataAx = await getDataAx()
+    mkdContent.value = dataAx.content
+    title.value = dataAx.title
 
-        //console.log(JSON.stringify(dataL.body))
-        // mkdContent.value = JSON.stringify(dataL.body.children)
-        title.value = dataL.title
-
-        $fetch('/api/md/mdcontent',
-            {
-                key: articleid,
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: {
-                    file: file.value,
-                    articleid: articleid.value
-                }
-            }).then((res: any) => {
-                // console.log(res)
-                mkdContent.value = res.md
-            }, error => {
-                console.log('exception...')
-                console.log(error)
-                hint.value = "request exception" + error
-                if (!isDev) {
-                    hint.value = "Tips: SSG Mode cannot save md content!! "
-                    const markdownContent = compileHastToStringify(dataL.body)
-                    mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
-                }
-            })
-
-        // articles.value.time = dataL.date
-        // articles.value.author = getAuthor(dataL)
-    } else {
-        const dataAx = await getDataAx()
-        mkdContent.value = dataAx.content
-        title.value = dataAx.title
-
-        // console.log(dataAx)
-        // const { data: dataS } = await getData()
-        // mkdContent.value = dataS.value.content
-        // title.value = dataS.value.title
-    }
+    // console.log(dataAx)
+    // const { data: dataS } = await getData()
+    // mkdContent.value = dataS.value.content
+    // title.value = dataS.value.title
 }
 
 function changeAction(e: any) {

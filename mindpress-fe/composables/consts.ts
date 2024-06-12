@@ -1,6 +1,7 @@
 export const MINDPRESS_MODE = {
-  static: 'static',
-  server: 'server'
+  SSG: 'SSG',
+  FCM: 'FCM',
+  SCM: 'SCM'
 }
 
 export const DEMO_TEXT_MARKDOWN = `---

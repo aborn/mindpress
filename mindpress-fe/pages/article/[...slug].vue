@@ -57,20 +57,33 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 const queryV = route.query
 
 const articleids = route.params.slug
-const articleid = (mp.mode === MINDPRESS_MODE.static && 'undefined' === articleids[0]) ?
+const articleid = (mp.mode === MINDPRESS_MODE.SSG && 'undefined' === articleids[0]) ?
     ref(null) : ref(articleids[0]);
 if (!articleid.value && queryV.id) {
     articleid.value = queryV.id
 }
 
-if (mp.mode === MINDPRESS_MODE.static) {
-    const mode = await queryMode();
-    console.log('mode=>' + mode)
-    let dataL;
+console.log('mode===>' + mp.mode)
+if (mp.mode === MINDPRESS_MODE.SSG) {
+    hint.value = 'No content found.'
+    const permalink = '/article/' + articleid.value
+    console.log(permalink)
+    const dataL = articleid.value.indexOf(':') >= 0 ?
+        await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
+        : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
+    console.log(dataL)
+    articles.value = dataL
+    articles.value.time = dataL.date
+    articles.value.author = mpFormatAuthor(dataL)
+    articles.value.articleid = articleid.value
+    toc.value = dataL.body.toc;
+    // console.log('toc value....')
+    // console.log(toc.value)
+} else if (mp.mode == MINDPRESS_MODE.FCM) {
     try {
         const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
         console.log('***************')
-        dataL = dataQ.value
+        const dataL = dataQ.value
         console.log(dataL)
         articles.value = dataL
         articles.value.time = dataL.date
@@ -80,34 +93,13 @@ if (mp.mode === MINDPRESS_MODE.static) {
     } catch (error) {
         console.warn(error)
     }
-
-    if (!dataL) {
-        hint.value = 'No content found.'
-        console.log('static mode.')
-        const permalink = '/article/' + articleid.value
-        console.log(permalink)
-        dataL = articleid.value.indexOf(':') >= 0 ?
-            await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
-            : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
-        console.log(dataL)
-        articles.value = dataL
-        articles.value.time = dataL.date
-        articles.value.author = mpFormatAuthor(dataL)
-        articles.value.articleid = articleid.value
-        toc.value = dataL.body.toc;
-    }
-
-    // console.log('toc value....')
-    // console.log(toc.value)
 } else {
     console.log('server mode.')
     const url = mp.contentUrl + "/" + articleid.value
     // console.log(url)
-
     const { data } = await useFetch(url)
     // console.log(data.value)
     const content = ref(data.value.content)
-
     const { data: doc, refresh } = await useAsyncData(articleid.value, async () => {
         try {
             return await $fetch('/api/parse', {
