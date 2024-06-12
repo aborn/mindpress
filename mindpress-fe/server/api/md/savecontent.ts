@@ -80,6 +80,9 @@ export default defineEventHandler(async (event) => {
             // console.log(content)
         }
     }
+
+    console.log('hhhhh0-----')
+    console.log(header)
     header = header + `---\n\n<!-- Content of the page -->\n`;
     try {
         fs.writeFileSync(baseDir + file, header + content);

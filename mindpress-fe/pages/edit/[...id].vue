@@ -180,11 +180,10 @@ function saveAction(text: string) {
         pub: true, // default value
         ...bodyExtra
     }
-    hint.value = "保存中......"
+    hint.value = "save......"
     console.log(bodyContent)
     console.log(mp.contentUrl)
-    // this.hint = "save action triggled."
-    $fetch(mp.mode === MINDPRESS_MODE.static ? '/api/md/savecontent' : mp.contentUrl,
+    $fetch(mp.mode === MINDPRESS_MODE.FCM ? '/api/md/savecontent' : mp.contentUrl,
         {
             key: requestSpace,
             method: "POST",
