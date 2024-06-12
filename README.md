@@ -3,7 +3,7 @@
 
 Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://v3.nuxtjs.org) and [nuxt content 2.0](https://github.com/nuxt/content). Markdown editor use [md-editor-v3](https://github.com/imzbf/md-editor-v3). Mindpress provides three modes: `SSG` (default), `FCM` and `SCM`. 
 
-`SSG`, mindpress use nuxt static site generation (SSG) prerenders every route of your markdown files at build time. Here is static site example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/), which is hosted by github pages.  
+`SSG`, mindpress use nuxt static site generation (SSG) prerenders every route of your markdown files when building. Here is static site example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/), which is hosted by github pages.  
 
 `FCM` and `SCM` modes, you can edit/save markdown file upstream from another api server. Here is an java language api implementation [mindpress-serv](https://github.com/aborn/mindpress/mindpress-serv). 
 
@@ -11,24 +11,24 @@ Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://
 <img src="docs/img/modes.png" width="600">
 
 ### 1.1 SSG
-SSG, Static Site Generation. Mindpress use nuxt SSG generate static pages. SSG can be deployed in Github Pages, here is an example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/).
+SSG, **S**tatic **S**ite **G**eneration. Mindpress uses nuxt SSG generate static pages. SSG can be deployed in Github Pages, here is an example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/).
 ```
 yarn dev:ssg
 ```
 
 ### 1.2 FCM
-FCM, File-based Content Management System. This mode deployed in node server.
+FCM, **F**ile-based **C**ontent **M**anagement System. This mode deployed in node server.
 ```
 yarn dev:fcm
 ```
 
 ### 1.3 SCM
-SCM, Server-based Content Management. This mode deployed in another server. [mindpress-serv](https://github.com/aborn/mindpress/mindpress-serv) is the implementation server api.
+SCM, **S**erver-based **C**ontent **M**anagement. This mode deployed in another server. [mindpress-serv](https://github.com/aborn/mindpress/mindpress-serv) is the implementation server api.
 ```
 yarn dev:scm
 ```
 
-## 2. How to development
+## 2. How to develop.
 
 ### 2.1 Nuxt fronted dev
 **Make sure you have node 18+ env**.  
@@ -36,14 +36,13 @@ yarn dev:scm
 Setup, install deps and boot up.
 
 ```bash
-# yarn
 cd mindpress-fe
 yarn install
 yarn dev:fcm  # yarn dev:scm  （scm mode）
 ```
 Now the nuxt server boot up in http://localhost:7001
 
-### 2.2 API server dev (Optional)
+### 2.2 API server dev (optional)
 Only for `SCM` mode (`yarn dev:scm` in 2.1)
 
 **Make sure you have Java 17+ env**.  
