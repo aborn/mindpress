@@ -3,7 +3,7 @@
 
 Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://v3.nuxtjs.org) and [nuxt content 2.0](https://github.com/nuxt/content). Markdown editor use [md-editor-v3](https://github.com/imzbf/md-editor-v3). Mindpress provides three modes: `SSG` (default), `FCM` and `SCM`. 
 
-`SSG`, mindpress use nuxt static site generation (SSG) prerenders every route of your markdown files when building. Here is static site example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/), which is hosted by github pages.  
+`SSG`, mindpress uses nuxt static site generation (SSG) prerenders every route of your markdown files when building. Here is static site example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/), which is hosted by github pages.  
 
 `FCM` and `SCM` modes, you can edit/save markdown file upstream from another api server. Here is an java language api implementation [mindpress-serv](https://github.com/aborn/mindpress/mindpress-serv). 
 
@@ -56,6 +56,7 @@ Note: `FCM` and `SSG` nodes, we don't need api server!
 
 ### 3.1 Docker deploy (Recommended)
 All docker deploy scripts in `scripts/docker`
+
 For `FCM` mode
 ```
 ./scripts/docker/fcm/build.sh    # build nuxt
@@ -63,9 +64,9 @@ For `FCM` mode
 ```
 And docker container boot up in http://localhost:7010
 
-### 3.2 Deploy from source
+### 3.2 Deploy from source code
 
-Build the application for production (`FCM` mode):
+Build the application and deploy it at production (`FCM` mode):
 
 1. `SSG` mode build and deploy
 ```bash
