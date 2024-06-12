@@ -77,21 +77,25 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     console.log('SSG mode. articleid:' + articleid.value)
     const permalink = '/article/' + articleid.value
     console.log(permalink)
-    const dataL = articleid.value.indexOf(':') >= 0 ?
-        await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
-        : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
-    file.value = dataL._file;
-    console.log(dataL)
-    const idxNames = ['author', 'authors', 'permalink']
-    idxNames.forEach(item => {
-        if (dataL.hasOwnProperty(item)) {
-            bodyExtra[item] = dataL[item]
-        }
-    })
-    title.value = dataL.title
-    hint.value = "Tips: SSG Mode cannot save md content!! "
-    const markdownContent = compileHastToStringify(dataL.body)
-    mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
+    if (articleid.value) {
+        const dataL = articleid.value.indexOf(':') >= 0 ?
+            await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
+            : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
+        file.value = dataL._file;
+        console.log(dataL)
+        const idxNames = ['author', 'authors', 'permalink']
+        idxNames.forEach(item => {
+            if (dataL.hasOwnProperty(item)) {
+                bodyExtra[item] = dataL[item]
+            }
+        })
+        title.value = dataL.title
+        hint.value = "Tips: SSG Mode cannot save md content!! "
+        const markdownContent = compileHastToStringify(dataL.body)
+        mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
+    } else {
+        hint.value = "SSG mode: cannot create new file!"
+    }
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
     let dataL: any;
     if (articleid.value) {

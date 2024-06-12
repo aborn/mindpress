@@ -27,32 +27,38 @@ const hint = ref("")
 const articles = ref<MarkdownMeta[]>([]);
 
 console.log('search.....')
+console.log('mode===>' + mp.mode)
 
 function searchShows(searchKey: string) {
   const url = mp.searchUrl + "?q=" + searchKey
   console.log(url)
 
-  useFetch(url, {
-    key: url + searchKey
-  }).then(res => {
-    const data = res.data.value as MarkdownMetaPageResponse
-    console.log(data)
-
-    if (data.totalElements > 0) {
-      articles.value = data.content.map((value: MarkdownMetaS) => {
-        return mpTransform(value)
-      })
-      hint.value = 'find <span style="color:red">' + data.totalElements + "</span> markdown files."
-      console.log(articles.value)
-      console.log(hint.value)
-    } else {
-      articles.value = []
-      hint.value = "no markdown file find."
-    }
-  }, error => {
-    hint.value = "http request error. " + error
+  if (mp.mode === MINDPRESS_MODE.SSG) {
     articles.value = []
-  })
+    hint.value = "no markdown file find." + mp.mode
+  } else {
+    useFetch(url, {
+      key: url + searchKey
+    }).then(res => {
+      const data = res.data.value as MarkdownMetaPageResponse
+      console.log(data)
+
+      if (data && data.totalElements > 0) {
+        articles.value = data.content.map((value: MarkdownMetaS) => {
+          return mpTransform(value)
+        })
+        hint.value = 'find <span style="color:red">' + data.totalElements + "</span> markdown files."
+        console.log(articles.value)
+        console.log(hint.value)
+      } else {
+        articles.value = []
+        hint.value = "no markdown file find."
+      }
+    }, error => {
+      hint.value = "http request error. " + error
+      articles.value = []
+    })
+  }
 }
 
 function submit() {
