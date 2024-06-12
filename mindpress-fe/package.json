@@ -14,6 +14,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev --port=7001",
     "devstatic": "MINDPRESS_MODE=FCM nuxt dev --port=7001",
+    "devssg": "MINDPRESS_MODE=SSG nuxt dev --port=7001",
     "generate": "BUILD_MODE=ghpages MINDPRESS_MODE=SSG nuxt generate",
     "preview": "nuxt preview",
     "start": "nuxt build && PORT=8001 node .output/server/index.mjs",

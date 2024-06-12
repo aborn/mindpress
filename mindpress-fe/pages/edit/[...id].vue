@@ -88,12 +88,10 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
             bodyExtra[item] = dataL[item]
         }
     })
-
-    if (!isDev) {
-        hint.value = "Tips: SSG Mode cannot save md content!! "
-        const markdownContent = compileHastToStringify(dataL.body)
-        mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
-    }
+    title.value = dataL.title
+    hint.value = "Tips: SSG Mode cannot save md content!! "
+    const markdownContent = compileHastToStringify(dataL.body)
+    mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
     let dataL: any;
     if (articleid.value) {
@@ -133,7 +131,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                 console.log(error)
                 hint.value = "request exception" + error
                 if (!isDev) {
-                    hint.value = "Tips: SSG Mode cannot save md content!! "
+                    hint.value = "Tips: SSG Mode cannot save the edit content!!"
                     const markdownContent = compileHastToStringify(dataL.body)
                     mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
                 }
@@ -155,6 +153,11 @@ function changeAction(e: any) {
 }
 
 function saveAction(text: string) {
+    if (mp.mode === MINDPRESS_MODE.SSG) {
+        console.error("SSG mode cannot save edit content!")
+        hint.value = 'SSG mode cannot save edit content!'
+        return
+    }
     const route = useRoute()
     const extInfo = simpleParser(text)
     console.log(extInfo)
