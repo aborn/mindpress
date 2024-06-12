@@ -92,7 +92,7 @@ yarn deploy:scm
 ```
 
 ## 4. Framework
-<img src="docs/img/framework.png" width="600">
+<img src="docs/img/framework.png" width="800">
 
 ## 5. Preview
 1. The home page `/`  
