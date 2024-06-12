@@ -9,7 +9,6 @@ export async function updateCache(fileId: string) {
 
     const length = 'markdown:source'.length;
     let keys = await storage.getKeys('markdown:source')
-    console.log(keys)
 
     if (fileId) {
         const articleid = PREFIX + fileId.replace(/\//g, ':')
@@ -17,7 +16,7 @@ export async function updateCache(fileId: string) {
         keys = keys.filter(item => item == articleid)
         console.log(keys)
     }
-    
+
     await Promise.all(
         keys.map(async (key: string) => {
             const value = await storage.getItem(key);

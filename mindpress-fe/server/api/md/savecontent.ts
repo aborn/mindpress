@@ -57,7 +57,7 @@ export default defineEventHandler(async (event) => {
     console.log('cccccccnnnnn->' + computerName + ",,,," + __rootDir)
 
     const baseDir = __rootDir + '/content/';
-    if (!file || file.length == 0) { // create new file.
+    if (!file || file.length == 0) { // create new file. TODO: deal with file name exits.
         file = "test/" + body.title + ".md"
         isCreateFile = true;
         console.log("create new file, file name=" + file)
@@ -88,7 +88,12 @@ export default defineEventHandler(async (event) => {
     header = header + `---\n\n<!-- Content of the page -->\n`;
     try {
         fs.writeFileSync(baseDir + file, header + content);
-        await updateCache(file)
+
+        // async updateCache.
+        updateCache(file).then(() => {
+            console.log('update cache success! triggle by:' + file)
+        })
+        console.log('save content success!')
         // console.log(data);
     } catch (err) {
         console.error(err);
