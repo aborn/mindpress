@@ -27,7 +27,7 @@ console.log('mode===>' + mp.mode)
 if (mp.mode === MINDPRESS_MODE.SSG) {
   if (articles.value.length <= 0) {
     const { data } = await useAsyncData('home', () => queryContent().sort({ _id: 1 }).find())
-    console.log('--------dataVVVVVVV-----')
+    console.log('--------data SSG-----')
     // console.log(data.value)
     const tdata = data.value.map((value) => {
       return staticMdTransform(value)

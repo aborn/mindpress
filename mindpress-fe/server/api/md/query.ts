@@ -4,6 +4,7 @@ import { type StorageValue, prefixStorage, type Storage, createStorage } from 'u
 import { parseContent } from '#content/server'
 
 export default defineEventHandler(async (event) => {
+    console.log("----------- nitro ------------")
     console.log("nitro: req comming...(status)")
     const req = event.node.req
     const query = getQuery(event)

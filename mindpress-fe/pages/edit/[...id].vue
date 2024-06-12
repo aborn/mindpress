@@ -94,7 +94,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
         const markdownContent = compileHastToStringify(dataL.body)
         mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
     } else {
-        hint.value = "SSG mode: cannot create new file!"
+        hint.value = "SSG mode: cannot save new file content!"
     }
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
     let dataL: any;
