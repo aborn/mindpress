@@ -8,7 +8,7 @@ Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://
 `FCM` and `SCM` modes, you can edit/save markdown file upstream from another api server. Here is an java language api implementation [mindpress-serv](https://github.com/aborn/mindpress/mindpress-serv). 
 
 ## 1. MindPress modes
-![three modes](docs/img/modes.png | width=100)
+<img src="docs/img/modes.png" width="100">
 
 ### 1.1 SSG
 SSG, Static Site Generation. Mindpress use nuxt SSG generate static pages. SSG can be deployed in Github Pages, here is an example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/).
