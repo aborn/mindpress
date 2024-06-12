@@ -131,7 +131,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                 }
             }).then((res: any) => {
                 // console.log(res)
-                mkdContent.value = res.md
+                mkdContent.value = res.mdcontent
             }, error => {
                 console.log('exception...')
                 console.log(error)

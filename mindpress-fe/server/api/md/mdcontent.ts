@@ -1,6 +1,7 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import os  from 'node:os';
+import { parseFrontMatter } from 'remark-mdc'
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -14,7 +15,7 @@ export default defineEventHandler(async (event) => {
 
     const computerName = os.hostname()
     const __rootDir = process.cwd();
-    console.log('cccccccnnnnn->' + computerName + ",,,," + __rootDir)
+    console.log('cccccccnnnnn->' + computerName + ", rootDir:" + __rootDir)
 
     let file;
     let articleid;
@@ -35,20 +36,21 @@ export default defineEventHandler(async (event) => {
         console.error(err);
     }
 
-    let mdheader = '';
+    let mdheader:any = '';
     if (mdcontent) {
+        const { content, data: frontmatter } = await parseFrontMatter(mdcontent)
+        mdheader = frontmatter;
         const modestr = '<!-- Content of the page -->';
-        let idx = mdcontent.lastIndexOf(modestr);
+        let idx = content.lastIndexOf(modestr);
         if (idx >= 0) {
-            mdheader = mdcontent.substring(0, idx)
-            data = mdcontent.substring(idx + modestr.length + 1)
+            data = content.substring(idx + modestr.length + 1)
         } else {
-            data = mdcontent;
+            data = content;
         }
     }
 
     return {
-        md: data,
+        mdcontent: data,
         mdheader,
         api: 'mdcontent api works',
     }
