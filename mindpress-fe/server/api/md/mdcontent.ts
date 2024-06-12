@@ -43,7 +43,6 @@ export default defineEventHandler(async (event) => {
         }
         mdcontent = fs.readFileSync(baseDir + file, 'utf8');
     } catch (err) {
-        console.log('eeeee')
         console.error(JSON.stringify(err));
     }
 

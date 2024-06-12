@@ -3,7 +3,7 @@ import fsDriver from "unstorage/drivers/fs";
 import { parseContent } from '#content/server'
 
 export async function updateCache(fileId: string) {
-    const storage = prefixStorage(useStorage(), 'markdown:source'); // createStorage()
+    const storage = prefixStorage(useStorage(), 'markdown:source');
     const cacheParsedStorage = prefixStorage(useStorage(), 'cache:markdown:parsed')
     const PREFIX = 'markdown:source:'
 
@@ -25,13 +25,10 @@ export async function updateCache(fileId: string) {
             // console.log('------pkey')
             // console.log(pKey)
             const parsedKey = `cache:markdown:parsed:${pKey}`;
-            const parsedKeyLocal = `cache:content:parsed:${pKey}`;
             const parsedValue = await parseContent('content:' + pKey, value)
             // console.log(key)
             // console.log(parsedValue)
             await cacheParsedStorage.setItem(parsedKey, parsedValue)
-            // await cacheParsedStorageLocal.setItem(parsedKeyLocal, parsedValue)
         })
     )
-
 }

@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
     console.log("nitro: req comming...(query)")
     const req = event.node.req
-    const query = getQuery(event)
+    const query: any = getQuery(event)
     let data = '';
     console.log(req.url)
     console.log(query)
@@ -19,27 +19,14 @@ export default defineEventHandler(async (event) => {
     // console.log(keys)
     // console.log(keys2)
 
-    // const contentId = 'markdown:source:中国文化展.md';
-    //let body = await markdownStorage.getItem(contentId);
-    //console.log(body)
-
     if (query._id) {
         const realId = query._id.substring('content:'.length)
         const parsedKey = `cache:markdown:parsed:${realId}`;
         const paserdValue = await cacheParsedStorage.getItem(parsedKey);
-        // console.log(paserdValue)
-        // console.log(parsedKey)
-        // console.log('*******88')
         if (paserdValue) {
             return paserdValue;
         }
     }
-
-    // const paserdV = await cacheParsedStorage.getItem('cache:markdown:parsed:中国文化展.md')
-    // console.log(paserdV)
-    // const parsed = await parseContent(contentId, body)
-    console.log('###########')
-    //console.log(parsed)
 
     const length = 'markdown:source'.length;
     const res: any[] = []
@@ -51,11 +38,6 @@ export default defineEventHandler(async (event) => {
             res.push(paserdValue)
         })
     )
-
-    //keys.map(async (key: string) => {
-    //    const parsedKey = `cache:markdown:parsed:${key.substring(length + 1)}`;
-    //    res.push(await cacheParsedStorage.getItem(parsedKey))
-    //})
 
     if (query._id) {
         const fond = res.find(i => i.permalink === ('/article/' + query._id))
