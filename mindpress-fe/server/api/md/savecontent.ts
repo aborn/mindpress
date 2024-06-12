@@ -33,11 +33,12 @@ export default defineEventHandler(async (event) => {
         `date: '` + todayDate + `'\n`;
 
     const idxNames = ['author', 'authors', 'permalink']
-
     idxNames.forEach(item => {
         if (body.hasOwnProperty(item)) {
             if ('permalink' === item) {
-                if (body[item] && body[item].indexOf(':') < 0) {
+                if (body.header && body.header.permalink) {
+                    header = header + `permalink: '` + body.header.permalink + `'\n`
+                } else if (body[item] && body[item].indexOf(':') < 0) {
                     header = header + `permalink: '` + body[item] + `'\n`
                 }
             } else {
@@ -51,6 +52,9 @@ export default defineEventHandler(async (event) => {
         }
     })
 
+    // console.log('------bodyheader-----')
+    // console.log(body.header)
+
     let isCreateFile = false;
     const computerName = os.hostname()
     const __rootDir = process.cwd();
@@ -61,14 +65,16 @@ export default defineEventHandler(async (event) => {
         file = "test/" + body.title + ".md"
         isCreateFile = true;
         console.log("create new file, file name=" + file)
+        header = header +
+            `createTime: '` + dateFormat(new Date()) + `'\n`
     } else { // file exists!
-        if (fs.existsSync(baseDir + file)) {
+        if (body.header && body.header.createTime) {
+            header = header + `createTime: '` + body.header.createTime + `'\n`
+        } else if (fs.existsSync(baseDir + file)) {
             const stats = fs.statSync(baseDir + file);
-            if (stats.birthtime) {
-                header = header +
-                    `createTime: '` + dateFormat(new Date(stats.birthtime)) + `'\n`
-            }
             // console.log(stats);
+            header = header +
+                `createTime: '` + dateFormat(new Date(stats.birthtimeMs > 0 ? stats.birthtime : stats.ctime)) + `'\n`
         }
     }
 

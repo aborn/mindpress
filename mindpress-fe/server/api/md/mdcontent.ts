@@ -1,6 +1,6 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
-import os  from 'node:os';
+import os from 'node:os';
 import { parseFrontMatter } from 'remark-mdc'
 
 export default defineEventHandler(async (event) => {
@@ -31,12 +31,23 @@ export default defineEventHandler(async (event) => {
     let mdcontent
     try {
         const baseDir = __rootDir + '/content/';
-        mdcontent = fs.readFileSync( baseDir + file, 'utf8');
+        console.log('file--->' + baseDir + file)
+        if (!fs.existsSync(baseDir + file)) {
+            return {
+                mdcontent: '',
+                mdheader: {},
+                api: 'mdcontent api works',
+                status: false,
+                msg: 'cannot query content, because file:' + baseDir + file + ' doesnot exists!'
+            }
+        }
+        mdcontent = fs.readFileSync(baseDir + file, 'utf8');
     } catch (err) {
-        console.error(err);
+        console.log('eeeee')
+        console.error(JSON.stringify(err));
     }
 
-    let mdheader:any = '';
+    let mdheader: any = '';
     if (mdcontent) {
         const { content, data: frontmatter } = await parseFrontMatter(mdcontent)
         mdheader = frontmatter;
@@ -53,5 +64,7 @@ export default defineEventHandler(async (event) => {
         mdcontent: data,
         mdheader,
         api: 'mdcontent api works',
+        status: true,
+        msg: 'query success'
     }
 })

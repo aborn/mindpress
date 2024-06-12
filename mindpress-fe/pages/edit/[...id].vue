@@ -73,6 +73,7 @@ async function getData() {
 }
 
 const bodyExtra: any = {};
+const mdHeader: any = {};
 
 console.log('mode===>' + mp.mode)
 if (mp.mode === MINDPRESS_MODE.SSG) {
@@ -131,7 +132,12 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                 }
             }).then((res: any) => {
                 // console.log(res)
-                mkdContent.value = res.mdcontent
+                if (!res.status) {
+                    hint.value = res.msg;
+                } else {
+                    mkdContent.value = res.mdcontent
+                    mdHeader.value = res.mdheader
+                }
             }, error => {
                 console.log('exception...')
                 console.log(error)
@@ -187,6 +193,7 @@ function saveAction(text: string) {
         file: file.value,
         permalink: articleid.value ? '/article/' + articleid.value : undefined,
         pub: true, // default value
+        header: mdHeader.value,
         ...bodyExtra
     }
     hint.value = "save......"
