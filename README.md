@@ -5,7 +5,7 @@ Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://
 
 `SSG`, mindpress use nuxt static site generation (SSG) prerenders every route of your markdown files at build time. Here is static site example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/), which is hosted by github pages.  
 
-`FCM` and `SCM`, you can edit/save markdown file upstream from another api server. Here is an java language api implementation [mindpress-serv](https://github.com/aborn/mindpress/mindpress-serv). 
+`FCM` and `SCM` modes, you can edit/save markdown file upstream from another api server. Here is an java language api implementation [mindpress-serv](https://github.com/aborn/mindpress/mindpress-serv). 
 
 ## 1. MindPress modes
 ### 1.1 SSG
@@ -29,7 +29,7 @@ yarn dev:scm
 ## 2. How to development
 
 ### 2.1 Nuxt fronted dev
-Make sure you have node 18+ env.  
+**Make sure you have node 18+ env**.  
 
 Setup, install deps and boot up.
 
@@ -41,16 +41,19 @@ yarn dev:fcm  # yarn dev:scm  （scm mode）
 ```
 Now the nuxt server boot up in http://localhost:7001
 
-### 3.2 API server dev (Optional)
-Only for `SCM` mode (`yarn dev:scm` in 2.1), 
-Make sure you have Java 17+ env.  Boot up `mindpress-serv` backend api server.
+### 2.2 API server dev (Optional)
+Only for `SCM` mode (`yarn dev:scm` in 2.1)
+
+**Make sure you have Java 17+ env**.  
+
+Boot up `mindpress-serv` backend api server.
 The api server boot up in http://localhost:3012
 
-Note: for `FCM` and `SSG`, we don't need api server!
+Note: `FCM` and `SSG` nodes, we don't need api server!
 
 ## 3. How to deploy.
 
-### 4.1 Docker deploy (Recommended)
+### 3.1 Docker deploy (Recommended)
 All docker deploy scripts in `scripts/docker`
 For `FCM` mode
 ```
@@ -59,7 +62,7 @@ For `FCM` mode
 ```
 And docker container boot up in http://localhost:7010
 
-### 4.2 Deploy from source
+### 3.2 Deploy from source
 
 Build the application for production (`FCM` mode):
 
@@ -82,11 +85,11 @@ Deploy serer first.
 ```bash
 cd mindpress-fe
 yarn install      # npm install
-yarn build:scm    # npm run build:fcm
+yarn build:scm    # npm run build:scm
 yarn deploy:scm
 ```
 
-## 3. Preview
+## 4. Preview
 1. The home page `/`  
 
 ![index](docs/img/index.png)
