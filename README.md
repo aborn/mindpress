@@ -91,7 +91,10 @@ yarn build:scm    # npm run build:scm
 yarn deploy:scm
 ```
 
-## 4. Preview
+## 4. Framework
+<img src="docs/img/framework.png" width="600">
+
+## 5. Preview
 1. The home page `/`  
 
 ![index](docs/img/index.png)
