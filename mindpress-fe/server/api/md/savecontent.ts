@@ -17,7 +17,6 @@ export default defineEventHandler(async (event) => {
     let articleid;
     let body: any;
     if (req.method === 'POST') {
-        // response_mode=form_post ('POST' method)
         body = await readBody(event)
         file = body.file;
         articleid = body.articleid;

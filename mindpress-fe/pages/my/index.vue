@@ -64,7 +64,8 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 const formatDate = mpFormatDate;
 const useReqURL = useRequestURL()
 
-if (mp.mode === MINDPRESS_MODE.static) {
+console.log('mode===>' + mp.mode)
+if (mp.mode === MINDPRESS_MODE.SSG) {
     console.log('static mode')
     const { data } = await useAsyncData('home', () => queryContent().find())
     const tdata = data.value.map((value) => {
