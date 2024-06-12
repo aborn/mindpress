@@ -7,7 +7,7 @@ Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://
 
 `FCM` and `SCM`, you can edit/save markdown file upstream from another api server. Here is an java language api implementation [mindpress-serv](https://github.com/aborn/mindpress/mindpress-serv). 
 
-## 1. MindPress Modes
+## 1. MindPress modes
 ### 1.1 SSG
 SSG, Static Site Generation. Mindpress use nuxt SSG generate static pages. SSG can be deployed in Github Pages, here is an example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/).
 ```
@@ -26,7 +26,67 @@ SCM, Server-based Content Management. This mode deployed in another server. [min
 yarn dev:scm
 ```
 
-## 2. Preview
+## 2. How to development
+
+### 2.1 Nuxt fronted dev
+Make sure you have node 18+ env.  
+
+Setup, install deps and boot up.
+
+```bash
+# yarn
+cd mindpress-fe
+yarn install
+yarn dev:fcm  # yarn dev:scm  （scm mode）
+```
+Now the nuxt server boot up in http://localhost:7001
+
+### 3.2 API server dev (Optional)
+Only for `SCM` mode (`yarn dev:scm` in 2.1), 
+Make sure you have Java 17+ env.  Boot up `mindpress-serv` backend api server.
+The api server boot up in http://localhost:3012
+
+Note: for `FCM` and `SSG`, we don't need api server!
+
+## 3. How to deploy.
+
+### 4.1 Docker deploy (Recommended)
+All docker deploy scripts in `scripts/docker`
+For `FCM` mode
+```
+./scripts/docker/fcm/build.sh    # build nuxt
+./scripts/docker/fcm/docker.sh   # make docker image and container and boot up
+```
+And docker container boot up in http://localhost:7010
+
+### 4.2 Deploy from source
+
+Build the application for production (`FCM` mode):
+
+1. `SSG` mode build and deploy
+```bash
+cd mindpress-fe
+yarn gh
+```
+
+2. `FCM` mode build and deploy
+```bash
+cd mindpress-fe
+yarn install      # npm install
+yarn build:fcm    # npm run build:fcm
+yarn deploy:fcm
+```
+
+3. `SCM` mode build and deploy
+Deploy serer first.
+```bash
+cd mindpress-fe
+yarn install      # npm install
+yarn build:scm    # npm run build:fcm
+yarn deploy:scm
+```
+
+## 3. Preview
 1. The home page `/`  
 
 ![index](docs/img/index.png)
@@ -55,54 +115,4 @@ yarn dev:scm
 
 ![my](docs/img/my.png)
 
-## 3. How to development
 
-### 3.1 Nuxt fronted dev
-Make sure to install the dependencies: (Node 18+)
-
-1. Setup 
-
-```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install --shamefully-hoist
-```
-
-2. Startup
-Start the development server on http://localhost:3012
-
-```bash
-yarn dev
-```
-
-### 3.2 Development Server (Optional)
-Make sure to install Java 17+ env.
-
-Boot up `mindpress-serv` backed api server.
-
-
-## 4. Deploy in production env.
-
-### 4.1 Docker deploy (Recommended)
-All docker deploy scripts in `scripts/docker`
-
-### 4.2 Deploy from source
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment) for more information.

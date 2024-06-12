@@ -13,6 +13,9 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --port=7001",
+    "build:ssg": "MINDPRESS_MODE=SSG nuxt build",
+    "build:fcm": "MINDPRESS_MODE=FCM nuxt build",
+    "build:scm": "MINDPRESS_MODE=SCM nuxt build",
     "dev:ssg": "MINDPRESS_MODE=SSG nuxt dev --port=7001",
     "dev:fcm": "MINDPRESS_MODE=FCM nuxt dev --port=7001",
     "dev:scm": "MINDPRESS_MODE=SCM nuxt dev --port=7001",

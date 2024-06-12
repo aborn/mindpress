@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ########################################
-# 后端代码更新后重新运行下该脚本
-# /Users/aborn/github/mindpress/mindpress-serv/scripts/docker/serv/rebuild.sh
+# front-end rebuild package and boot it!
+# /Users/aborn/github/mindpress/docker/h5/scripts/rebuild.sh
 #########################################
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
@@ -10,12 +10,26 @@ cd $DIR
 cd ../../..
 SRC_DIR="`pwd`"
 
-cd $SRC_DIR/mindpress-serv
+cd $SRC_DIR/mindpress-fe
 
-$DIR/package.sh
+# git pull
 
-# reboot container，make change jar active
-CONTAINER="mindpress-serv"
+# building
+yarn install
+yarn generate
+
+# copy dist files.
+ROOT_PATH=`$HOME/docker/mindpress/ssg`
+if [ ! -d "$ROOT_PATH" ];then
+    mkdir -p $ROOT_PATH
+else
+    echo "$ROOT_PATH, no need to create it!"
+fi
+
+cp -r dist/ $ROOT_PATH
+
+# restart container, make change active.
+CONTAINER="mindpress-ssg"
 
 if [ "$(docker ps -a | grep -c $CONTAINER)" -gt 0 ]; then
   echo "[---- Container with name: $CONTAINER  exist, now restart it! ]"

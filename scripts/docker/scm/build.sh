@@ -14,28 +14,29 @@ cd $SRC_DIR/mindpress-fe
 # git pull
 
 # building ，如果出现 /bin/sh: vite: command not found ，则需要重新yarn install下
-yarn docker:build:fcm
+yarn docker:build:scm
 
 # copy nuxt build files;
-if [ ! -d "$HOME/docker/mindpress/fcm" ];then
-    mkdir -p $HOME/docker/mindpress/fcm
+ROOT_PATH=`$HOME/docker/mindpress/scm`
+if [ ! -d "$ROOT_PATH" ];then
+    mkdir -p $ROOT_PATH
 else
-    echo "$HOME/docker/mindpress/fcm exists, no need to create it!"
+    echo "$ROOT_PATH, no need to create it!"
 fi
 
 # delete origin file
-if [ ! -d $HOME/docker/mindpress/fcm/.output ];then
+if [ ! -d $ROOT_PATH/.output ];then
     echo "dir not exists!"
 else
-    rm -rf $HOME/docker/mindpress/fcm/.output
+    rm -rf $ROOT_PATH/.output
 fi
 
 # copy files
-cp -r .output $HOME/docker/mindpress/fcm
-cp *.json $HOME/docker/mindpress/fcm
+cp -r .output $ROOT_PATH
+cp *.json $ROOT_PATH
 
 # restart container, make change active.
-CONTAINER="mindpress-fcm"
+CONTAINER="mindpress-scm"
 
 if [ "$(docker ps -a | grep -c $CONTAINER)" -gt 0 ]; then
   echo "[---- Container with name: $CONTAINER  exist, now restart it! ]"
