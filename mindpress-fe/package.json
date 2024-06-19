@@ -19,7 +19,7 @@
     "deploy:fcm": "PORT=7010 node .output/server/index.mjs",
     "deploy:scm": "PORT=3010 node .output/server/index.mjs",
     "dev:ssg": "MINDPRESS_MODE=SSG nuxt dev --port=7001",
-    "dev:fcm": "MINDPRESS_MODE=FCM nuxt dev --port=7001",
+    "dev:fcm": "cross-env MINDPRESS_MODE=FCM nuxt dev --port=7001",
     "dev:scm": "MINDPRESS_MODE=SCM nuxt dev --port=7001",
     "generate": "BUILD_MODE=ghpages MINDPRESS_MODE=SSG nuxt generate",
     "preview": "nuxt preview",
