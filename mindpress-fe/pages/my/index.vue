@@ -9,8 +9,12 @@
                     </NuxtLink>
                 </template>
                 <template #actions-data="{ row }">
-                    <UButton :to="row.editlink" color="white" variant="ghost" icon="i-heroicons-pencil-square"
-                        label="Edit" />
+                    <span class="article-meta">
+                        <NuxtLink :to="row.editlink">
+                            <UIcon name="i-heroicons-pencil-square" />
+                            <span class="article-edit">Edit</span>
+                        </NuxtLink>
+                    </span>
                 </template>
             </UTable>
             <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
@@ -105,7 +109,7 @@ const columns = [/*{
     }]
 const selectedColumns = ref([...columns])
 const page = ref(1)
-const pageCount = 10
+const pageCount = 9
 const rows = computed(() => {
     return articles.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 })
