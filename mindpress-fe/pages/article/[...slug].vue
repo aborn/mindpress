@@ -9,7 +9,9 @@
                         <span class="article-meta">
                             <UIcon name="i-heroicons-calendar-days" />
                         </span>
-                        <span class="article-meta">{{ formatDate(articles.createTime, 'en') }} </span>
+                        <UTooltip :text="`Update time: ` + formatDate(articles.time, 'en')" :popper="{ arrow: true }">
+                            <span class="article-meta">{{ formatDate(articles.createTime, 'en') }} </span>
+                        </UTooltip>
                         <span class="article-meta" style="margin-left:0.3rem">{{ articles.author }}</span>
                         <span class="article-meta">
                             <NuxtLink :to="'/edit?id=' + articles.articleid">
