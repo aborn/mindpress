@@ -102,7 +102,7 @@ export const mpConfig = (config: any) => {
     }
 }
 
-export const mpFormatDate = (date: any, lang: string) => {
+export const mpFormatDate = (date: any, lang: string = 'en') => {
     if (!date) { return '' }
     return new Date(date).toLocaleDateString(lang || 'en', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })
 }
