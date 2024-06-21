@@ -43,7 +43,8 @@ export interface QueryParamsFields {
     _id: string
     pageNo: number | undefined
     pageSize: number | undefined
-    url:string | undefined
+    url: string | undefined
+    q: string | undefined
 }
 
 export type QueryParams = QueryParamsFields;

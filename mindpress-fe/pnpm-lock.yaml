@@ -32,6 +32,9 @@ importers:
       md-editor-v3:
         specifier: ^4.15.6
         version: 4.16.9(@codemirror/view@6.28.1)(@lezer/common@1.2.1)(vue@3.4.29)
+      minisearch:
+        specifier: ^6.3.0
+        version: 6.3.0
       parse5:
         specifier: ^7.1.2
         version: 7.1.2

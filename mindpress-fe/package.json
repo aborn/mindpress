@@ -47,6 +47,7 @@
     "hast-util-from-html": "^2.0.1",
     "hast-util-to-mdast": "^10.1.0",
     "md-editor-v3": "^4.15.6",
+    "minisearch": "^6.3.0",
     "parse5": "^7.1.2",
     "rehype-raw": "^7.0.0",
     "remark-emoji": "^5.0.0",
