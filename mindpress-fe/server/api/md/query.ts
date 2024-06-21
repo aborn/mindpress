@@ -64,16 +64,7 @@ export default defineEventHandler(async (event) => {
 
     // console.log('!!!!!!!!')
     // console.log(res)
-
-    // order by title (default).
-    //const sortedList = sortList(res, { 'title': 1})
-
-    // order by 'createTime': 1
     const sortedResult = sortList(res, sortParams || { 'createTime': -1, 'title': 1 })
-
-    // order by 'updateTime' (the 'date' field.)
-    // const sortedList = sortList(res, { 'date': -1 })
-
     // console.log('!!!!!!!!------sorted')
     // console.log(sortedList)
 
@@ -82,7 +73,6 @@ export default defineEventHandler(async (event) => {
         pageNo = pageNo > totalPage ? totalPage : pageNo;
         const startIdx = pageNo * pageSize;
         const endIdx = (pageNo * pageSize + pageSize) > sortedResult.length ? sortedResult.length : (pageNo * pageSize + pageSize);
-        console.log('pageNo:' + pageNo + ", startIdx:" + startIdx + ", endIdx:" + endIdx)
         return sortedResult.slice(startIdx, endIdx)
     }
     return sortedResult
