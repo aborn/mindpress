@@ -54,8 +54,8 @@ function loadingMore() {
     isLoading.value = true
     try {
       console.log("pageNo==" + pageNo.value)
-      queryPageData(pageNo.value).then((res) => {
-        // console.log(res)
+      const url = (mp.mode == MINDPRESS_MODE.FCM) ? '/api/md/query' : (mp.mode == MINDPRESS_MODE.SCM ? mp.metaUrl : null)
+      queryPageData({ pageNo: pageNo.value, url: url }).then((res) => {
         isLoading.value = false
         if (pageNo.value >= res.totalPage) {
           isLastPage.value = true
@@ -72,6 +72,7 @@ function loadingMore() {
       isLoading.value = false
     }
   }
+
   if (isLastPage.value) {
     showLoadingComponent.value = false;
   }
@@ -125,7 +126,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
       }
     });
     pageNo.value = pageNo.value + 1
-    console.log(dataQ.value.data)
+    // console.log(dataQ.value.data)
     const tdata = dataQ.value.data.map((value) => {
       return staticMdTransform(value)
     })
@@ -138,6 +139,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
 } else {
   const { data: dataServer } = await useFetch(mp.metaUrl)
   // console.log(dataServer.value)
+  pageNo.value = pageNo.value + 1
 
   if (dataServer.value.totalElements > 0) {
     const dataS = ref([])

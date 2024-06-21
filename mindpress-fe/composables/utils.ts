@@ -95,14 +95,14 @@ export const staticMdTransform = (md: any) => {
     }
 }
 
-export const mpConfig = (config: any) => {
+export const mpConfig = (config: any): MPStruct => {
     return {
         mode: config.mode,
         contentUrl: config.baseUrl + 'content',
         metaUrl: config.baseUrl + 'meta',
         spaceUrl: config.baseUrl + 'space',
         searchUrl: config.baseUrl + 'search'
-    }
+    } as MPStruct
 }
 
 export const mpFormatDate = (date: any, lang: string = 'en') => {

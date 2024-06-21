@@ -1,3 +1,4 @@
+import type { QueryParams } from "~/types";
 
 export async function queryMode() {
     const url = '/api/md/status'
@@ -14,13 +15,14 @@ export async function queryMode() {
     return mode;
 }
 
-export async function queryPageData(pageNo: number, mode: string = 'fcm') {
-    const dataQ = await $fetch('/api/md/query', {
+export async function queryPageData(query: QueryParams) {
+    if (!query.url) { return {} }
+    const dataQ: any = await $fetch(query.url, {
         method: "POST",
         body: {
-            'pageNo': pageNo,  // start from 1
-            'pageSize': 9,
-            'sort': { 'createTime': -1, 'title': 1 }
+            'pageNo': query.pageNo,  // start from 1
+            'pageSize': query.pageSize || 9,
+            'sort': query.sort || { 'createTime': -1, 'title': 1 }
         }
     });
 

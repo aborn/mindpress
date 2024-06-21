@@ -63,3 +63,11 @@ export interface MarkdownMeta {
     highlightHtml?: string;
     highlightTitle?: string;
 }
+
+export interface MPStruct {
+    mode: string
+    contentUrl: string
+    metaUrl: string
+    spaceUrl: string
+    searchUrl: string
+}
