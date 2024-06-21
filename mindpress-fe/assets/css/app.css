@@ -166,19 +166,35 @@ nav>ul:first-of-type li:nth-of-type(2) {
   padding-left: var(--spacing);
 }
 
+.article-meta-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
 .article-meta {
   font-size: 1.167rem;
   text-align: center;
   color: #8a919f;
   line-height: 22px;
   vertical-align: middle;
-  margin-bottom: 1rem;
+  margin-right: 5px;
+}
+
+.card-footer-item {
+  font-size: 0.8rem;
+  text-align: center;
+  color: #8a919f;
+  line-height: 22px;
+  vertical-align: middle;
+ 
 }
 
 .article-edit {
   color: #1e80ff;
   cursor: pointer;
-  vertical-align: middle;
+  margin-left: 2px;
+  display: table-caption;
 }
 
 @media (max-width: 800px) {

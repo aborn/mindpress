@@ -2,6 +2,25 @@
     <div>
         <NavBar />
         <main class="container">
+            <UTable :columns="selectedColumns" :rows="rows">
+                <template #title-data="{ row }">
+                    <NuxtLink :to="row.permalink">
+                        {{ row.title }}
+                    </NuxtLink>
+                </template>
+                <template #actions-data="{ row }">
+                    <span class="article-meta">
+                        <NuxtLink :to="row.editlink">
+                            <UIcon name="i-heroicons-pencil-square" />
+                            <span class="article-edit">Edit</span>
+                        </NuxtLink>
+                    </span>
+                </template>
+            </UTable>
+            <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+                <UPagination v-model="page" :page-count="pageCount" :total="articles.length" />
+            </div>
+            <!--
             <table role="grid">
                 <thead>
                     <tr>
@@ -53,6 +72,7 @@
                     </tr>
                 </tfoot>
             </table>
+            -->
         </main>
     </div>
 </template>
@@ -64,6 +84,36 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 const formatDate = mpFormatDate;
 const useReqURL = useRequestURL()
 
+const columns = [/*{
+    key: 'articleid',
+    label: 'Article ID'
+},*/ {
+        key: 'title',
+        label: 'Title',
+    }, {
+        key: 'createTimeF',
+        label: 'Create Time'
+    }, {
+        key: 'updateTimeF',
+        label: 'Update Time'
+    }, /*{
+    key: 'space',
+    label: 'Space',
+}, {
+    key: 'isPublic',
+    label: 'isPublic'
+},*/
+    {
+        key: 'actions',
+        label: 'Actions'
+    }]
+const selectedColumns = ref([...columns])
+const page = ref(1)
+const pageCount = 9
+const rows = computed(() => {
+    return articles.value.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+})
+
 console.log('mode===>' + mp.mode)
 if (mp.mode === MINDPRESS_MODE.SSG) {
     console.log('static mode')
@@ -71,20 +121,29 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     const tdata = data.value.map((value) => {
         return staticMdTransform(value)
     })
+    articles.value = tdata.map(item => {
+        item.updateTimeF = formatDate(item.updateTime)
+        item.createTimeF = formatDate(item.createTime)
+        return item;
+    })
     // console.log(tdata)
     articles.value = tdata;
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
-  try {
-    const { data: dataQ } = await useFetch('/api/md/query');
-    const tdata = dataQ.value.map((value) => {
-      return staticMdTransform(value)
-    })
-    articles.value = tdata
-    // console.log('***************')
-    // console.log(tdata)
-  } catch (error) {
-    console.warn(error)
-  }
+    try {
+        const { data: dataQ } = await useFetch('/api/md/query');
+        const tdata = dataQ.value.map((value) => {
+            return staticMdTransform(value)
+        })
+        articles.value = tdata.map(item => {
+            item.updateTimeF = formatDate(item.updateTime)
+            item.createTimeF = formatDate(item.createTime)
+            return item;
+        })
+        // console.log('***************')
+        // console.log(tdata)
+    } catch (error) {
+        console.warn(error)
+    }
 } else {
     console.log('server mode')
     const { data: dataServer } = await useFetch(mp.metaUrl)

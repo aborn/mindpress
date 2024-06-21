@@ -3,7 +3,8 @@
         <NavBar />
         <main class="container">
             <input id="title" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
-            <label>{{ hint }}</label>
+            <UAlert v-if="hint.title" icon="i-heroicons-chat-bubble-left-ellipsis" :color="`${hint.color}`"
+                variant="outline" :title="`${hint.title}`" :description="`${hint.desc}`" style="margin-bottom: 10px;" />
             <NuxtLink v-if="articleid" :to="`/article/${articleid}`" class="secondary" target="_blank">Article Detail
             </NuxtLink>
             <ColorScheme placeholder="loading..." tag="span">
@@ -39,7 +40,7 @@ if (!articleid.value && queryV.id) {
 }
 
 const mkdContent = ref('')
-const hint = ref('')
+const hint = ref({} as any)
 const title = ref<string | undefined>('')
 const toolbarsExclude = ['github']
 let file = ref<string | undefined>('');
@@ -92,11 +93,19 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
             }
         })
         title.value = dataL.title
-        hint.value = "Tips: SSG Mode cannot save md content!! "
+        hint.value = {
+            title: 'Tips',
+            desc: "SSG Mode cannot save md content!! ",
+            color: 'orange'
+        }
         const markdownContent = compileHastToStringify(dataL.body)
         mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
     } else {
-        hint.value = "SSG mode: cannot save new file content!"
+        hint.value = {
+            title: 'Tips',
+            desc: "SSG mode: cannot save file content!! ",
+            color: 'orange'
+        }
     }
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
     let dataL: any;
@@ -132,7 +141,11 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
             }).then((res: any) => {
                 // console.log(res)
                 if (!res.status) {
-                    hint.value = res.msg;
+                    hint.value = {
+                        title: 'Info',
+                        desc: res.msg,
+                        color: 'primary'
+                    }
                 } else {
                     mkdContent.value = res.mdcontent
                     mdHeader.value = res.mdheader
@@ -140,7 +153,11 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
             }, error => {
                 console.log('exception...')
                 console.log(error)
-                hint.value = "request exception" + error
+                hint.value = {
+                    title: 'Error',
+                    desc: "request exception" + error,
+                    color: 'orange'
+                }
             })
     }
 } else {
@@ -161,7 +178,11 @@ function changeAction(e: any) {
 function saveAction(text: string) {
     if (mp.mode === MINDPRESS_MODE.SSG) {
         console.error("SSG mode cannot save edit content!")
-        hint.value = 'SSG mode cannot save edit content!'
+        hint.value = {
+            title: 'Error',
+            desc: 'SSG mode cannot save edit content!',
+            color: 'orange'
+        }
         return
     }
     const route = useRoute()
@@ -190,7 +211,9 @@ function saveAction(text: string) {
         header: mdHeader.value,
         ...bodyExtra
     }
-    hint.value = "save......"
+    hint.value = {
+        title: "save......",
+    }
     console.log(bodyContent)
     console.log(mp.contentUrl)
     $fetch(mp.mode === MINDPRESS_MODE.FCM ? '/api/md/savecontent' : mp.contentUrl,
@@ -203,9 +226,12 @@ function saveAction(text: string) {
             body: bodyContent
         }).then((res: any) => {
             console.log(res)
-            hint.value = res.msg
             if (res && res.success) {
-                hint.value = res.msg + " ,Time:" + new Date();
+                hint.value = {
+                    title: 'Info',
+                    desc: res.msg + " , Complete Time: " + mpFormatDate(new Date()),
+                    color: 'primary'
+                }
                 // scm mode
                 if (res.ext && res.ext.articleid) {
                     console.log(res.ext.articleid)
@@ -218,10 +244,21 @@ function saveAction(text: string) {
                     file.value = res.ext.file
                     console.log('fcm mode, save articleid:' + file.value)
                 }
+            } else {
+                hint.value = {
+                    title: 'Tips',
+                    desc: res.msg + " , Time: " + mpFormatDate(new Date()),
+                    color: 'orange'
+                }
             }
         }, error => {
             console.log('exception...')
             console.log(error)
+            hint.value = {
+                title: 'Error',
+                desc: "request exception!!" + error,
+                color: 'orange'
+            }
         })
 
 }

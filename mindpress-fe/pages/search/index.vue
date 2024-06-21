@@ -4,7 +4,7 @@
     <main class="container">
       <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
         <input type="text" style="height:2.5rem" v-model="search" placeholder="Please input your keyword." />
-        <button class="outline" style="margin-left: .5rem;height:2.5rem;width: 10rem;">Search</button>
+        <UButton :onclick="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px" block>Search</UButton>
       </form>
 
       <label style="margin-bottom:1rem" v-html="hint"></label>
@@ -20,6 +20,8 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import mdcontent from "~/server/api/md/mdcontent";
+import type { QueryParams } from "~/types";
 import type { MarkdownMetaPageResponse, MarkdownMetaS, MarkdownMeta } from "~~/composables/types";
 const search = ref("")
 const mp = mpConfig(useRuntimeConfig().public.minpress)
@@ -29,6 +31,8 @@ const articles = ref<MarkdownMeta[]>([]);
 console.log('search.....')
 console.log('mode===>' + mp.mode)
 
+const pageNo = ref(1)
+
 function searchShows(searchKey: string) {
   const url = mp.searchUrl + "?q=" + searchKey
   console.log(url)
@@ -36,6 +40,24 @@ function searchShows(searchKey: string) {
   if (mp.mode === MINDPRESS_MODE.SSG) {
     articles.value = []
     hint.value = "no markdown file find." + mp.mode
+  } else if (mp.mode === MINDPRESS_MODE.FCM) {
+    try {
+      const url = '/api/md/search'
+      searchPageData({ pageNo: pageNo.value, url: url, q: searchKey } as QueryParams).then(res => {
+        if (res) {
+          articles.value = res.map((value: MarkdownMetaS) => {
+            return staticMdTransform(value)
+          })
+          hint.value = 'find <span style="color:red">' + res.length + "</span> markdown files."
+        } else {
+          hint.value = 'find <span style="color:red">' + 0 + "</span> markdown files."
+        }
+      }, error => {
+
+      });
+    } catch (error) {
+      console.warn(error)
+    }
   } else {
     useFetch(url, {
       key: url + searchKey
@@ -63,7 +85,12 @@ function searchShows(searchKey: string) {
 
 function submit() {
   console.log('submit... q=' + search.value)
-  if (!search.value) return;
+
+  if (!search.value) {
+    articles.value = []
+    hint.value = ''
+    return;
+  }
   searchShows(search.value);
 }
 </script>

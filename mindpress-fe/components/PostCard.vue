@@ -14,7 +14,11 @@
             </h2>
 
             <div>
+                <UBadge v-for="tag in tags" :key="tag" :ui="{ rounded: 'rounded-full' }" size="xs"
+                    style="margin-right: 5px;">{{ tag }}</UBadge>
+                <!--
                 <span class="card-content-tag" v-for="tag in tags" :key="tag">{{ tag }}</span>
+                -->
             </div>
             <div class="card-content-desc">
                 <p v-if="item.highlightHtml" class="card-content-desc">
@@ -27,8 +31,9 @@
 
     <div class="card-footer">
         <div class="card-footer-date">
-            <img style="max-width: 12.5px;margin-right: 0.1rem;"
-                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAABQElEQVRoge2aWwqDMBBFb4u76DraNfjl5lvpv49VCLYfTiRiHkajGWUOBDEOM7l5DYYAy8kB1AB+VCqqi8Xe/kcqLYge7Cz+R5Rz23tS//eIDUmKLqQA0GI+vL6esdmHllD/LbV5hkuEKWAsAVv8Ny7lvp5Zah9KqP/J90uuER81PfWeqC22a4jm3zeUOaZ7/R4JMcS/tb2x5/zeyBphTWaoO9P0Grn0iNwOb8U6JjPnMiMiQrghQrghQrghQrghQrghQriRQsgLQAn/mVVJtsEc9c++RIQqH4ef5IcPPcUx/QspMrLpHTbJhSyNIyeNp0aEcEOEbEDtNL7tV7f1kkLIl54d7ImwI5tyTYCj8sgLQ8b2ZfU3gKfDT/KEGAtJiKwRIdzQ9/IWwAPnWvCtqbLAcJNgrxsNsUsDyxUOgQN/Ae4C203zZCwAAAAASUVORK5CYII=" />
+            <span class="card-footer-item">
+                <UIcon name="i-heroicons-calendar-days" />
+            </span>
             {{ item.date ? formatDate(item.date) : formatDate(item.mtime) }}
         </div>
         <div class="card-footer-author">
@@ -77,6 +82,7 @@ function assembyTags() {
 }
 
 function formatDesc(des: string) {
+    if (!des) { return '' }
     const maxLength = 50
     const cjkMatch = des.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/)
     const trimmedString = des.trim().substring(0, maxLength * 2)

@@ -1,8 +1,9 @@
 ---
-title: Getting Started
-authors: [{name: Aborn Jiang, link: aborn.jiang}, {name: John, link: aborn.jiang}]
-permalink: /article/8dd81e
-date: 2022-05-22
+title: 'Getting Started'
+date: '2024-06-21 10:03:48'
+authors: [{"name":"Aborn Jiang","link":"aborn.jiang"},{"name":"John","link":"aborn.jiang"}]
+permalink: '/article/8dd81e'
+createTime: '2024-06-05 22:29:37'
 category:
   - MindPress
   - Guide
