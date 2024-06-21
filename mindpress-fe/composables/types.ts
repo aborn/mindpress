@@ -25,7 +25,8 @@ export interface MarkdownMetaS extends Base {
     space: string;
     status: number;
     title: string;
-    tags: string;    
+    tags: string;
+    tag: string;
     highlight?: object;
 }
 
@@ -58,7 +59,7 @@ export interface MarkdownMeta {
     tags: string[];
     title: string;
     updateTime: number;
-    _type: string;    
+    _type: string;
     highlightHtml?: string;
     highlightTitle?: string;
 }

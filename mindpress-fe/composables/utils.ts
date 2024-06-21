@@ -25,6 +25,7 @@ export const mpTransform = (server: MarkdownMetaS): MarkdownMeta => {
         status: server.status,
         space: server.space,
         tags: server.tags ? server.tags.split(',') : [],
+        tag: server.tag,
         title: server.title,
         updateTime: server.updateTime,
         "_type": "markdown",
@@ -88,7 +89,9 @@ export const staticMdTransform = (md: any) => {
         _path: md._path,
         _id: md._id,
         editlink: "/edit/" + md._id,
-        authors: md.authors ? md.authors : (md.author ? [md.author] : [])
+        authors: md.authors ? md.authors : (md.author ? [md.author] : []),
+        category: md.category,
+        tag: md.tag
     }
 }
 

@@ -2,7 +2,7 @@ import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import { type StorageValue, prefixStorage, type Storage, createStorage } from 'unstorage'
 import { parseContent } from '#content/server'
-import { sortList } from '../../utils/match/sort';
+import { sortList } from '~/server/utils/match/sort';
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -47,8 +47,8 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-    console.log('!!!!!!!!')
-    console.log(res)
+    // console.log('!!!!!!!!')
+    // console.log(res)
 
     // order by title (default).
     //const sortedList = sortList(res, { 'title': 1})
@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
     // order by 'updateTime' (the 'date' field.)
     // const sortedList = sortList(res, { 'date': -1 })
 
-    console.log('!!!!!!!!------sorted')
-    console.log(sortedList)
+    // console.log('!!!!!!!!------sorted')
+    // console.log(sortedList)
     return sortedList
 })

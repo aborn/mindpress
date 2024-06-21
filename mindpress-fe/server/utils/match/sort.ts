@@ -1,4 +1,4 @@
-import type { SortOptions } from '../../../types'
+import type { SortOptions } from '~/types'
 
 export const get = (obj: any, path: string): any => path.split('.').reduce((acc, part) => acc && acc[part], obj)
 

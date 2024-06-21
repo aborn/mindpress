@@ -37,6 +37,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
   try {
     const { data: dataQ } = await useFetch('/api/md/query');
+    // console.log(dataQ.value)
     const tdata = dataQ.value.map((value) => {
       return staticMdTransform(value)
     })
