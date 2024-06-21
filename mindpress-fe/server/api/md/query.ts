@@ -13,6 +13,21 @@ export default defineEventHandler(async (event) => {
     console.log(req.url)
     console.log(query)
 
+    let sortParams: any = undefined;
+    let pageQuery = false;
+    let pageNo = 0;
+    let pageSize = 0;
+    if (req.method === 'POST') {
+        const body = await readBody(event)
+        sortParams = body.sort;
+        if (body.pageNo && body.pageSize) {
+            pageQuery = true;
+            pageNo = body.pageNo - 1;
+            pageSize = body.pageSize;
+        }
+        console.log(body)
+    }
+
     const cacheParsedStorage: Storage = prefixStorage(useStorage(), 'cache:markdown:parsed')
     const markdownStorage: Storage = prefixStorage(useStorage(), 'markdown:source')
     let keys = await markdownStorage.getKeys('markdown:source')
@@ -54,12 +69,21 @@ export default defineEventHandler(async (event) => {
     //const sortedList = sortList(res, { 'title': 1})
 
     // order by 'createTime': 1
-    const sortedList = sortList(res, { 'createTime': -1, 'title': 1 })
+    const sortedResult = sortList(res, sortParams || { 'createTime': -1, 'title': 1 })
 
     // order by 'updateTime' (the 'date' field.)
     // const sortedList = sortList(res, { 'date': -1 })
 
     // console.log('!!!!!!!!------sorted')
     // console.log(sortedList)
-    return sortedList
+
+    if (pageQuery) {
+        const totalPage = Math.ceil(sortedResult.length / pageSize)
+        pageNo = pageNo > totalPage ? totalPage : pageNo;
+        const startIdx = pageNo * pageSize;
+        const endIdx = (pageNo * pageSize + pageSize) > sortedResult.length ? sortedResult.length : (pageNo * pageSize + pageSize);
+        console.log('pageNo:' + pageNo + ", startIdx:" + startIdx + ", endIdx:" + endIdx)
+        return sortedResult.slice(startIdx, endIdx)
+    }
+    return sortedResult
 })

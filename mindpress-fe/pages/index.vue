@@ -36,7 +36,14 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
   }
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
   try {
-    const { data: dataQ } = await useFetch('/api/md/query');
+    const { data: dataQ } = await useFetch('/api/md/query', {
+      method: "POST",
+      body: {
+        'pageNo': 1,  // start from 1
+        'pageSize': 9,
+        'sort': { 'createTime': -1, 'title': 1 }
+      }
+    });
     // console.log(dataQ.value)
     const tdata = dataQ.value.map((value) => {
       return staticMdTransform(value)

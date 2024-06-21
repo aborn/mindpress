@@ -16,8 +16,8 @@ export const sortList = (data: any[], params: SortOptions) => {
   })
   const keys = Object.keys(params).filter(key => !key.startsWith('$'))
   data = data.sort((a, b) => {
-    var res = 0;
-    for (var i = 0; i < keys.length; i++) {
+    let res = 0;
+    for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       const values = [get(a, key), get(b, key)]
         .map((value) => {
