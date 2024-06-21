@@ -58,18 +58,68 @@ export default defineEventHandler(async (event) => {
     // Search with default options
     let results = miniSearch.search(searchKey)
 
-    let ids: any[] = []
+    console.log('--------results-----')
+    console.log(JSON.stringify(results))
+
+    let ids = results.map(item => item.id)
+    let KV: any = {}
     results.map(item => {
-        ids.push(item.id);
+        KV[item.id] = item
     })
+    // console.log('--------KV-----')
+
+    //console.log(KV)
+
 
     const searchRes = res.filter(item => {
         const idx = ids.indexOf(item._id)
         return idx >= 0
+    })
+    /*.map(i => {
+        i.originContent = ''
+        return i;
+    })*/
+
+    const hightResult = searchRes.map(item => {
+        const matchPatten = KV[item._id].match
+        console.log('-----key' + item._id)
+        console.log(matchPatten)
+        const keys = matchPatten[searchKey];
+        console.log(keys)
+        keys.forEach((key: string) => {
+            const value = item[key]
+            const idx = value.toLowerCase().indexOf(searchKey.toLowerCase())
+            const idxLast = value.toLowerCase().lastIndexOf(searchKey.toLowerCase());
+            const highlightKey = (key == 'title') ? 'highlightTitle' : (key == 'originContent' ? 'highlightHtml' : null)
+            console.log('---h>>>' + highlightKey + ' , idx=' + idx)
+            if (idx >= 0 && highlightKey) {
+                item[highlightKey] = getHtmlValue(idx, idxLast, value, searchKey)
+            }
+        })
+        return item;
     }).map(i => {
         i.originContent = ''
         return i;
     })
 
-    return searchRes
+    // console.log('-------hhhhh')
+    // console.log(hightResult)
+
+    return hightResult
 })
+
+
+function getHtmlValue(idx: number, idxLast: number | undefined, value: string, searchKey: string) {
+    const highlight = '<span style="color:red">' + searchKey + '</span>';
+    const searchBackLength = 10;
+    const startIdx = (idx - searchBackLength) >= 0 ? idx - searchBackLength : 0;
+    let result = value.substring(startIdx, idx) + highlight;
+
+    const searchFowardLength = 10;
+    const maxIdx = (idxLast && idxLast >= 0) ?
+        (idxLast + searchKey.length + searchFowardLength) :
+        (idx + searchKey.length + searchFowardLength);
+    const endIdx = maxIdx > value.length ? value.length : maxIdx;
+    return result + value.substring(idx + searchKey.length, maxIdx)
+
+}

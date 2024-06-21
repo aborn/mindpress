@@ -48,7 +48,7 @@ export const mpTransform = (server: MarkdownMetaS): MarkdownMeta => {
             const idxLast = hlHtml.lastIndexOf(pattenLast);
             const step = 100 + patten.length;
             if (idx >= 0) {
-                const startIdx = idx - 10 > 0 ? idx - 10 : 0
+                const startIdx = idx - 10 >= 0 ? idx - 10 : 0
                 let endIdx = idx + step > hlHtml.length ? hlHtml.length - 1 : idx + step;
                 if (idxLast > 0) {
                     endIdx = (idxLast + pattenLast.length) > hlHtml.length ? hlHtml.length - 1 : (idxLast + pattenLast.length)
@@ -91,7 +91,9 @@ export const staticMdTransform = (md: any) => {
         editlink: "/edit/" + md._id,
         authors: md.authors ? md.authors : (md.author ? [md.author] : []),
         category: md.category,
-        tag: md.tag
+        tag: md.tag,
+        highlightHtml: md.highlightHtml,
+        highlightTitle: md.highlightTitle
     }
 }
 
