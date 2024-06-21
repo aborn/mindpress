@@ -44,8 +44,8 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
         'sort': { 'createTime': -1, 'title': 1 }
       }
     });
-    // console.log(dataQ.value)
-    const tdata = dataQ.value.map((value) => {
+    console.log(dataQ.value.data)
+    const tdata = dataQ.value.data.map((value) => {
       return staticMdTransform(value)
     })
     articles.value = tdata

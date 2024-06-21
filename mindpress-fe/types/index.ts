@@ -37,3 +37,12 @@ export interface SortFields {
 }
 
 export type SortOptions = SortParams | SortFields
+
+export interface QueryParamsFields {
+    sort: SortOptions
+    _id: string
+    pageNo: number | undefined
+    pageSize: number | undefined
+}
+
+export type QueryParams = QueryParamsFields;
