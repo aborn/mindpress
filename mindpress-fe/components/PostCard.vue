@@ -14,7 +14,10 @@
             </h2>
 
             <div>
+                <UBadge v-for="tag in tags" :key="tag" :ui="{ rounded: 'rounded-full' }" size="xs" style="margin-right: 5px;">{{ tag }}</UBadge>
+                <!--
                 <span class="card-content-tag" v-for="tag in tags" :key="tag">{{ tag }}</span>
+                -->
             </div>
             <div class="card-content-desc">
                 <p v-if="item.highlightHtml" class="card-content-desc">

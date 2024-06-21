@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
     //const sortedList = sortList(res, { 'title': 1})
 
     // order by 'createTime': 1
-    const sortedList = sortList(res, { 'createTime': -1 })
+    const sortedList = sortList(res, { 'createTime': -1, 'title': 1 })
 
     // order by 'updateTime' (the 'date' field.)
     // const sortedList = sortList(res, { 'date': -1 })

@@ -79,7 +79,7 @@ export default defineEventHandler(async (event) => {
             const stats = fs.statSync(baseDir + file);
             // console.log(stats);
             header = header +
-                `createTime: '` + dateFormat(new Date(stats.birthtimeMs > 0 ? stats.birthtime : stats.ctime)) + `'\n`
+                `createTime: '` + dateFormat(new Date(stats.birthtimeMs > 0 ? stats.birthtime : stats.ctime), true) + `'\n`
         }
     }
 

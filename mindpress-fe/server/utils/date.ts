@@ -1,8 +1,8 @@
-export const dateFormat = (date: Date) => {
+export const dateFormat = (date: Date, fullFormat: boolean = false) => {
     if (!date) {
         date = new Date();
     }
-    return date.format("yyyy-MM-dd hh:mm:ss");
+    return fullFormat ? date.format("yyyy-MM-dd hh:mm:ss.S") :  date.format("yyyy-MM-dd hh:mm:ss");
 }
 
 Date.prototype.format = function (fmt) {

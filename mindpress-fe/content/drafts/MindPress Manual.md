@@ -1,9 +1,9 @@
 ---
 title: 'MindPress Manual'
-date: '2024-06-11 10:32:19'
+date: '2024-06-21 10:52:39'
 author: {"name":"aborn","link":"aborn"}
 permalink: '/article/8dd818'
-createTime: '2024-06-05 22:29:37'
+createTime: '2024-06-05 22:29:37.115'
 ---
 
 <!-- Content of the page -->
