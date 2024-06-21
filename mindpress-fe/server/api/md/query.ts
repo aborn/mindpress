@@ -15,8 +15,6 @@ export default defineEventHandler(async (event) => {
     serverQuery._id = query._id
     if (req.method === 'POST') {
         const body = await readBody(event)
-        console.log(body)
-
         serverQuery.sort = body.sort;
         serverQuery.pageNo = body.pageNo;
         serverQuery.pageSize = body.pageSize;

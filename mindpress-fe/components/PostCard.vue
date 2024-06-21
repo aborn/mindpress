@@ -14,7 +14,8 @@
             </h2>
 
             <div>
-                <UBadge v-for="tag in tags" :key="tag" :ui="{ rounded: 'rounded-full' }" size="xs" style="margin-right: 5px;">{{ tag }}</UBadge>
+                <UBadge v-for="tag in tags" :key="tag" :ui="{ rounded: 'rounded-full' }" size="xs"
+                    style="margin-right: 5px;">{{ tag }}</UBadge>
                 <!--
                 <span class="card-content-tag" v-for="tag in tags" :key="tag">{{ tag }}</span>
                 -->
@@ -81,6 +82,7 @@ function assembyTags() {
 }
 
 function formatDesc(des: string) {
+    if (!des) { return '' }
     const maxLength = 50
     const cjkMatch = des.match(/[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/)
     const trimmedString = des.trim().substring(0, maxLength * 2)

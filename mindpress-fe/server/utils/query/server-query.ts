@@ -52,11 +52,13 @@ export async function serverQueryContent(query: QueryParams) {
         pageNo = pageNo > totalPage ? totalPage : pageNo;
         const startIdx = pageNo * pageSize;
         const endIdx = (pageNo * pageSize + pageSize) > sortedList.length ? sortedList.length : (pageNo * pageSize + pageSize);
+        console.log('pageNo:' + pageNo + ', totalPage:' + totalPage + ", total:" + sortedList.length + ", sIdx:" + startIdx + ", eIdx:" + endIdx)
         return {
             data: sortedList.slice(startIdx, endIdx),
-            pageNo: (pageNo - 1) > 0 ? pageNo - 1 : 1,
+            pageNo: query.pageNo,
             pageSize: pageSize,
-            total: sortedList.length
+            total: sortedList.length,
+            totalPage: totalPage
         }
     }
 

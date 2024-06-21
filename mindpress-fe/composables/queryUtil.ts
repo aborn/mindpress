@@ -13,3 +13,20 @@ export async function queryMode() {
     }
     return mode;
 }
+
+export async function queryPageData(pageNo: number, mode: string = 'fcm') {
+    const dataQ = await $fetch('/api/md/query', {
+        method: "POST",
+        body: {
+            'pageNo': pageNo,  // start from 1
+            'pageSize': 9,
+            'sort': { 'createTime': -1, 'title': 1 }
+        }
+    });
+
+    // console.log(dataQ)
+    dataQ.data = dataQ.data.map((value: any) => {
+        return staticMdTransform(value)
+    })
+    return dataQ;
+}
