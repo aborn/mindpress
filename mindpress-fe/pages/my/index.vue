@@ -122,10 +122,10 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
         return staticMdTransform(value)
     })
     articles.value = tdata.map(item => {
-            item.updateTimeF = formatDate(item.updateTime)
-            item.createTimeF = formatDate(item.createTime)
-            return item;
-        })
+        item.updateTimeF = formatDate(item.updateTime)
+        item.createTimeF = formatDate(item.createTime)
+        return item;
+    })
     // console.log(tdata)
     articles.value = tdata;
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
