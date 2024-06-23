@@ -78,12 +78,24 @@ export async function serverSearchContent(query: SearchParams) {
         })
     }
 
+    // console.log(results)
+    let startTimeHight = performance.now()
+    const hightResult = highlight(searchKey, searchRes, KV).map(i => {
+        i.originContent = ''
+        return i;
+    })
+    let endTimeHight = performance.now()
+    console.log(`\n\nhightlight const time spend: ${endTimeHight - startTimeHight} milliseconds`)
+
+    return hightResult;
+}
+
+
+function highlight(searchKey: string, searchRes: any[], KV: any) {
     // toLowerCase() toLocaleLowerCase()
     const searchKeyIgnoreCase = searchKey.toLocaleLowerCase();
-    // console.log(results)
 
-    let startTimeHight = performance.now()
-    const hightResult = searchRes.map(item => {
+    return searchRes.map(item => {
         const matchPatten = KV[item._id].match
         const queryTerms: any = KV[item._id].queryTerms
         console.log('           \n')
@@ -143,17 +155,8 @@ export async function serverSearchContent(query: SearchParams) {
                 }
             })
         });
-
         let endTimeA = performance.now()
         console.log(`time spend: ${endTimeA - startTimeA} milliseconds`)
         return item;
-    }).map(i => {
-        i.originContent = ''
-        return i;
     })
-    let endTimeHight = performance.now()
-    console.log(`\n\nhightlight const time spend: ${endTimeHight - startTimeHight} milliseconds`)
-
-    return hightResult;
 }
-

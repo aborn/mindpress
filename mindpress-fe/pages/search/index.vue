@@ -48,6 +48,7 @@ function searchShows(searchKey: string) {
       let startTime = performance.now()
       loading.value = true
       hint.value = ''
+      articles.value = []
       searchPageData({ pageNo: pageNo.value, url: url, q: searchKey, highlight: true } as SearchParams).then(res => {
         if (res) {
           articles.value = res.map((value: MarkdownMetaS) => {
