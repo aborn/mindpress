@@ -5,3 +5,7 @@ export function generatePermalinkHash() {
     const permalink = uuid.replace(/-/g, '');
     return permalink.length > 16 ? permalink.substring(permalink.length - 16) : permalink
 }
+
+export function extractBody(content: string) {
+
+}

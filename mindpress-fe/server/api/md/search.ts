@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
         keys.map(async (key: string) => {
             const parsedKey = `cache:markdown:parsed:${key.substring(length + 1)}`;
             const sourceKey = `markdown:source:${key.substring(length + 1)}`;
-            const paserdValue = await cacheParsedStorage.getItem(parsedKey);
+            const paserdValue = await cacheParsedStorage.getItem(parsedKey) as any;
             const sourceValue = await markdownStorage.getItem(sourceKey);
             paserdValue.originContent = sourceValue
             res.push(paserdValue)
