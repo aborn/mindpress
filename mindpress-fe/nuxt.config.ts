@@ -22,14 +22,7 @@ export default defineNuxtConfig({
     modules: [
         '@nuxt/content',
         '@nuxt/ui'
-    ],
-    nitro: {
-        serverAssets: [{
-            baseName: 'resources',
-            dir: './server/resources'
-        }]
-    },
-    
+    ], 
     content: {
         highlight: {
             theme: "one-dark-pro",
