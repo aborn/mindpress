@@ -89,7 +89,7 @@ function searchShows(searchKey: string) {
             const url = '/api/md/search'
             let startTime = performance.now()
             loading.value = true
-            searchPageData({ pageNo: pageNo.value, url: url, q: searchKey } as QueryParams).then(res => {
+            searchPageData({ pageNo: pageNo.value, url: url, q: searchKey } as SearchParams).then(res => {
                 if (res) {
                     articles.value = res.map((value: MarkdownMetaS) => {
                         return staticMdTransform(value)
@@ -145,6 +145,7 @@ function submit() {
 }
 
 function formSubmit() {
+    // case `enter` event in SearchAutocomplete component.
     console.log('--form submit, do nothing... q=' + search.value)
 }
 </script>

@@ -3,8 +3,7 @@
     <NavBar />
     <main class="container">
       <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
-        <input type="text" style="height:2.5rem" v-model="search" placeholder="Please input your keyword."
-          @input="debounce(() => onChange($event.target.value), 500)" />
+        <input type="text" style="height:2.5rem" v-model="search" placeholder="Please input your keyword." />
         <UButton @click="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px"
           block>Search</UButton>
       </form>
@@ -23,8 +22,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import mdcontent from "~/server/api/md/mdcontent";
-import type { QueryParams, SearchParams } from "~/types";
+import type { SearchParams } from "~/types";
 import type { MarkdownMetaPageResponse, MarkdownMetaS, MarkdownMeta } from "~~/composables/types";
 const search = ref("")
 const mp = mpConfig(useRuntimeConfig().public.minpress)
@@ -34,33 +32,7 @@ const loading = ref(false)
 
 console.log('search.....')
 console.log('mode===>' + mp.mode)
-
 const pageNo = ref(1)
-const debounce = createDebounce()
-
-// suggest list!
-function onChange(key: any) {
-  const searchKey = key;
-  console.log('----onchanged:' + searchKey)
-  if ((!key || key.length == 0) || mp.mode !== MINDPRESS_MODE.FCM) {
-    return
-  }
-  const url = '/api/md/search'
-  const startTime = performance.now()
-  searchPageData({ pageNo: pageNo.value, url: url, q: searchKey, autoSuggest: true } as SearchParams)
-    .then(res => {
-      if (res) {
-        console.log(res)
-        let endTime = performance.now()
-        let timeCost = (endTime - startTime).toFixed(2)
-        //hint.value = 'find <span style="color:red">' + res.length + `</span> markdown files. Time cost: ${timeCost} milliseconds.`
-      } else {
-        // hint.value = 'find <span style="color:red">' + 0 + "</span> markdown files."
-      }
-    }, error => {
-      console.warn(error)
-    });
-}
 
 function searchShows(searchKey: string) {
   const url = mp.searchUrl + "?q=" + searchKey
@@ -75,15 +47,15 @@ function searchShows(searchKey: string) {
       const url = '/api/md/search'
       let startTime = performance.now()
       loading.value = true
-      searchPageData({ pageNo: pageNo.value, url: url, q: searchKey, highlight: true } as QueryParams).then(res => {
+      hint.value = ''
+      searchPageData({ pageNo: pageNo.value, url: url, q: searchKey, highlight: true } as SearchParams).then(res => {
         if (res) {
           articles.value = res.map((value: MarkdownMetaS) => {
             return staticMdTransform(value)
           })
           let endTime = performance.now()
           let timeCost = (endTime - startTime).toFixed(2)
-
-          hint.value = 'find <span style="color:red">' + res.length + `</span> markdown files. Time cost: ${timeCost} milliseconds.`
+          hint.value = `Mindpress found <span style="color:red">${res.length}</span> files (key:<span style="color:red">${searchKey}</span>). Time cost: ${timeCost} milliseconds.`
         } else {
           hint.value = 'find <span style="color:red">' + 0 + "</span> markdown files."
         }
