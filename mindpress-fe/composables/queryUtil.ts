@@ -1,4 +1,4 @@
-import type { QueryParams } from "~/types";
+import type { QueryParams, SearchParams } from "~/types";
 
 export async function queryMode() {
     const url = '/api/md/status'
@@ -15,7 +15,7 @@ export async function queryMode() {
     return mode;
 }
 
-export async function searchPageData(query: QueryParams) {
+export async function searchPageData(query: SearchParams) {
     if (!query.url) { return {} }
     const dataQ: any = await $fetch(query.url, {
         method: "POST",
@@ -23,13 +23,12 @@ export async function searchPageData(query: QueryParams) {
             'q': query.q,
             'pageNo': query.pageNo,  // start from 1
             'pageSize': query.pageSize || 9,
-            'sort': query.sort || { 'createTime': -1, 'title': 1 }
+            'sort': query.sort || { 'createTime': -1, 'title': 1 },
+            autoSuggest: query.autoSuggest
         }
     });
-
     console.log('search result .......')
-    console.log(dataQ)
-   
+    //console.log(dataQ)
     return dataQ;
 }
 
