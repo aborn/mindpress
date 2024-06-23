@@ -1,6 +1,7 @@
 import { defineEventHandler } from 'h3'
 import MiniSearch from 'minisearch'
 import { type StorageValue, prefixStorage, type Storage, createStorage } from 'unstorage'
+import { extractBody } from '~/server/utils/markdownUtils';
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -37,7 +38,7 @@ export default defineEventHandler(async (event) => {
             const sourceKey = `markdown:source:${key.substring(length + 1)}`;
             const paserdValue = await cacheParsedStorage.getItem(parsedKey) as any;
             const sourceValue = await markdownStorage.getItem(sourceKey);
-            paserdValue.originContent = sourceValue
+            paserdValue.originContent = extractBody(sourceValue as string)
             res.push(paserdValue)
         })
     )
@@ -80,16 +81,19 @@ export default defineEventHandler(async (event) => {
         return i;
     })*/
 
+    // toLowerCase() toLocaleLowerCase()
+    console.log(searchRes)
+    const searchKeyIgnoreCase = searchKey.toLocaleLowerCase();
+    console.log('---origin:' + searchKey + ', now search:' + searchKeyIgnoreCase)
     const hightResult = searchRes.map(item => {
         const matchPatten = KV[item._id].match
-        console.log('-----key' + item._id)
+        console.log('-----key--->' + item._id)
         console.log(matchPatten)
-        const keys = matchPatten[searchKey];
-        console.log(keys)
+        const keys = matchPatten[searchKeyIgnoreCase];
         keys.forEach((key: string) => {
             const value = item[key]
-            const idx = value.toLowerCase().indexOf(searchKey.toLowerCase())
-            const idxLast = value.toLowerCase().lastIndexOf(searchKey.toLowerCase());
+            const idx = value.toLowerCase().indexOf(searchKeyIgnoreCase)
+            const idxLast = value.toLowerCase().lastIndexOf(searchKeyIgnoreCase);
             const highlightKey = (key == 'title') ? 'highlightTitle' : (key == 'originContent' ? 'highlightHtml' : null)
             console.log('---h>>>' + highlightKey + ' , idx=' + idx)
             if (idx >= 0 && highlightKey) {
