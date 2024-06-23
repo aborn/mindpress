@@ -12,17 +12,19 @@ export default defineEventHandler(async (event) => {
 
     let searchKey: any = query.q
     let autoSuggest = query.autoSuggest as boolean;
+    let highlight = query.highlight as boolean;
     if (req.method === 'POST') {
         const body = await readBody(event)
         searchKey = body.q;
         autoSuggest = body.autoSuggest;
+        highlight = body.highlight == undefined ? false : body.highlight;
     }
 
     if (!searchKey || searchKey.trim().length == 0) {
         return []
     }
 
-    const searchQuery = { q: searchKey, autoSuggest: autoSuggest } as SearchParams;
+    const searchQuery = { q: searchKey, autoSuggest: autoSuggest, highlight: highlight } as SearchParams;
     return serverSearchContent(searchQuery)
 })
 

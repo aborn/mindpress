@@ -5,7 +5,7 @@
       <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
         <input type="text" style="height:2.5rem" v-model="search" placeholder="Please input your keyword."
           @input="debounce(() => onChange($event.target.value), 500)" />
-        <UButton :onclick="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px"
+        <UButton @click="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px"
           block>Search</UButton>
       </form>
 
@@ -36,19 +36,9 @@ console.log('search.....')
 console.log('mode===>' + mp.mode)
 
 const pageNo = ref(1)
-
-function createDebounce() {
-  let timeout: any = null;
-  return function (fnc: any, delayMs: any) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      fnc();
-    }, delayMs || 500);
-  };
-}
-
 const debounce = createDebounce()
 
+// suggest list!
 function onChange(key: any) {
   const searchKey = key;
   console.log('----onchanged:' + searchKey)
@@ -63,13 +53,12 @@ function onChange(key: any) {
         console.log(res)
         let endTime = performance.now()
         let timeCost = (endTime - startTime).toFixed(2)
-        hint.value = 'find <span style="color:red">' + res.length + `</span> markdown files. Time cost: ${timeCost} milliseconds.`
+        //hint.value = 'find <span style="color:red">' + res.length + `</span> markdown files. Time cost: ${timeCost} milliseconds.`
       } else {
-        hint.value = 'find <span style="color:red">' + 0 + "</span> markdown files."
+        // hint.value = 'find <span style="color:red">' + 0 + "</span> markdown files."
       }
-      loading.value = false
     }, error => {
-      loading.value = false
+      console.warn(error)
     });
 }
 
@@ -86,7 +75,7 @@ function searchShows(searchKey: string) {
       const url = '/api/md/search'
       let startTime = performance.now()
       loading.value = true
-      searchPageData({ pageNo: pageNo.value, url: url, q: searchKey } as QueryParams).then(res => {
+      searchPageData({ pageNo: pageNo.value, url: url, q: searchKey, highlight: true } as QueryParams).then(res => {
         if (res) {
           articles.value = res.map((value: MarkdownMetaS) => {
             return staticMdTransform(value)

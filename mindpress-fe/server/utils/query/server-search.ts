@@ -3,6 +3,9 @@ import { type StorageValue, prefixStorage, type Storage, createStorage } from 'u
 import MiniSearch from 'minisearch'
 
 export async function serverSearchContent(query: SearchParams) {
+    console.log('    +++++ serverSearchContent --')
+    console.log(query)
+
     let searchKey: string | undefined = query.q
     if (!searchKey) { return [] }
     const cacheParsedStorage: Storage = prefixStorage(useStorage(), 'cache:markdown:parsed')
@@ -66,6 +69,13 @@ export async function serverSearchContent(query: SearchParams) {
         const idx = ids.indexOf(item._id)
         return idx >= 0
     })
+
+    if (!query.highlight) {
+        return searchRes.map(i => {
+            i.originContent = ''
+            return i;
+        })
+    }
 
     // toLowerCase() toLocaleLowerCase()
     const searchKeyIgnoreCase = searchKey.toLocaleLowerCase();
