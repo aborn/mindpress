@@ -2,6 +2,7 @@ import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import os from 'node:os';
 import { parseFrontMatter } from 'remark-mdc'
+import { extractBody } from '~/server/utils/markdownUtils';
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -50,13 +51,7 @@ export default defineEventHandler(async (event) => {
     if (mdcontent) {
         const { content, data: frontmatter } = await parseFrontMatter(mdcontent)
         mdheader = frontmatter;
-        const modestr = '<!-- Content of the page -->';
-        let idx = content.lastIndexOf(modestr);
-        if (idx >= 0) {
-            data = content.substring(idx + modestr.length + 1)
-        } else {
-            data = content;
-        }
+        data = extractBody(content)
     }
 
     return {

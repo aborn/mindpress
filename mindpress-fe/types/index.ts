@@ -48,3 +48,15 @@ export interface QueryParamsFields {
 }
 
 export type QueryParams = QueryParamsFields;
+
+export interface SearchParamsFields {
+    q: string | undefined
+    autoSuggest: boolean
+    highlight: boolean
+    pageNo: number | undefined
+    pageSize: number | undefined
+    url: string | undefined
+    sort: SortOptions
+}
+
+export type SearchParams = SearchParamsFields

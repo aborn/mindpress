@@ -13,37 +13,40 @@ Press your mind(markdown) gracefully, which is powered by [nuxt.js 3.0](https://
 ### 1.1 SSG
 SSG, **S**tatic **S**ite **G**eneration. Mindpress uses nuxt SSG generate static pages. SSG can be deployed in Github Pages, here is an example [https://aborn.github.io/mindpress/](https://aborn.github.io/mindpress/).
 ```
-yarn dev:ssg
+pnpm dev:ssg
 ```
 
 ### 1.2 FCM
 FCM, **F**ile-based **C**ontent **M**anagement System. This mode deployed in node server.
 ```
-yarn dev:fcm
+pnpm dev:fcm
 ```
 
 ### 1.3 SCM
 SCM, **S**erver-based **C**ontent **M**anagement. This mode deployed in another server. [mindpress-serv](https://github.com/aborn/mindpress/mindpress-serv) is the implementation server api.
 ```
-yarn dev:scm
+pnpm dev:scm
 ```
 
 ## 2. How to develop.
 
 ### 2.1 Nuxt fronted dev
-**Make sure you have node 18+ env**.  
+**Make sure you have node 18+ env and install `cross-env`**.  
+```
+pnpm install cross-env -g
+```
 
 Setup, install deps and boot up.
 
 ```bash
 cd mindpress-fe
-yarn install
-yarn dev:fcm  # yarn dev:scm  （scm mode）
+pnpm install
+pnpm dev:fcm  # pnpm dev:scm  （scm mode）
 ```
 Now the nuxt server boot up in http://localhost:7001
 
 ### 2.2 API server dev (optional)
-Only for `SCM` mode (`yarn dev:scm` in 2.1)
+Only for `SCM` mode (`pnpm dev:scm` in 2.1)
 
 **Make sure you have Java 17+ env**.  
 
@@ -71,24 +74,24 @@ Build the application and deploy it at production (`FCM` mode):
 1. `SSG` mode build and deploy
 ```bash
 cd mindpress-fe
-yarn gh
+pnpm gh
 ```
 
 2. `FCM` mode build and deploy
 ```bash
 cd mindpress-fe
-yarn install      # npm install
-yarn build:fcm    # npm run build:fcm
-yarn deploy:fcm
+pnpm install      
+pnpm build:fcm    
+pnpm deploy:fcm
 ```
 
 3. `SCM` mode build and deploy
 Deploy serer first.
 ```bash
 cd mindpress-fe
-yarn install      # npm install
-yarn build:scm    # npm run build:scm
-yarn deploy:scm
+pnpm install      # npm install
+pnpm build:scm    # npm run build:scm
+pnpm deploy:scm
 ```
 
 ## 4. Framework

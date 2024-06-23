@@ -4,13 +4,15 @@
     <main class="container">
       <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
         <input type="text" style="height:2.5rem" v-model="search" placeholder="Please input your keyword." />
-        <UButton :onclick="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px" block>Search</UButton>
+        <UButton @click="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px"
+          block>Search</UButton>
       </form>
 
       <label style="margin-bottom:1rem" v-html="hint"></label>
+      <UProgress v-if="loading" animation="carousel" />
 
       <div class="articles">
-        <div class="article" v-for="article in articles" :key="article.id">
+        <div v-if="!loading" class="article" v-for="article in articles" :key="article.id">
           <PostCard :item="article" />
         </div>
       </div>
@@ -20,17 +22,16 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import mdcontent from "~/server/api/md/mdcontent";
-import type { QueryParams } from "~/types";
+import type { SearchParams } from "~/types";
 import type { MarkdownMetaPageResponse, MarkdownMetaS, MarkdownMeta } from "~~/composables/types";
 const search = ref("")
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const hint = ref("")
 const articles = ref<MarkdownMeta[]>([]);
+const loading = ref(false)
 
 console.log('search.....')
 console.log('mode===>' + mp.mode)
-
 const pageNo = ref(1)
 
 function searchShows(searchKey: string) {
@@ -40,20 +41,27 @@ function searchShows(searchKey: string) {
   if (mp.mode === MINDPRESS_MODE.SSG) {
     articles.value = []
     hint.value = "no markdown file find." + mp.mode
+    loading.value = false
   } else if (mp.mode === MINDPRESS_MODE.FCM) {
     try {
       const url = '/api/md/search'
-      searchPageData({ pageNo: pageNo.value, url: url, q: searchKey } as QueryParams).then(res => {
+      let startTime = performance.now()
+      loading.value = true
+      hint.value = ''
+      searchPageData({ pageNo: pageNo.value, url: url, q: searchKey, highlight: true } as SearchParams).then(res => {
         if (res) {
           articles.value = res.map((value: MarkdownMetaS) => {
             return staticMdTransform(value)
           })
-          hint.value = 'find <span style="color:red">' + res.length + "</span> markdown files."
+          let endTime = performance.now()
+          let timeCost = (endTime - startTime).toFixed(2)
+          hint.value = `Mindpress found <span style="color:red">${res.length}</span> files (key:<span style="color:red">${searchKey}</span>). Time cost: ${timeCost} milliseconds.`
         } else {
           hint.value = 'find <span style="color:red">' + 0 + "</span> markdown files."
         }
+        loading.value = false
       }, error => {
-
+        loading.value = false
       });
     } catch (error) {
       console.warn(error)
@@ -93,4 +101,5 @@ function submit() {
   }
   searchShows(search.value);
 }
+
 </script>

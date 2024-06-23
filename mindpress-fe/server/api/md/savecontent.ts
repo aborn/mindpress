@@ -63,9 +63,16 @@ export default defineEventHandler(async (event) => {
     const baseDir = __rootDir + '/content/';
     if (!file || file.length == 0) { // create new file.
         const permalinkHash = generatePermalinkHash();
-        file = "test/" + body.title + ".md"
-        if (fs.existsSync(baseDir + file)) { // if file exists, generate new random name!
-            file = "test/" + permalinkHash + ".md"
+        const subDir = "test/"
+        if (!fs.existsSync(baseDir + subDir)){
+            console.log(baseDir + subDir + ' doesnot exists! now create it!')
+            fs.mkdirSync(baseDir + subDir, { recursive: true });
+        }
+
+        file = subDir + body.title + ".md"
+        // if file exists, generate new random name!
+        if (fs.existsSync(baseDir + file)) { 
+            file = subDir + permalinkHash + ".md"
         }
         isCreateFile = true;
         console.log("create new file, file name=" + file)
@@ -108,6 +115,15 @@ export default defineEventHandler(async (event) => {
         // console.log(data);
     } catch (err) {
         console.error(err);
+        return {
+            md: data,
+            success: false,
+            msg: 'articleid=' + (articleid || file) + ", save failed! reason:" + err,
+            ext: {
+                file: file
+            },
+            isCreateFile
+        }
     }
 
     return {
