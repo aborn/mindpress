@@ -43,9 +43,19 @@ export default defineEventHandler(async (event) => {
         })
     )
 
+    // CJK Search https://github.com/lucaong/minisearch/issues/201
+    const segmenter = Intl.Segmenter && new Intl.Segmenter("zh", { granularity: "word" });
     let miniSearch = new MiniSearch({
         fields: ['title', 'originContent'], // fields to index for full-text search
-        storeFields: ['title', 'category'] // fields to return with search results
+        storeFields: ['title', 'category'], // fields to return with search results
+        processTerm: (term) => {
+            if (!segmenter) return term;
+            const tokens = [];
+            for (const seg of segmenter.segment(term)) {
+                tokens.push(seg.segment);
+            }
+            return tokens;
+        }
     })
 
     const documents = res.map(item => {
@@ -57,7 +67,10 @@ export default defineEventHandler(async (event) => {
     miniSearch.addAll(documents)
 
     // Search with default options
+    var startTime = performance.now()
     let results = miniSearch.search(searchKey)
+    var endTime = performance.now()
+    console.log(`search time const: ${endTime - startTime} milliseconds`)
 
     console.log('--------results-----')
     console.log(JSON.stringify(results))
@@ -82,7 +95,6 @@ export default defineEventHandler(async (event) => {
     })*/
 
     // toLowerCase() toLocaleLowerCase()
-    console.log(searchRes)
     const searchKeyIgnoreCase = searchKey.toLocaleLowerCase();
     console.log('---origin:' + searchKey + ', now search:' + searchKeyIgnoreCase)
     const hightResult = searchRes.map(item => {
@@ -105,6 +117,9 @@ export default defineEventHandler(async (event) => {
         i.originContent = ''
         return i;
     })
+
+    var endTime2 = performance.now()
+    console.log(`dealing time spend: ${endTime2 - endTime} milliseconds`)
 
     // console.log('-------hhhhh')
     // console.log(hightResult)
