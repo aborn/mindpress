@@ -20,6 +20,21 @@ export interface IdxStruct {
     e: number
 }
 
+export function hightlightTitle(indexes: IdxStruct[] | void, value: string) {
+    if ((!indexes) || (indexes && indexes.length <= 0)) { return value }
+    let array = []
+    let startIdx = 0;
+    indexes.forEach(idx => {
+        array.push(value.substring(startIdx, idx.s))
+        const searchKey = value.substring(idx.s, idx.e)
+        const highlight = '<span style="color:red">' + searchKey + '</span>';
+        array.push(highlight)
+        startIdx = idx.e
+    })
+    array.push(value.substring(startIdx, value.length))
+    return array.join('')
+}
+
 export function extraWithSurroundings(idx: IdxStruct, value: string) {
     const searchKey = value.substring(idx.s, idx.e);
     const highlight = '<span style="color:red">' + searchKey + '</span>';
