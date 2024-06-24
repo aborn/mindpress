@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const articleidArr = files?.filter(item =>
     item.name == 'articleid'
   )
-  const articleid = articleidArr ? articleidArr[0].data : '';
+  const articleid = articleidArr && articleidArr.length >0 ? articleidArr[0].data : '';
   console.log("...articleid=" + articleid + ", file.lengh" + files?.length)
 
   const uploadedFilePaths: ImageItem[] = []
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     uploadedFilePaths.push({
       alt: file.filename,
       title: file.filename,
-      url: uploadDir + '/' + rdmFileName
+      url: '/' + uploadDir + '/' + rdmFileName
     })
   })
 
