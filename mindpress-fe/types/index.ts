@@ -60,3 +60,9 @@ export interface SearchParamsFields {
 }
 
 export type SearchParams = SearchParamsFields
+
+export interface ImageItem {
+    alt:string
+    title:string
+    url:string
+}

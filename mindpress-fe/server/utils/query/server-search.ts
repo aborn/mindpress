@@ -80,7 +80,7 @@ export async function serverSearchContent(query: SearchParams) {
 
     // console.log(results)
     let startTimeHight = performance.now()
-    const hightResult = highlight(searchKey, searchRes, KV).map(i => {
+    const hightResult = (await highlight(searchKey, searchRes, KV)).map(i => {
         i.originContent = ''
         return i;
     })
@@ -91,11 +91,12 @@ export async function serverSearchContent(query: SearchParams) {
 }
 
 
-function highlight(searchKey: string, searchRes: any[], KV: any) {
+async function highlight(searchKey: string, searchRes: any[], KV: any) {
     // toLowerCase() toLocaleLowerCase()
     const searchKeyIgnoreCase = searchKey.toLocaleLowerCase();
 
-    return searchRes.map(item => {
+    const result = [] as any[]
+    await Promise.all(searchRes.map(async (item) => {
         const matchPatten = KV[item._id].match
         const queryTerms: any = KV[item._id].queryTerms
         console.log('           \n')
@@ -157,6 +158,7 @@ function highlight(searchKey: string, searchRes: any[], KV: any) {
         });
         let endTimeA = performance.now()
         console.log(`time spend: ${endTimeA - startTimeA} milliseconds`)
-        return item;
-    })
+        result.push(item)
+    }))
+    return result;
 }

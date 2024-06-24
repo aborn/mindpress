@@ -10,7 +10,7 @@
             <ColorScheme placeholder="loading..." tag="span">
                 <md-editor v-model="mkdContent" :theme="$colorMode.value as Themes"
                     :toolbarsExclude="toolbarsExclude as ToolbarNames[]" style="height:480px;" @onChange="changeAction"
-                    @onSave="saveAction" />
+                    @onSave="saveAction" @onUploadImg="onUploadImg" />
             </ColorScheme>
         </main>
     </div>
@@ -21,6 +21,7 @@ import { ref } from 'vue';
 import { MdEditor, type Themes, type ToolbarNames } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css';
 import { mpConfig } from '~~/composables/utils';
+import axios from 'axios'
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
 
@@ -262,5 +263,40 @@ function saveAction(text: string) {
         })
 
 }
+
+const onUploadImg = async (files: any, callback: any) => {
+    const res = await Promise.all(
+        files.map((file: any) => {
+            return new Promise((rev, rej) => {
+                const form = new FormData();
+                form.append('file', file);
+                if (articleid.value) {
+                    form.append('articleid', articleid.value || "");
+                }
+                axios.post('/api/upload', form, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then((res) => rev(res))
+                    .catch((error) => rej(error));
+            });
+        })
+    );
+
+    console.log(res)
+
+    callback(
+        res.map((item: any) => {
+            const itemData = item.data.data
+            console.log(itemData)
+
+            return {
+                url: itemData[0].url,
+                alt: itemData[0].alt,
+                title: itemData[0].title
+            }
+        })
+    );
+};
 </script>
 <style scoped></style>

@@ -9,6 +9,7 @@ node_modules
 .*/
 content/magazine/
 mindpress-fe/content/test/
+mindpress-fe/public/uploads/
 mindpress-fe/server/resources/
 mdparser/
 dist
