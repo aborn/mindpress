@@ -3,7 +3,8 @@
     <NavBar />
     <main class="container">
       <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
-        <input type="text" style="height:2.5rem" v-model="search" placeholder="Please input your keyword." />
+        <input ref="searchBar" type="text" style="height:2.5rem" v-model="search"
+          placeholder="Please input your keyword." />
         <UButton @click="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px"
           block>Search</UButton>
       </form>
@@ -29,10 +30,19 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 const hint = ref("")
 const articles = ref<MarkdownMeta[]>([]);
 const loading = ref(false)
-
+const searchBar = ref(null as any)
 console.log('search.....')
 console.log('mode===>' + mp.mode)
 const pageNo = ref(1)
+
+onMounted(() => {
+  if (import.meta.client) {
+    console.log('focused')
+    if (searchBar && searchBar.value) {
+      searchBar.value.focus()
+    }
+  }
+})
 
 function searchShows(searchKey: string) {
   const url = mp.searchUrl + "?q=" + searchKey
