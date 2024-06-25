@@ -1,4 +1,3 @@
-import { editorEmits } from 'md-editor-v3/lib/types/MdEditor/props';
 import { v4 as uuidv4 } from 'uuid'
 import axios from 'axios'
 import fs from 'fs'
@@ -52,7 +51,15 @@ export function extraWithSurroundings(idx: IdxStruct, value: string) {
     return result + value.substring(idx.e + 1, endIdx)
 }
 
-export async function downloadImageAndReplaseContent(content: string) {
+export function makeSureImagePathExists() {
+    const imagePath = path.join(process.cwd(), 'public/' + IMAGE_UPLOAD_PATH)
+    if (!fs.existsSync(imagePath)) {
+      console.log(imagePath + ' doesnot exists! now create it!')
+      fs.mkdirSync(imagePath, { recursive: true });
+    }
+}
+
+export function imageMatches(content: string) {
     const regex = /\!\[(.*?)\]\((.*?)\)/gm
     let matche;
     const matches = []
@@ -60,14 +67,20 @@ export async function downloadImageAndReplaseContent(content: string) {
         matches.push(matche)
     }
 
-    const filterMatches = matches.filter(i=>{
+    const filterMatches = matches.filter(i => {
         const imageUrl = i[2] as string;
         return (imageUrl.includes('http:') || imageUrl.includes('https:'))
-        && imageUrl.includes('jianshu')
+            && imageUrl.includes('jianshu')
     })
 
     console.log('  filterMatches length:' + filterMatches.length)
-    if (!filterMatches  || filterMatches.length == 0) {
+    return filterMatches;
+}
+
+export async function downloadImageAndReplaseContent(content: string) {
+    makeSureImagePathExists()
+    const filterMatches = imageMatches(content) as any[];
+    if (!filterMatches || filterMatches.length == 0) {
         return {
             state: false,
             content

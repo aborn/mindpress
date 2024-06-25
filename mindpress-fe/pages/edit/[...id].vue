@@ -9,7 +9,7 @@
             </NuxtLink>
             <ColorScheme placeholder="loading..." tag="span">
                 <md-editor v-model="mkdContent" :theme="$colorMode.value as Themes"
-                    :toolbarsExclude="toolbarsExclude as ToolbarNames[]" style="height:480px;" @onChange="changeAction"
+                    :toolbarsExclude="toolbarsExclude as ToolbarNames[]" style="height:480px;" @onChange="onChange"
                     @onSave="saveAction" @onUploadImg="onUploadImg" />
             </ColorScheme>
         </main>
@@ -22,9 +22,10 @@ import { MdEditor, type Themes, type ToolbarNames } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css';
 import { mpConfig } from '~~/composables/utils';
 import axios from 'axios'
+import { imageMatches } from '~/server/utils/markdownUtils';
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
-
+const debounce = createDebounce()
 const articleids = route.params.id
 const queryV = route.query
 console.log(queryV)
@@ -172,10 +173,6 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     // title.value = dataS.value.title
 }
 
-function changeAction(e: any) {
-    // console.log('content changed. data=' + new Date())
-}
-
 function saveAction(text: string) {
     if (mp.mode === MINDPRESS_MODE.SSG) {
         console.error("SSG mode cannot save edit content!")
@@ -302,5 +299,51 @@ const onUploadImg = async (files: any, callback: any) => {
         })
     );
 };
+
+const onChange = (content: string) => {
+    console.log('changed  ' + new Date())
+    debounce(() => changeAction(content), 500)
+}
+
+const changeAction = (content: string) => {
+    console.log(' ----------action: ' + new Date())
+    // console.log(content)
+
+    const filterMatches = imageMatches(content) as any[];
+    if (filterMatches && filterMatches.length > 0) {
+        console.log('process images....')
+
+        if (mp.mode !== MINDPRESS_MODE.FCM) {
+            return;
+        }
+
+        const bodyContent = {
+            articleid: articleid.value,
+            content: content,
+            title: title.value,
+        }
+        $fetch(mp.mode === MINDPRESS_MODE.FCM ? '/api/md/mdimage' : mp.contentUrl,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: bodyContent
+            }).then((res: any) => {
+                console.log(res)
+                if (res && res.success) {
+                    if (res.state) {
+                        console.warn('content updated!')
+                        mkdContent.value = res.content
+                    }
+                } else {
+                    console.warn('call /api/md/mdimage error')
+                }
+            }, error => {
+                console.log('exception...')
+                console.log(error)
+            })
+    }
+}
 </script>
 <style scoped></style>

@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { generatePermalinkHash, IMAGE_UPLOAD_PATH } from '../utils/markdownUtils'
+import { generatePermalinkHash, IMAGE_UPLOAD_PATH, makeSureImagePathExists } from '../utils/markdownUtils'
 import type { ImageItem } from '~/types';
 
 export default defineEventHandler(async (event) => {
@@ -11,17 +11,11 @@ export default defineEventHandler(async (event) => {
   const articleidArr = files?.filter(item =>
     item.name == 'articleid'
   )
-  const articleid = articleidArr && articleidArr.length >0 ? articleidArr[0].data : '';
+  const articleid = articleidArr && articleidArr.length > 0 ? articleidArr[0].data : '';
   console.log("...articleid=" + articleid + ", file.lengh" + files?.length)
 
   const uploadedFilePaths: ImageItem[] = []
-
-
-  const imagePath = path.join(process.cwd(), 'public/' + IMAGE_UPLOAD_PATH)
-  if (!fs.existsSync(imagePath)) {
-    console.log(imagePath + ' doesnot exists! now create it!')
-    fs.mkdirSync(imagePath, { recursive: true });
-  }
+  makeSureImagePathExists()
 
   files?.forEach((file) => {
     if (!file.filename) { // keep file exists!
