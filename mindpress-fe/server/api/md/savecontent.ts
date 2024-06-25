@@ -1,7 +1,7 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import os from 'node:os';
-import { generatePermalinkHash } from '../../utils/markdownUtils'
+import { generatePermalinkHash, downloadImageAndReplaseContent } from '../../utils/markdownUtils'
 import { dateFormat } from '../../utils/date'
 import { updateCache } from '../../storage'
 
@@ -64,14 +64,14 @@ export default defineEventHandler(async (event) => {
     if (!file || file.length == 0) { // create new file.
         const permalinkHash = generatePermalinkHash();
         const subDir = "test/"
-        if (!fs.existsSync(baseDir + subDir)){
+        if (!fs.existsSync(baseDir + subDir)) {
             console.log(baseDir + subDir + ' doesnot exists! now create it!')
             fs.mkdirSync(baseDir + subDir, { recursive: true });
         }
 
         file = subDir + body.title + ".md"
         // if file exists, generate new random name!
-        if (fs.existsSync(baseDir + file)) { 
+        if (fs.existsSync(baseDir + file)) {
             file = subDir + permalinkHash + ".md"
         }
         isCreateFile = true;
@@ -101,7 +101,10 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-    console.log('hhhhh0-----')
+    const contentUpdate = await downloadImageAndReplaseContent(content);
+    content = contentUpdate.state ? contentUpdate.content : content;
+
+    console.log('hhhhh0-----' + contentUpdate.state)
     console.log(header)
     header = header + `---\n\n<!-- Content of the page -->\n`;
     try {
@@ -131,7 +134,9 @@ export default defineEventHandler(async (event) => {
         success: true,
         msg: 'articleid=' + (articleid || file) + ", save success!",
         ext: {
-            file: file
+            file: file,
+            contentUpdate: contentUpdate.state,
+            content: contentUpdate.state ? contentUpdate.content : ''
         },
         isCreateFile
     }

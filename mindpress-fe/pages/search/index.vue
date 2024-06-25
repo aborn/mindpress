@@ -3,7 +3,8 @@
     <NavBar />
     <main class="container">
       <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
-        <input type="text" style="height:2.5rem" v-model="search" placeholder="Please input your keyword." />
+        <input ref="searchInput" type="text" style="height:2.5rem" v-model="search"
+          placeholder="Please input your keyword." />
         <UButton @click="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px"
           block>Search</UButton>
       </form>
@@ -29,10 +30,19 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 const hint = ref("")
 const articles = ref<MarkdownMeta[]>([]);
 const loading = ref(false)
-
+const searchInput = ref(null as any)
 console.log('search.....')
 console.log('mode===>' + mp.mode)
 const pageNo = ref(1)
+
+onMounted(() => {
+  if (import.meta.client) {
+    // https://vuejs.org/guide/essentials/template-refs
+    if (searchInput && searchInput.value) {
+      searchInput.value.focus()
+    }
+  }
+})
 
 function searchShows(searchKey: string) {
   const url = mp.searchUrl + "?q=" + searchKey
@@ -48,6 +58,7 @@ function searchShows(searchKey: string) {
       let startTime = performance.now()
       loading.value = true
       hint.value = ''
+      articles.value = []
       searchPageData({ pageNo: pageNo.value, url: url, q: searchKey, highlight: true } as SearchParams).then(res => {
         if (res) {
           articles.value = res.map((value: MarkdownMetaS) => {

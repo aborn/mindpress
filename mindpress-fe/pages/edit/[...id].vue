@@ -2,15 +2,15 @@
     <div>
         <NavBar />
         <main class="container">
-            <input id="title" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
+            <input id="title" ref="titleInput" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
             <UAlert v-if="hint.title" icon="i-heroicons-chat-bubble-left-ellipsis" :color="`${hint.color}`"
                 variant="outline" :title="`${hint.title}`" :description="`${hint.desc}`" style="margin-bottom: 10px;" />
             <NuxtLink v-if="articleid" :to="`/article/${articleid}`" class="secondary" target="_blank">Article Detail
             </NuxtLink>
             <ColorScheme placeholder="loading..." tag="span">
                 <md-editor v-model="mkdContent" :theme="$colorMode.value as Themes"
-                    :toolbarsExclude="toolbarsExclude as ToolbarNames[]" style="height:480px;" @onChange="changeAction"
-                    @onSave="saveAction" />
+                    :toolbarsExclude="toolbarsExclude as ToolbarNames[]" style="height:480px;" @onChange="onChange"
+                    @onSave="saveAction" @onUploadImg="onUploadImg" />
             </ColorScheme>
         </main>
     </div>
@@ -21,9 +21,12 @@ import { ref } from 'vue';
 import { MdEditor, type Themes, type ToolbarNames } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css';
 import { mpConfig } from '~~/composables/utils';
+import axios from 'axios'
+import { imageMatches } from '~/server/utils/markdownUtils';
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
-
+const titleInput = ref(null as any)
+const debounce = createDebounce()
 const articleids = route.params.id
 const queryV = route.query
 console.log(queryV)
@@ -38,6 +41,15 @@ const articleid = ((mp.mode === MINDPRESS_MODE.SSG || mp.mode === MINDPRESS_MODE
 if (!articleid.value && queryV.id) {
     articleid.value = queryV.id as string
 }
+
+onMounted(() => {
+  if (import.meta.client) {
+    // https://vuejs.org/guide/essentials/template-refs
+    if (titleInput && titleInput.value) {
+        titleInput.value.focus()
+    }
+  }
+})
 
 const mkdContent = ref('')
 const hint = ref({} as any)
@@ -171,10 +183,6 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     // title.value = dataS.value.title
 }
 
-function changeAction(e: any) {
-    // console.log('content changed. data=' + new Date())
-}
-
 function saveAction(text: string) {
     if (mp.mode === MINDPRESS_MODE.SSG) {
         console.error("SSG mode cannot save edit content!")
@@ -242,6 +250,10 @@ function saveAction(text: string) {
                 // fcm mode
                 if (res.ext && res.ext.file) {
                     file.value = res.ext.file
+                    if (res.ext.contentUpdate) {
+                        console.warn('content updated!')
+                        mkdContent.value = res.ext.content
+                    }
                     console.log('fcm mode, save articleid:' + file.value)
                 }
             } else {
@@ -261,6 +273,87 @@ function saveAction(text: string) {
             }
         })
 
+}
+
+const onUploadImg = async (files: any, callback: any) => {
+    const res = await Promise.all(
+        files.map((file: any) => {
+            return new Promise((rev, rej) => {
+                const form = new FormData();
+                form.append('file', file);
+                if (articleid.value) {
+                    form.append('articleid', articleid.value || "");
+                }
+                axios.post('/api/upload', form, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then((res) => rev(res))
+                    .catch((error) => rej(error));
+            });
+        })
+    );
+
+    console.log(res)
+
+    callback(
+        res.map((item: any) => {
+            const itemData = item.data.data
+            console.log(itemData)
+
+            return {
+                url: itemData[0].url,
+                alt: itemData[0].alt,
+                title: itemData[0].title
+            }
+        })
+    );
+};
+
+const onChange = (content: string) => {
+    console.log('changed  ' + new Date())
+    debounce(() => changeAction(content), 500)
+}
+
+const changeAction = (content: string) => {
+    console.log(' ----------action: ' + new Date())
+    // console.log(content)
+
+    const filterMatches = imageMatches(content) as any[];
+    if (filterMatches && filterMatches.length > 0) {
+        console.log('process images....')
+
+        if (mp.mode !== MINDPRESS_MODE.FCM) {
+            return;
+        }
+
+        const bodyContent = {
+            articleid: articleid.value,
+            content: content,
+            title: title.value,
+        }
+        $fetch(mp.mode === MINDPRESS_MODE.FCM ? '/api/md/mdimage' : mp.contentUrl,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: bodyContent
+            }).then((res: any) => {
+                console.log(res)
+                if (res && res.success) {
+                    if (res.state) {
+                        console.warn('content updated!')
+                        mkdContent.value = res.content
+                    }
+                } else {
+                    console.warn('call /api/md/mdimage error')
+                }
+            }, error => {
+                console.log('exception...')
+                console.log(error)
+            })
+    }
 }
 </script>
 <style scoped></style>

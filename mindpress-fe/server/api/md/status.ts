@@ -8,6 +8,9 @@ export default defineEventHandler(async (event) => {
     let data = '';
     console.log(req.url)
 
+    console.log(req.headers)
+    console.log(req.headers['host'])
+
     return {
         md: data,
         api: 'mindpress works',

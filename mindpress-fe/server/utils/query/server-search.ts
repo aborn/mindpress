@@ -36,10 +36,10 @@ export async function serverSearchContent(query: SearchParams) {
             if (!segmenter) return term;
             const tokens = [];
             for (const seg of segmenter.segment(term)) {
-                tokens.push(seg.segment);
+                tokens.push(seg.segment.toLowerCase());
             }
             return tokens;
-        }
+        },
     })
 
     const documents = res.map(item => {
@@ -78,12 +78,25 @@ export async function serverSearchContent(query: SearchParams) {
         })
     }
 
+    // console.log(results)
+    let startTimeHight = performance.now()
+    const hightResult = (await highlight(searchKey, searchRes, KV)).map(i => {
+        i.originContent = ''
+        return i;
+    })
+    let endTimeHight = performance.now()
+    console.log(`\n\nhightlight const time spend: ${endTimeHight - startTimeHight} milliseconds`)
+
+    return hightResult;
+}
+
+
+async function highlight(searchKey: string, searchRes: any[], KV: any) {
     // toLowerCase() toLocaleLowerCase()
     const searchKeyIgnoreCase = searchKey.toLocaleLowerCase();
-    // console.log(results)
 
-    let startTimeHight = performance.now()
-    const hightResult = searchRes.map(item => {
+    const result = [] as any[]
+    await Promise.all(searchRes.map(async (item) => {
         const matchPatten = KV[item._id].match
         const queryTerms: any = KV[item._id].queryTerms
         console.log('           \n')
@@ -143,17 +156,9 @@ export async function serverSearchContent(query: SearchParams) {
                 }
             })
         });
-
         let endTimeA = performance.now()
         console.log(`time spend: ${endTimeA - startTimeA} milliseconds`)
-        return item;
-    }).map(i => {
-        i.originContent = ''
-        return i;
-    })
-    let endTimeHight = performance.now()
-    console.log(`\n\nhightlight const time spend: ${endTimeHight - startTimeHight} milliseconds`)
-
-    return hightResult;
+        result.push(item)
+    }))
+    return result;
 }
-
