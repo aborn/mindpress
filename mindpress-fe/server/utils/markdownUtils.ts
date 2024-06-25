@@ -73,7 +73,6 @@ export function imageMatches(content: string) {
             && imageUrl.includes('jianshu')
     })
 
-    console.log('  filterMatches length:' + filterMatches.length)
     return filterMatches;
 }
 
@@ -100,10 +99,7 @@ export async function downloadImageAndReplaseContent(content: string) {
         })
     )
 
-    console.log('----download images finished')
-    // console.log(fileNameMaps)
-    // console.log(matches)
-
+    console.log('----tips: download images finished')
     filterMatches.forEach(item => {
         const originImageUrl = item[2]
         const destPath = fileNameMaps[originImageUrl]

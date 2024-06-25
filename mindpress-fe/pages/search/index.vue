@@ -37,7 +37,7 @@ const pageNo = ref(1)
 
 onMounted(() => {
   if (import.meta.client) {
-    console.log('focused')
+    // https://vuejs.org/guide/essentials/template-refs
     if (searchBar && searchBar.value) {
       searchBar.value.focus()
     }
