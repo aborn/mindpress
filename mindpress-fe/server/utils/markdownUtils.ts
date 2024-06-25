@@ -54,8 +54,8 @@ export function extraWithSurroundings(idx: IdxStruct, value: string) {
 export function makeSureImagePathExists() {
     const imagePath = path.join(process.cwd(), 'public/' + IMAGE_UPLOAD_PATH)
     if (!fs.existsSync(imagePath)) {
-      console.log(imagePath + ' doesnot exists! now create it!')
-      fs.mkdirSync(imagePath, { recursive: true });
+        console.log(imagePath + ' doesnot exists! now create it!')
+        fs.mkdirSync(imagePath, { recursive: true });
     }
 }
 
@@ -152,20 +152,44 @@ export async function downloadImage(url: string) {
         console.log('---++++++ pro')
         console.log(pro)
 
-        // use axios download
-        /**
-        const response = await axios.get(url, { responseType: 'arraybuffer' });
-        console.log(response)
-        fs.writeFile(filePath, response.data, (err: any) => {
-            if (err) throw err;
-            console.log('Image downloaded successfully!');
-        });
-        */
+
         return '/' + IMAGE_UPLOAD_PATH + '/' + fileName
     } catch (err) {
         console.log(err)
         return null
     }
+}
+
+export async function downloadImageAxios(url: string) {
+    if (!url || url.length == 0) {
+        return ''
+    }
+
+    // use axios download
+    const parsedUrl = new URL(url);
+    const pathname = parsedUrl.pathname;
+    const paths = pathname.split('.');
+    const imagePostfix = paths.length > 1 ? paths[1] : null
+    if (!imagePostfix) {
+        return null;
+    }
+    const fileName = generatePermalinkHash(32) + "." + imagePostfix;
+    const filePath = path.join(process.cwd(), 'public', IMAGE_UPLOAD_PATH, fileName)
+
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    // Error -- > Client network socket disconnected before secure TLS connection was established if used proxy!!!
+    try {
+        fs.writeFileSync(filePath, response.data);
+        if (fs.existsSync(filePath)) {
+            console.log(`download image ${url} success`)
+        } else {
+            console.error(`download image ${url} failed!`)
+        }
+    } catch (err) {
+        console.error(`download image ${url} failed! reason:${err}`)
+    }
+
+    return '/' + IMAGE_UPLOAD_PATH + '/' + fileName
 }
 
 async function buildPromise(url: string, file: any, filePath: string) {
