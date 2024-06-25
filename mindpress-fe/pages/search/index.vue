@@ -3,7 +3,7 @@
     <NavBar />
     <main class="container">
       <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
-        <input ref="searchBar" type="text" style="height:2.5rem" v-model="search"
+        <input ref="searchInput" type="text" style="height:2.5rem" v-model="search"
           placeholder="Please input your keyword." />
         <UButton @click="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px"
           block>Search</UButton>
@@ -30,7 +30,7 @@ const mp = mpConfig(useRuntimeConfig().public.minpress)
 const hint = ref("")
 const articles = ref<MarkdownMeta[]>([]);
 const loading = ref(false)
-const searchBar = ref(null as any)
+const searchInput = ref(null as any)
 console.log('search.....')
 console.log('mode===>' + mp.mode)
 const pageNo = ref(1)
@@ -38,8 +38,8 @@ const pageNo = ref(1)
 onMounted(() => {
   if (import.meta.client) {
     // https://vuejs.org/guide/essentials/template-refs
-    if (searchBar && searchBar.value) {
-      searchBar.value.focus()
+    if (searchInput && searchInput.value) {
+      searchInput.value.focus()
     }
   }
 })

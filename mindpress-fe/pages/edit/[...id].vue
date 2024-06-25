@@ -2,7 +2,7 @@
     <div>
         <NavBar />
         <main class="container">
-            <input id="title" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
+            <input id="title" ref="titleInput" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
             <UAlert v-if="hint.title" icon="i-heroicons-chat-bubble-left-ellipsis" :color="`${hint.color}`"
                 variant="outline" :title="`${hint.title}`" :description="`${hint.desc}`" style="margin-bottom: 10px;" />
             <NuxtLink v-if="articleid" :to="`/article/${articleid}`" class="secondary" target="_blank">Article Detail
@@ -25,6 +25,7 @@ import axios from 'axios'
 import { imageMatches } from '~/server/utils/markdownUtils';
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
+const titleInput = ref(null as any)
 const debounce = createDebounce()
 const articleids = route.params.id
 const queryV = route.query
@@ -40,6 +41,15 @@ const articleid = ((mp.mode === MINDPRESS_MODE.SSG || mp.mode === MINDPRESS_MODE
 if (!articleid.value && queryV.id) {
     articleid.value = queryV.id as string
 }
+
+onMounted(() => {
+  if (import.meta.client) {
+    // https://vuejs.org/guide/essentials/template-refs
+    if (titleInput && titleInput.value) {
+        titleInput.value.focus()
+    }
+  }
+})
 
 const mkdContent = ref('')
 const hint = ref({} as any)
