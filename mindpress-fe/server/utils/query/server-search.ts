@@ -36,10 +36,10 @@ export async function serverSearchContent(query: SearchParams) {
             if (!segmenter) return term;
             const tokens = [];
             for (const seg of segmenter.segment(term)) {
-                tokens.push(seg.segment);
+                tokens.push(seg.segment.toLowerCase());
             }
             return tokens;
-        }
+        },
     })
 
     const documents = res.map(item => {
