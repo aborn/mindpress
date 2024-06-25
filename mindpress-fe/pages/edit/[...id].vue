@@ -243,6 +243,10 @@ function saveAction(text: string) {
                 // fcm mode
                 if (res.ext && res.ext.file) {
                     file.value = res.ext.file
+                    if (res.ext.contentUpdate) {
+                        console.warn('content updated!')
+                        mkdContent.value = res.ext.content
+                    }
                     console.log('fcm mode, save articleid:' + file.value)
                 }
             } else {

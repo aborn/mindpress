@@ -1,8 +1,7 @@
 import path from 'path'
 import fs from 'fs'
-import { generatePermalinkHash } from '../utils/markdownUtils'
+import { generatePermalinkHash, IMAGE_UPLOAD_PATH } from '../utils/markdownUtils'
 import type { ImageItem } from '~/types';
-
 
 export default defineEventHandler(async (event) => {
   console.log("----------- nitro ------------")
@@ -16,10 +15,9 @@ export default defineEventHandler(async (event) => {
   console.log("...articleid=" + articleid + ", file.lengh" + files?.length)
 
   const uploadedFilePaths: ImageItem[] = []
-  const uploadDir = "uploads"
 
 
-  const imagePath = path.join(process.cwd(), 'public/' + uploadDir)
+  const imagePath = path.join(process.cwd(), 'public/' + IMAGE_UPLOAD_PATH)
   if (!fs.existsSync(imagePath)) {
     console.log(imagePath + ' doesnot exists! now create it!')
     fs.mkdirSync(imagePath, { recursive: true });
@@ -31,7 +29,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const rdmFileName = buildRandomFileName(articleid as string, file.filename);
-    const destPath = path.join('public', uploadDir, rdmFileName);
+    const destPath = path.join('public', IMAGE_UPLOAD_PATH, rdmFileName);
     const filePath = path.join(process.cwd(), destPath)
 
     console.log(filePath)
@@ -39,7 +37,7 @@ export default defineEventHandler(async (event) => {
     uploadedFilePaths.push({
       alt: file.filename,
       title: file.filename,
-      url: '/' + uploadDir + '/' + rdmFileName
+      url: '/' + IMAGE_UPLOAD_PATH + '/' + rdmFileName
     })
   })
 
