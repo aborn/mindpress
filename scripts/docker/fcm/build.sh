@@ -17,16 +17,23 @@ cd $SRC_DIR/mindpress-fe
 yarn docker:build:fcm
 
 # copy nuxt build files;
-ROOT_PATH=`$HOME/docker/mindpress/fcm`
-if [ ! -d "$ROOT_PATH" ];then
+ROOT_PATH="${HOME}/docker/mindpress/fcm"
+if [ ! -d $ROOT_PATH ];then
+    echo "${ROOT_PATH} not exists, now create it!"
     mkdir -p $ROOT_PATH
 else
-    echo "$ROOT_PATH, no need to create it!"
+    echo "${ROOT_PATH} exists, no need to create it!"
+fi
+
+# delete origin file
+if [ ! -d $ROOT_PATH/content ];then
+    echo "dir ${ROOT_PATH}/content not exists! now create it!"
+    mkdir -p $ROOT_PATH/content
 fi
 
 # delete origin file
 if [ ! -d $ROOT_PATH/.output ];then
-    echo "dir not exists!"
+    echo "dir ${ROOT_PATH}/.output not exists!"
 else
     rm -rf $ROOT_PATH/.output
 fi
