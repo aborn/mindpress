@@ -25,10 +25,15 @@ else
     echo "${ROOT_PATH} exists, no need to create it!"
 fi
 
-# delete origin file
+# create content and mindpress path
 if [ ! -d $ROOT_PATH/content ];then
     echo "dir ${ROOT_PATH}/content not exists! now create it!"
     mkdir -p $ROOT_PATH/content
+fi
+
+if [ ! -d $ROOT_PATH/mindpress ];then
+    echo "dir ${ROOT_PATH}/mindpress not exists! now create it!"
+    mkdir -p $ROOT_PATH/mindpress
 fi
 
 # delete origin file

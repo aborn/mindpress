@@ -10,6 +10,6 @@ docker build -t mindpress_fcm:v1 .
 docker run --name mindpress-fcm -it -d \
        -v $HOME/docker/mindpress/fcm:/app \
        -v $HOME/docker/mindpress/fcm/content:/app/content \
-       -v $HOME/docker/mindpress/fcm/public:/app/public \
+       -v $HOME/docker/mindpress/fcm/mindpress:/app/mindpress \
        -p 7010:7010 \
        --net=mindpress_net mindpress_fcm:v1
