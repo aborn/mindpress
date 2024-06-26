@@ -31,6 +31,16 @@ export default defineNuxtConfig({
                 'rs', 'swift', 'sql', 'typescript', 'ts', 'tsx', 'vue', 'xml', 'yaml']
         }
     },
+    nitro: {
+        publicAssets: [
+            {
+                baseURL: "uploads",
+                dir: /*process.env.BUILD_MODE === 'docker' ? "/app/public/uploads" :*/ process.cwd() + "/public/uploads",
+                maxAge: 60 * 60 * 24 * 7, // 7 days
+            },
+        ],
+        /*noPublicDir: true*/
+    },
     runtimeConfig: {
         public: {
             minpress: {

@@ -6,7 +6,7 @@ export default defineNitroPlugin(async (nitroApp) => {
     //console.log('Nitro plugin', nitroApp)
     const storage = prefixStorage(useStorage(), 'markdown:source');
     const cacheParsedStorage = prefixStorage(useStorage(), 'cache:markdown:parsed')
-
+    
     const sources = {} as any;
     sources['markdown:source'] = {
         driver: 'fs',
