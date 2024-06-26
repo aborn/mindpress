@@ -43,15 +43,18 @@ export default defineNitroPlugin(async (nitroApp) => {
     let configFileContent = {} as any
     const configStorage = useStorage('MINDPRESS_CONFIG')
 
-    if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, 'utf8');
-        configFileContent = { ...JSON.parse(content) }
-        console.log(' #### jsonocnfig ###')
-        console.log(configFileContent)
-        await configStorage.setItem<any>('settings', configFileContent)
-        // mdConfig.other = configFileContent.title
-    } else {
-        console.log(filePath + ' doesnot exists!')
+    try {
+        if (fs.existsSync(filePath)) {
+            const content = fs.readFileSync(filePath, 'utf8');
+            configFileContent = { ...JSON.parse(content) }
+            console.log(' #### jsonocnfig ###')
+            console.log(configFileContent)
+            await configStorage.setItem<any>('settings', configFileContent)
+        } else {
+            console.warn(filePath + ' doesnot exists!')
+        }
+    } catch (err) {
+        console.error(err)
     }
 
     console.log('-------mdConfig')

@@ -40,8 +40,10 @@
 </template>
 <script setup>
 const { $settings } = useNuxtApp()
-console.log('settttttttts--->')
+console.log('----settttttttts--->')
 console.log($settings)
 var title = ref('MindPress')
-title.value = $settings.title
+if ($settings.title) {
+  title.value = $settings.title
+}
 </script>
