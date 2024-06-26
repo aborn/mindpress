@@ -1,0 +1,26 @@
+import fs from "fs";
+import path from 'path'
+import { MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, makeSureImagePathExists } from '~/server/utils/markdownUtils'
+
+export default defineEventHandler(async (event) => {
+    console.log("----------- nitro ------------")
+    console.log("nitro: req comming...(file)")
+    const req = event.node.req
+    const query = getQuery(event)
+
+    // console.log(query)
+    // console.log(req.url)
+    const dir = event.context.params?.path
+    const fileName = event.context.params?.name
+
+    console.log('dir=' + dir + ', fileName=' + fileName)
+    makeSureImagePathExists()
+
+    if (!fileName || dir !== IMAGE_UPLOAD_PATH) {
+        return {
+            msg: 'unsupported files!'
+        }
+    }
+    const filePath = path.join(MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, fileName);
+    return sendStream(event, fs.createReadStream(filePath));
+});
