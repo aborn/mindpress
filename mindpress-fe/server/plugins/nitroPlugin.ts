@@ -1,12 +1,16 @@
 import { createStorage, type WatchEvent, prefixStorage } from 'unstorage'
 import fsDriver from "unstorage/drivers/fs";
 import { parseContent } from '#content/server'
+import fs from 'node:fs';
+import path from 'path'
+import { MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, makeSureImagePathExists } from '~/server/utils/markdownUtils'
+
 
 export default defineNitroPlugin(async (nitroApp) => {
     //console.log('Nitro plugin', nitroApp)
     const storage = prefixStorage(useStorage(), 'markdown:source');
     const cacheParsedStorage = prefixStorage(useStorage(), 'cache:markdown:parsed')
-    
+
     const sources = {} as any;
     sources['markdown:source'] = {
         driver: 'fs',
@@ -29,4 +33,23 @@ export default defineNitroPlugin(async (nitroApp) => {
             await cacheParsedStorage.setItem(parsedKey, parsedValue)
         })
     )
+
+    // https://github.com/nuxt/nuxt/issues/15366
+    const config = useRuntimeConfig();
+    const mdConfig = config.public.minpress
+
+    const filePath = path.join(process.cwd(), MINDPRESS_ROOT_PATH, "mindpress.conf")
+    let configFileContent = {} as any
+    if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath, 'utf8');
+        configFileContent = { ...JSON.parse(content) }
+        console.log(' #### jsonocnfig ###')
+        console.log(configFileContent)
+        // mdConfig.other = configFileContent.title
+    } else {
+        console.log(filePath + ' doesnot exists!')
+    }
+
+    console.log('-------mdConfig')
+    console.log(mdConfig)
 })
