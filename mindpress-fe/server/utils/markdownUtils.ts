@@ -133,26 +133,8 @@ export async function downloadImage(url: string) {
         console.log(filePath)
 
         const file = fs.createWriteStream(filePath);
-        // async
-        /**https.get(url, response => {
-            response.pipe(file);
-            file.on('finish', () => {
-                file.close();
-                console.log(`Image downloaded as ${filePath}`);
-            });
-        }).on('error', err => {
-            fs.unlink(filePath, (err: any) => {
-                console.error(err)
-            });
-            console.error(`Error downloading image: ${err.message}`);
-        });*/
-
-        // sync
-        const pro = await buildPromise(url, file, filePath);
-        console.log('---++++++ pro')
-        console.log(pro)
-
-
+        const res = await downloadImageHttps(url, file, filePath);
+        console.log('---++++++ downloadImageHttps:' + res)
         return '/' + IMAGE_UPLOAD_PATH + '/' + fileName
     } catch (err) {
         console.log(err)
@@ -192,8 +174,8 @@ export async function downloadImageAxios(url: string) {
     return '/' + IMAGE_UPLOAD_PATH + '/' + fileName
 }
 
-async function buildPromise(url: string, file: any, filePath: string) {
-    let result = await new Promise(function (resolve, reject) {
+async function downloadImageHttps(url: string, file: any, filePath: string) {
+    const result = await new Promise(function (resolve, reject) {
         https.get(url, response => {
             response.pipe(file);
             file.on('finish', () => {

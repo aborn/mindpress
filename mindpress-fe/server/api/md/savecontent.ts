@@ -1,7 +1,7 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import os from 'node:os';
-import { generatePermalinkHash, downloadImageAndReplaseContent } from '../../utils/markdownUtils'
+import { generatePermalinkHash, downloadImageAndReplaseContent, MD_DIVIDER } from '../../utils/markdownUtils'
 import { dateFormat } from '../../utils/date'
 import { updateCache } from '../../storage'
 
@@ -92,11 +92,10 @@ export default defineEventHandler(async (event) => {
 
     let content = body.content
     if (body.content) {
-        const modestr = '<!-- Content of the page -->';
-        let idx = body.content.lastIndexOf(modestr);
+        let idx = body.content.lastIndexOf(MD_DIVIDER);
         if (idx >= 0) {
             // console.log('find it!!!' + idx)
-            content = body.content.substring(idx + modestr.length + 1)
+            content = body.content.substring(idx + MD_DIVIDER.length + 1)
             // console.log(content)
         }
     }
@@ -104,9 +103,9 @@ export default defineEventHandler(async (event) => {
     const contentUpdate = await downloadImageAndReplaseContent(content);
     content = contentUpdate.state ? contentUpdate.content : content;
 
-    console.log('hhhhh0-----' + contentUpdate.state)
+    console.log('hhhh--header-----' + contentUpdate.state)
     console.log(header)
-    header = header + `---\n\n<!-- Content of the page -->\n`;
+    header = header + `---\n\n${MD_DIVIDER}\n`;
     try {
         fs.writeFileSync(baseDir + file, header + content);
 
