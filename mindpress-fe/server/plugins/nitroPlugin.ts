@@ -35,16 +35,20 @@ export default defineNitroPlugin(async (nitroApp) => {
     )
 
     // https://github.com/nuxt/nuxt/issues/15366
+    // https://stackoverflow.com/questions/76488291/how-to-fetch-data-as-part-of-server-start-up-in-nuxt-3
     const config = useRuntimeConfig();
     const mdConfig = config.public.minpress
 
     const filePath = path.join(process.cwd(), MINDPRESS_ROOT_PATH, "mindpress.conf")
     let configFileContent = {} as any
+    const configStorage = useStorage('MINDPRESS_CONFIG')
+
     if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, 'utf8');
         configFileContent = { ...JSON.parse(content) }
         console.log(' #### jsonocnfig ###')
         console.log(configFileContent)
+        await configStorage.setItem<any>('settings', configFileContent)
         // mdConfig.other = configFileContent.title
     } else {
         console.log(filePath + ' doesnot exists!')

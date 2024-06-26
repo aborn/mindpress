@@ -11,13 +11,19 @@
         </NuxtLink>
       </li>
       <li>
-        <NuxtLink to="/" class="first">MindPress</NuxtLink>
+        <NuxtLink to="/" class="first">{{ title }}</NuxtLink>
       </li>
     </ul>
     <ul>
-      <li><NuxtLink to="/search" class="secondary">Search</NuxtLink></li>
-      <li><NuxtLink to="/edit" class="secondary">New file</NuxtLink></li>
-      <li><NuxtLink to="/my" class="secondary">My docs</NuxtLink></li>
+      <li>
+        <NuxtLink to="/search" class="secondary">Search</NuxtLink>
+      </li>
+      <li>
+        <NuxtLink to="/edit" class="secondary">New file</NuxtLink>
+      </li>
+      <li>
+        <NuxtLink to="/my" class="secondary">My docs</NuxtLink>
+      </li>
       <li>
         <NuxtLink to="https://github.com/aborn/mindpress" class="contrast" aria-label="Pico GitHub repository"
           target="_blank">
@@ -32,3 +38,10 @@
     </ul>
   </nav>
 </template>
+<script setup>
+const { $settings } = useNuxtApp()
+console.log('settttttttts--->')
+console.log($settings)
+var title = ref('MindPress')
+title.value = $settings.title
+</script>
