@@ -14,7 +14,7 @@ cd $SRC_DIR/mindpress-fe
 # git pull
 
 # building ，如果出现 /bin/sh: vite: command not found ，则需要重新yarn install下
-yarn docker:build:fcm
+pnpm docker:build:fcm
 
 # copy nuxt build files;
 ROOT_PATH="${HOME}/docker/mindpress/fcm"

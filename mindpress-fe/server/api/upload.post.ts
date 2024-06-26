@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { generatePermalinkHash, IMAGE_UPLOAD_PATH, makeSureImagePathExists } from '../utils/markdownUtils'
+import { generatePermalinkHash, IMAGE_UPLOAD_PATH, MINDPRESS_ROOT_PATH, makeSureImagePathExists, buildImageUrl } from '../utils/markdownUtils'
 import type { ImageItem } from '~/types';
 
 export default defineEventHandler(async (event) => {
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const rdmFileName = buildRandomFileName(articleid as string, file.filename);
-    const destPath = path.join('public', IMAGE_UPLOAD_PATH, rdmFileName);
+    const destPath = path.join(MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, rdmFileName);
     const filePath = path.join(process.cwd(), destPath)
 
     console.log(filePath)
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
     uploadedFilePaths.push({
       alt: file.filename,
       title: file.filename,
-      url: '/' + IMAGE_UPLOAD_PATH + '/' + rdmFileName
+      url: buildImageUrl(IMAGE_UPLOAD_PATH, rdmFileName)
     })
   })
 

@@ -12,6 +12,7 @@ export function generatePermalinkHash(len: number = 16) {
 
 export const MD_DIVIDER = '<!-- Content of the page -->';
 export const IMAGE_UPLOAD_PATH = "uploads"
+export const MINDPRESS_ROOT_PATH = "mindpress"
 
 export function extractBody(content: string | null) {
     if (!content) { return '' }
@@ -52,7 +53,7 @@ export function extraWithSurroundings(idx: IdxStruct, value: string) {
 }
 
 export function makeSureImagePathExists() {
-    const imagePath = path.join(process.cwd(), 'public/' + IMAGE_UPLOAD_PATH)
+    const imagePath = path.join(process.cwd(), MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH)
     if (!fs.existsSync(imagePath)) {
         console.log(imagePath + ' doesnot exists! now create it!')
         fs.mkdirSync(imagePath, { recursive: true });
@@ -129,17 +130,21 @@ export async function downloadImage(url: string) {
         console.log(url)
         const fileName = generatePermalinkHash(32) + "." + imagePostfix;
         console.log(fileName)
-        const filePath = path.join(process.cwd(), 'public', IMAGE_UPLOAD_PATH, fileName)
+        const filePath = path.join(process.cwd(), MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, fileName)
         console.log(filePath)
 
         const file = fs.createWriteStream(filePath);
         const res = await downloadImageHttps(url, file, filePath);
         console.log('---++++++ downloadImageHttps:' + res)
-        return '/' + IMAGE_UPLOAD_PATH + '/' + fileName
+        return buildImageUrl(IMAGE_UPLOAD_PATH, fileName)
     } catch (err) {
         console.log(err)
         return null
     }
+}
+
+export function buildImageUrl(dir: string, fileName: string): string {
+    return '/file/' + dir + '/' + fileName;
 }
 
 export async function downloadImageAxios(url: string) {
