@@ -27,12 +27,22 @@ export default defineEventHandler(async (event) => {
     const filePath = path.join(process.cwd(), destPath)
 
     console.log(filePath)
-    fs.writeFileSync(filePath, file.data)
-    uploadedFilePaths.push({
-      alt: file.filename,
-      title: file.filename,
-      url: buildImageUrl(IMAGE_UPLOAD_PATH, rdmFileName)
-    })
+    try {
+      const res = fs.writeFileSync(filePath, file.data, 'utf8')
+      if (!fs.existsSync(filePath)) {
+        console.log('write error:' + filePath)
+      } else {
+        console.log('write file success:' + filePath)
+      }
+
+      uploadedFilePaths.push({
+        alt: file.filename,
+        title: file.filename,
+        url: buildImageUrl(IMAGE_UPLOAD_PATH, rdmFileName)
+      })
+    } catch (err) {
+      console.log(err)
+    }
   })
 
   console.log(uploadedFilePaths)
@@ -45,6 +55,6 @@ export default defineEventHandler(async (event) => {
 
 function buildRandomFileName(articleid: string, filename: string): string {
   const uuid = generatePermalinkHash();
-  return articleid && articleid.length > 0 ?
-    articleid + '-' + uuid + '-' + filename : uuid + '-' + filename;
+  const pureId = (articleid && articleid.length > 0) ? (articleid + '-').replace(/[:\.]+/g, '') : ''
+  return pureId + uuid + '-' + filename;
 }

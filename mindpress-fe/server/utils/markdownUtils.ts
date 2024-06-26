@@ -71,7 +71,7 @@ export function imageMatches(content: string) {
     const filterMatches = matches.filter(i => {
         const imageUrl = i[2] as string;
         return (imageUrl.includes('http:') || imageUrl.includes('https:'))
-            && imageUrl.includes('jianshu')
+            && (imageUrl.includes('jianshu') || imageUrl.includes('csdnimg'))
     })
 
     return filterMatches;

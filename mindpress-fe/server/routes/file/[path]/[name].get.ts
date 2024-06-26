@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     // console.log(query)
     // console.log(req.url)
     const dir = event.context.params?.path
-    const fileName = event.context.params?.name
+    const fileName = decodeURI(event.context.params?.name)
 
     console.log('dir=' + dir + ', fileName=' + fileName)
     makeSureImagePathExists()
