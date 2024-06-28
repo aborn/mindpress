@@ -12,6 +12,7 @@ export function generatePermalinkHash(len: number = 16) {
 
 export const MD_DIVIDER = '<!-- Content of the page -->';
 export const IMAGE_UPLOAD_PATH = "uploads"
+export const MINDPRESS_ROOT_PATH = "mindpress"
 
 export function extractBody(content: string | null) {
     if (!content) { return '' }
@@ -52,10 +53,10 @@ export function extraWithSurroundings(idx: IdxStruct, value: string) {
 }
 
 export function makeSureImagePathExists() {
-    const imagePath = path.join(process.cwd(), 'public/' + IMAGE_UPLOAD_PATH)
+    const imagePath = path.join(process.cwd(), MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH)
     if (!fs.existsSync(imagePath)) {
-      console.log(imagePath + ' doesnot exists! now create it!')
-      fs.mkdirSync(imagePath, { recursive: true });
+        console.log(imagePath + ' doesnot exists! now create it!')
+        fs.mkdirSync(imagePath, { recursive: true });
     }
 }
 
@@ -70,7 +71,7 @@ export function imageMatches(content: string) {
     const filterMatches = matches.filter(i => {
         const imageUrl = i[2] as string;
         return (imageUrl.includes('http:') || imageUrl.includes('https:'))
-            && imageUrl.includes('jianshu')
+            && (imageUrl.includes('jianshu') || imageUrl.includes('csdnimg'))
     })
 
     return filterMatches;
@@ -129,47 +130,57 @@ export async function downloadImage(url: string) {
         console.log(url)
         const fileName = generatePermalinkHash(32) + "." + imagePostfix;
         console.log(fileName)
-        const filePath = path.join(process.cwd(), 'public', IMAGE_UPLOAD_PATH, fileName)
+        const filePath = path.join(process.cwd(), MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, fileName)
         console.log(filePath)
 
         const file = fs.createWriteStream(filePath);
-        // async
-        /**https.get(url, response => {
-            response.pipe(file);
-            file.on('finish', () => {
-                file.close();
-                console.log(`Image downloaded as ${filePath}`);
-            });
-        }).on('error', err => {
-            fs.unlink(filePath, (err: any) => {
-                console.error(err)
-            });
-            console.error(`Error downloading image: ${err.message}`);
-        });*/
-
-        // sync
-        const pro = await buildPromise(url, file, filePath);
-        console.log('---++++++ pro')
-        console.log(pro)
-
-        // use axios download
-        /**
-        const response = await axios.get(url, { responseType: 'arraybuffer' });
-        console.log(response)
-        fs.writeFile(filePath, response.data, (err: any) => {
-            if (err) throw err;
-            console.log('Image downloaded successfully!');
-        });
-        */
-        return '/' + IMAGE_UPLOAD_PATH + '/' + fileName
+        const res = await downloadImageHttps(url, file, filePath);
+        console.log('---++++++ downloadImageHttps:' + res)
+        return buildImageUrl(IMAGE_UPLOAD_PATH, fileName)
     } catch (err) {
         console.log(err)
         return null
     }
 }
 
-async function buildPromise(url: string, file: any, filePath: string) {
-    let result = await new Promise(function (resolve, reject) {
+export function buildImageUrl(dir: string, fileName: string): string {
+    return '/file/' + dir + '/' + fileName;
+}
+
+export async function downloadImageAxios(url: string) {
+    if (!url || url.length == 0) {
+        return ''
+    }
+
+    // use axios download
+    const parsedUrl = new URL(url);
+    const pathname = parsedUrl.pathname;
+    const paths = pathname.split('.');
+    const imagePostfix = paths.length > 1 ? paths[1] : null
+    if (!imagePostfix) {
+        return null;
+    }
+    const fileName = generatePermalinkHash(32) + "." + imagePostfix;
+    const filePath = path.join(process.cwd(), 'public', IMAGE_UPLOAD_PATH, fileName)
+
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    // Error -- > Client network socket disconnected before secure TLS connection was established if used proxy!!!
+    try {
+        fs.writeFileSync(filePath, response.data);
+        if (fs.existsSync(filePath)) {
+            console.log(`download image ${url} success`)
+        } else {
+            console.error(`download image ${url} failed!`)
+        }
+    } catch (err) {
+        console.error(`download image ${url} failed! reason:${err}`)
+    }
+
+    return '/' + IMAGE_UPLOAD_PATH + '/' + fileName
+}
+
+async function downloadImageHttps(url: string, file: any, filePath: string) {
+    const result = await new Promise(function (resolve, reject) {
         https.get(url, response => {
             response.pipe(file);
             file.on('finish', () => {

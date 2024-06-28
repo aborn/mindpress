@@ -19,6 +19,9 @@ import { ref, onMounted, onUnmounted } from "vue"
 const articles = ref([]);
 const mp = mpConfig(useRuntimeConfig().public.minpress)
 const useReqURL = useRequestURL()
+const { $settings } = useNuxtApp()
+console.log('settttttttts--->')
+console.log($settings)
 // console.log(useReqURL)
 const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
 console.log(mp)
