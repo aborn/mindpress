@@ -39,8 +39,10 @@ export default defineNitroPlugin(async (nitroApp) => {
     // https://stackoverflow.com/questions/76488291/how-to-fetch-data-as-part-of-server-start-up-in-nuxt-3
     const config = useRuntimeConfig();
     const mdConfig = config.public.mindpress
+    const runtimeConfigFile = process.env.MINDPRESS_CONF
+    console.log('runtimeConfigFile=' + runtimeConfigFile)
 
-    const confFile = mdConfig.conf || path.join(process.cwd(), MINDPRESS_ROOT_PATH, "mindpress.conf")
+    const confFile = runtimeConfigFile || mdConfig.conf || path.join(process.cwd(), MINDPRESS_ROOT_PATH, "mindpress.conf")
     const configStorage = useStorage('MINDPRESS_CONFIG')
 
     try {
