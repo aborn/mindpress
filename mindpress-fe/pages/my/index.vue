@@ -80,7 +80,7 @@
 <script setup>
 import { ref } from "vue"
 const articles = ref([]);
-const mp = mpConfig(useRuntimeConfig().public.minpress)
+const mp = mpConfig(useRuntimeConfig().public.mindpress)
 const formatDate = mpFormatDate;
 const useReqURL = useRequestURL()
 

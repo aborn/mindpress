@@ -10,6 +10,8 @@ export default defineEventHandler(async (event) => {
     console.log("nitro: req comming...(savecontent)")
     const req = event.node.req
     const query = getQuery(event)
+    const token = req.headers['token']
+    console.log('token=' + token)
     let data = '';
 
     console.log(req.url)

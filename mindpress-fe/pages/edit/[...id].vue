@@ -2,7 +2,8 @@
     <div>
         <NavBar />
         <main class="container">
-            <input id="title" ref="titleInput" name="title" style="height:2.5rem" placeholder="Article title" v-model="title" required>
+            <input id="title" ref="titleInput" name="title" style="height:2.5rem" placeholder="Article title"
+                v-model="title" required>
             <UAlert v-if="hint.title" icon="i-heroicons-chat-bubble-left-ellipsis" :color="`${hint.color}`"
                 variant="outline" :title="`${hint.title}`" :description="`${hint.desc}`" style="margin-bottom: 10px;" />
             <NuxtLink v-if="articleid" :to="`/article/${articleid}`" class="secondary" target="_blank">Article Detail
@@ -13,6 +14,25 @@
                     @onSave="saveAction" @onUploadImg="onUploadImg" />
             </ColorScheme>
         </main>
+        <UModal v-model="isOpen" prevent-close>
+            <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+                <template #header>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                            User Validate
+                        </h3>
+                        <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+                            @click="isOpen = false" />
+                    </div>
+                </template>
+                <UInput color="primary" ref="tokenInput" v-model="token" variant="outline"
+                    placeholder="Your validate token..." />
+                <UButtonGroup size="sm" orientation="horizontal">
+                    <UButton color="gray" @click="isOpen = false">Cancel</UButton>
+                    <UButton style="margin-left: 10px;" @click="onTokenSubmit">Submit</UButton>
+                </UButtonGroup>
+            </UCard>
+        </UModal>
     </div>
 </template>
 
@@ -26,6 +46,11 @@ import { imageMatches } from '~/server/utils/markdownUtils';
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
 const titleInput = ref(null as any)
+const tokenInput = ref(null as any)
+const title = ref<string | undefined>('')
+const token = ref<string | undefined>('')
+const mkdContent = ref('')
+const hint = ref({} as any)
 const debounce = createDebounce()
 const articleids = route.params.id
 const queryV = route.query
@@ -35,7 +60,7 @@ const useReqURL = useRequestURL()
 console.log(useReqURL)
 
 const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
-const mp = mpConfig(useRuntimeConfig().public.minpress)
+const mp = mpConfig(useRuntimeConfig().public.mindpress)
 const articleid = ((mp.mode === MINDPRESS_MODE.SSG || mp.mode === MINDPRESS_MODE.FCM) && 'undefined' === articleids[0]) ?
     ref(null) : ref(articleids[0]);
 if (!articleid.value && queryV.id) {
@@ -43,17 +68,14 @@ if (!articleid.value && queryV.id) {
 }
 
 onMounted(() => {
-  if (import.meta.client) {
-    // https://vuejs.org/guide/essentials/template-refs
-    if (titleInput && titleInput.value) {
-        titleInput.value.focus()
+    if (import.meta.client) {
+        // https://vuejs.org/guide/essentials/template-refs
+        if (titleInput && titleInput.value) {
+            titleInput.value.focus()
+        }
     }
-  }
 })
 
-const mkdContent = ref('')
-const hint = ref({} as any)
-const title = ref<string | undefined>('')
 const toolbarsExclude = ['github']
 let file = ref<string | undefined>('');
 
@@ -86,6 +108,7 @@ async function getData() {
 
 const bodyExtra: any = {};
 const mdHeader: any = {};
+const isOpen = ref(false)
 
 console.log('mode===>' + mp.mode)
 if (mp.mode === MINDPRESS_MODE.SSG) {
@@ -138,6 +161,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                 bodyExtra[item] = dataL[item]
             }
         })
+
         title.value = dataL.title
         $fetch('/api/md/mdcontent',
             {
@@ -183,6 +207,19 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     // title.value = dataS.value.title
 }
 
+const onTokenSubmit = () => {
+    console.log('token submit')
+    console.log('value:' + token.value)
+    console.log(mkdContent.value)
+    if (token.value && token.value.length > 0) {
+        isOpen.value = false;
+        localStorage.setItem('token', token.value);
+        saveAction(mkdContent.value)
+    } else {
+        isOpen.value = true;
+    }
+}
+
 function saveAction(text: string) {
     if (mp.mode === MINDPRESS_MODE.SSG) {
         console.error("SSG mode cannot save edit content!")
@@ -208,6 +245,15 @@ function saveAction(text: string) {
     // static mode for save to local files !!
     extInfo.mode = mp.mode;
 
+    const token = localStorage.getItem('token');
+    if (!token) {
+        isOpen.value = true
+        if (tokenInput && tokenInput.value) {
+            tokenInput.value.focus()
+        }
+        return;
+    }
+
     const bodyContent = {
         articleid: articleid.value,
         content: text,
@@ -229,7 +275,8 @@ function saveAction(text: string) {
             key: requestSpace,
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "token": token || ''
             },
             body: bodyContent
         }).then((res: any) => {
