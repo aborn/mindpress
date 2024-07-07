@@ -39,12 +39,20 @@ export default defineNitroPlugin(async (nitroApp) => {
     // https://stackoverflow.com/questions/76488291/how-to-fetch-data-as-part-of-server-start-up-in-nuxt-3
     const config = useRuntimeConfig();
     const mdConfig = config.public.mindpress
-    
+
     const confFile = mdConfig.conf || path.join(process.cwd(), MINDPRESS_ROOT_PATH, "mindpress.conf")
     const configStorage = useStorage('MINDPRESS_CONFIG')
 
     try {
         if (fs.existsSync(confFile)) {
+            fs.watchFile(confFile, function (curr, prev) {
+                console.log(`file ${confFile} changed event`);
+                console.log(`the current mtime is: ${curr.mtime}`);
+                console.log(`the previous mtime was: ${prev.mtime}`);
+                reloadConfigFile().then(() => {
+                    console.log('reloadConfigFile success based on watch!')
+                })
+            });
             await reloadConfigFile(confFile)
             await configStorage.setItem<any>('configfile', confFile)
         } else {

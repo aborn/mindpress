@@ -7,9 +7,9 @@ export async function validateToken(token: string): Promise<boolean> {
     }
 
     const configToken = settings.token;
-    reloadConfigFile().then(() => {
-        console.log('reloadConfigFile success!')
-    })
+    //reloadConfigFile().then(() => {
+    //    console.log('reloadConfigFile success!')
+    //})
 
     if ((!configToken) || configToken.trim().length == 0) {
         console.warn('token not configed in server side!')
