@@ -304,6 +304,9 @@ function saveAction(text: string) {
                     console.log('fcm mode, save articleid:' + file.value)
                 }
             } else {
+                if (res.code === 501) {
+                    localStorage.removeItem('token')
+                }
                 hint.value = {
                     title: 'Tips',
                     desc: res.msg + " , Time: " + mpFormatDate(new Date()),

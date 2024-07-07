@@ -71,3 +71,8 @@ export interface MPStruct {
     spaceUrl: string
     searchUrl: string
 }
+
+export interface SettingStruct {
+    title: string
+    token: string
+}

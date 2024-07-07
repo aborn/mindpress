@@ -2,6 +2,7 @@ import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import os from 'node:os';
 import { generatePermalinkHash, downloadImageAndReplaseContent, MD_DIVIDER } from '../../utils/markdownUtils'
+import { validateToken } from '~/server/utils/settingsUtils';
 import { dateFormat } from '../../utils/date'
 import { updateCache } from '../../storage'
 
@@ -10,9 +11,19 @@ export default defineEventHandler(async (event) => {
     console.log("nitro: req comming...(savecontent)")
     const req = event.node.req
     const query = getQuery(event)
-    const token = req.headers['token']
+    const token = req.headers['token'] as string
     console.log('token=' + token)
     let data = '';
+
+    const validateResult = await validateToken(token)
+    if (!validateResult) {
+        return {
+            md: data,
+            success: false,
+            msg: 'validate token is error，please retry!',
+            code: 501
+        }
+    }
 
     console.log(req.url)
     //console.log(query)

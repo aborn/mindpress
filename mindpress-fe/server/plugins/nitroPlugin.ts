@@ -4,6 +4,7 @@ import { parseContent } from '#content/server'
 import fs from 'node:fs';
 import path from 'path'
 import { MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, makeSureImagePathExists } from '~/server/utils/markdownUtils'
+import { reloadConfigFile } from '../utils/settingsUtils';
 
 
 export default defineNitroPlugin(async (nitroApp) => {
@@ -38,18 +39,14 @@ export default defineNitroPlugin(async (nitroApp) => {
     // https://stackoverflow.com/questions/76488291/how-to-fetch-data-as-part-of-server-start-up-in-nuxt-3
     const config = useRuntimeConfig();
     const mdConfig = config.public.mindpress
-
+    
     const confFile = mdConfig.conf || path.join(process.cwd(), MINDPRESS_ROOT_PATH, "mindpress.conf")
-    let configFileContent = {} as any
     const configStorage = useStorage('MINDPRESS_CONFIG')
 
     try {
         if (fs.existsSync(confFile)) {
-            const content = fs.readFileSync(confFile, 'utf8');
-            configFileContent = { ...JSON.parse(content) }
-            console.log(' #### jsonocnfig ###')
-            console.log(configFileContent)
-            await configStorage.setItem<any>('settings', configFileContent)
+            await reloadConfigFile(confFile)
+            await configStorage.setItem<any>('configfile', confFile)
         } else {
             console.warn(confFile + ' doesnot exists!')
         }
