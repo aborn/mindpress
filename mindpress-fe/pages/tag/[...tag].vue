@@ -14,7 +14,7 @@
 
 <script setup>
 import { ref } from "vue";
-const mp = mpConfig(useRuntimeConfig().public.minpress)
+const mp = mpConfig(useRuntimeConfig().public.mindpress)
 const route = useRoute()
 const tags = route.params.tag
 const tag = tags[0]

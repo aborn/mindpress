@@ -17,7 +17,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue"
 const articles = ref([]);
-const mp = mpConfig(useRuntimeConfig().public.minpress)
+const mp = mpConfig(useRuntimeConfig().public.mindpress)
 const useReqURL = useRequestURL()
 const { $settings } = useNuxtApp()
 console.log('settttttttts--->')

@@ -33,11 +33,12 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            minpress: {
+            mindpress: {
                 //mode: (process.env.MINDPRESS_MODE === 'SSG' || process.env.MINDPRESS_MODE === 'static') ? 'static' : 'server',   // 'static' (default) or 'server'
                 baseUrl: '/api/v1/mindpress/',
                 mode: process.env.MINDPRESS_MODE === 'SSG' ? 'SSG' : (process.env.MINDPRESS_MODE === 'FCM' ? 'FCM' : 'SCM'),
-                title: 'MindPress'
+                title: 'MindPress',
+                conf: process.env.MINDPRESS_CONF || 'D:\\temp\\mindpress.conf',   // consider node env first.
             }
         }
     }

@@ -46,7 +46,7 @@ const articles = ref()
 const hint = ref('')
 const toc = ref('')
 const formatDate = mpFormatDate;
-const mp = mpConfig(useRuntimeConfig().public.minpress)
+const mp = mpConfig(useRuntimeConfig().public.mindpress)
 const queryV = route.query
 
 const articleids = route.params.slug

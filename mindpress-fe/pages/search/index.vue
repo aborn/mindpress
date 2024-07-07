@@ -26,7 +26,7 @@ import { ref } from "vue";
 import type { SearchParams } from "~/types";
 import type { MarkdownMetaPageResponse, MarkdownMetaS, MarkdownMeta } from "~~/composables/types";
 const search = ref("")
-const mp = mpConfig(useRuntimeConfig().public.minpress)
+const mp = mpConfig(useRuntimeConfig().public.mindpress)
 const hint = ref("")
 const articles = ref<MarkdownMeta[]>([]);
 const loading = ref(false)

@@ -28,7 +28,7 @@ const hint = ref("")
 const articles = ref<MarkdownMeta[]>([]);
 const loading = ref(false)
 const debounce = createDebounce()
-const mp = mpConfig(useRuntimeConfig().public.minpress)
+const mp = mpConfig(useRuntimeConfig().public.mindpress)
 import type { SearchParams, QueryParams } from "~/types";
 
 function inputAction(e: any) {
