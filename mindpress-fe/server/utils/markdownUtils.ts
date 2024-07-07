@@ -198,3 +198,15 @@ async function downloadImageHttps(url: string, file: any, filePath: string) {
     })
     return result;
 }
+
+export function buildHeaderArray(arrayVal: any[]) {
+    if (arrayVal.length == 0) {
+        return ''
+    }
+
+    let initValue = '\n';
+    arrayVal.forEach(item => {
+        initValue = initValue + "  - " + item + "\n"
+    })
+    return initValue
+}

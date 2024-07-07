@@ -1,18 +1,19 @@
 ---
 title: 'Getting Started'
-date: '2024-06-21 10:03:48'
+date: '2024-07-07 18:12:43'
 authors: [{"name":"Aborn Jiang","link":"aborn.jiang"},{"name":"John","link":"aborn.jiang"}]
 permalink: '/article/8dd81e'
-createTime: '2024-06-05 22:29:37'
-category:
+category: 
   - MindPress
   - Guide
-tag:
+tag: 
   - Guide
   - API
+createTime: '2024-06-05 22:29:37'
 ---
 
 <!-- Content of the page -->
+
 # MindPress
 Press your mind gracefully, which is powered by nuxt.js 3.0 and nuxt.js content 2.0.
 

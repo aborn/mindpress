@@ -1,7 +1,7 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import os from 'node:os';
-import { generatePermalinkHash, downloadImageAndReplaseContent, MD_DIVIDER } from '../../utils/markdownUtils'
+import { generatePermalinkHash, downloadImageAndReplaseContent, MD_DIVIDER, buildHeaderArray } from '../../utils/markdownUtils'
 import { validateToken } from '~/server/utils/settingsUtils';
 import { dateFormat } from '../../utils/date'
 import { updateCache } from '../../storage'
@@ -68,7 +68,11 @@ export default defineEventHandler(async (event) => {
         } else if (body && body.header && body.header.hasOwnProperty(item)) {
             console.log('itttttteeeeeeeeeeemmm:' + item)
             console.log(body.header[item])
-            header = header + `${item}: '` + body.header[item] + `'\n`
+            if ('category' === item || 'tag' === item) {
+                header = header + `${item}: ` + buildHeaderArray(body.header[item]) + ``
+            } else {
+                header = header + `${item}: '` + body.header[item] + `'\n`
+            }
         }
     })
 
