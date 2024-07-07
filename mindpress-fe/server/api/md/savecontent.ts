@@ -62,6 +62,10 @@ export default defineEventHandler(async (event) => {
                     header = header + item + `: '` + body[item] + `'\n`
                 }
             }
+        } else if (body && body.header && body.header.hasOwnProperty(item)) {
+            console.log('itttttteeeeeeeeeeemmm:' + item)
+            console.log(body.header[item])
+            header = header + `${item}: '` + body.header[item] + `'\n`
         }
     })
 
@@ -89,9 +93,12 @@ export default defineEventHandler(async (event) => {
         }
         isCreateFile = true;
         console.log("create new file, file name=" + file)
+        const settings = await useStorage('MINDPRESS_CONFIG').getItem<SettingStruct>('settings')
+        const author = settings && settings.author ?
+            `author: {"name":"${settings.author}","link":"${settings.author}"}\n` : ''
         header = header +
             `createTime: '` + dateFormat(new Date()) + `'\n` +
-            `permalink: '/article/` + permalinkHash + `'\n`
+            `permalink: '/article/` + permalinkHash + `'\n` + author
     } else { // file exists!
         if (body.header && body.header.createTime) {
             header = header + `createTime: '` + body.header.createTime + `'\n`

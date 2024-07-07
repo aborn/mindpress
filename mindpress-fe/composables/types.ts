@@ -75,4 +75,5 @@ export interface MPStruct {
 export interface SettingStruct {
     title: string
     token: string
+    author: string
 }

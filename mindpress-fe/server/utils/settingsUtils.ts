@@ -15,6 +15,7 @@ export async function validateToken(token: string): Promise<boolean> {
         console.warn('token not configed in server side!')
         return true;
     } else {
+        console.log(`input token=${token} and configToken=${configToken}`)
         return token === configToken
     }
 }
@@ -24,11 +25,16 @@ export async function reloadConfigFile(filePath: string | null = null) {
     let configFileContent = {} as any
     const configStorage = useStorage('MINDPRESS_CONFIG')
 
-    if (fs.existsSync(confFile)) {
-        const content = fs.readFileSync(confFile, 'utf8');
-        configFileContent = { ...JSON.parse(content) }
-        console.log(' #### reload config file content ###' + (filePath ? " @init process" : "other"))
-        console.log(configFileContent)
-        await configStorage.setItem<any>('settings', configFileContent)
+    try {
+        if (fs.existsSync(confFile)) {
+            const content = fs.readFileSync(confFile, 'utf8');
+            configFileContent = { ...JSON.parse(content) }
+            console.log(' #### reload config file content ###' + (filePath ? " @init process" : "other"))
+            console.log(configFileContent)
+            await configStorage.setItem<any>('settings', configFileContent)
+        }
+    } catch (err) {
+        console.log('reloadConfigFile error!')
+        console.error(err)
     }
 }
