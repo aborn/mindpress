@@ -45,7 +45,10 @@ export default defineEventHandler(async (event) => {
         `---\ntitle: '` + body.title + `'\n` +
         `date: '` + todayDate + `'\n`;
 
-    const idxNames = ['author', 'authors', 'permalink']
+    console.log('---body header---')
+    console.log(body.header)
+    console.log('----------')
+    const idxNames = ['author', 'authors', 'permalink', 'category', 'tag']
     idxNames.forEach(item => {
         if (body.hasOwnProperty(item)) {
             if ('permalink' === item) {
