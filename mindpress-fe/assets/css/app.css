@@ -148,7 +148,7 @@ nav li :where(a, [role=link]):not(:hover) {
   color: #181c25;;
 }
 
-ul>li {
+nav>ul>li {
   list-style: square;
   display: inline-block;
   padding: 1rem;

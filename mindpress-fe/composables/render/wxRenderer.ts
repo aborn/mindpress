@@ -1,11 +1,12 @@
 import { marked } from "marked";
 import { config } from './config'
 import { setColor } from './util'
+import hljs from "highlight.js";
 
 class WxRenderer {
     getRenderer: Function
     styleMapping: Map<any, any>
-    constructor(opt) {
+    constructor(opt: any) {
         const buildTheme = (themeTpl: any) => {
             let mapping = {} as any;
             let merge = (base: any, extend: any) => Object.assign({}, base, extend);
@@ -32,11 +33,16 @@ class WxRenderer {
         };
 
         this.styleMapping = buildTheme(opt.theme);
-        console.log(this.styleMapping)
+        let footnotes = [];
+        let footnoteIndex = 0;
+        let addFootnote = (title, link) => {
+            footnotes.push([++footnoteIndex, title, link]);
+            return footnoteIndex;
+        };
 
         const getStyles = (tokenName: any, addition: any = '') => {
             let arr = [];
-            console.log(this.styleMapping)
+            // @ts-ignore
             let dict = this.styleMapping[tokenName];
             // console.log(`tok:${tokenName}, dic:${dict}`)
             if (!dict) return "";
@@ -58,6 +64,124 @@ class WxRenderer {
                     default:
                         return `<h4 ${getStyles("h4")}>${text}</h4>`;
                 }
+            },
+            paragraph(text) {
+                if (text.indexOf("<figure") != -1 && text.indexOf("<img") != -1) {
+                    return text;
+                }
+                return text.replace(/ /g, "") === ""
+                    ? ""
+                    : `<p ${getStyles("p")}>${text}</p>`;
+            },
+            blockquote(text: any) {
+                text = text.replace(/<p.*?>/g, `<p ${getStyles("blockquote_p")}>`);
+                return `<blockquote ${getStyles("blockquote")}>${text}</blockquote>`;
+            },
+            code(text: any, lang = "") {
+                if (lang.startsWith("mermaid")) {
+                    setTimeout(() => {
+                        window.mermaid?.run();
+                    }, 0);
+                    return `<center><pre class="mermaid">${text}</pre></center>`;
+                }
+                lang = lang.split(" ")[0];
+                lang = hljs.getLanguage(lang) ? lang : "plaintext";
+                text = hljs.highlight(text, { language: lang }).value;
+                text = text
+                    .replace(/\r\n/g, "<br/>")
+                    .replace(/\n/g, "<br/>")
+                    .replace(/(>[^<]+)|(^[^<]+)/g, function (str) {
+                        return str.replace(/\s/g, "&nbsp;");
+                    });
+
+                return `<pre class="hljs code__pre" ${getStyles(
+                    "code_pre"
+                )}><code class="language-${lang}" ${getStyles(
+                    "code"
+                )}>${text}</code></pre>`;
+            },
+            codespan(text) {
+                return `<code ${getStyles("codespan")}>${text}</code>`;
+            },
+            listitem(text: any) {
+                if (text.type == 'list_item') {
+                    return `<li ${getStyles("listitem")}><span><%s/></span>${text.text}</li>`;
+                }
+            },
+            list(text, ordered, start) {
+                // const ordered = false;
+                text = text.replace(/<\/*p .*?>/g, "").replace(/<\/*p>/g, "");
+                let segments = text.split(`<%s/>`);
+                if (!ordered) {
+                    text = segments.join("• ");
+                    return `<ul ${getStyles("ul")}>${text}</ul>`;
+                }
+                text = segments[0];
+                for (let i = 1; i < segments.length; i++) {
+                    text = text + i + ". " + segments[i];
+                }
+                return `<ol ${getStyles("ol")}>${text}</ol>`;
+            },
+            image(href, title, text) {
+                const createSubText = (s) => {
+                    if (!s) {
+                        return "";
+                    }
+
+                    return `<figcaption ${getStyles("figcaption")}>${s}</figcaption>`;
+                };
+                const transform = (title, alt) => {
+                    const legend = localStorage.getItem("legend");
+                    switch (legend) {
+                        case "alt":
+                            return alt;
+                        case "title":
+                            return title;
+                        case "alt-title":
+                            return alt || title;
+                        case "title-alt":
+                            return title || alt;
+                        default:
+                            return "";
+                    }
+                };
+                const subText = createSubText(transform(title, text));
+                const figureStyles = getStyles("figure");
+                const imgStyles = getStyles("image");
+                return `<figure ${figureStyles}><img ${imgStyles} src="${href}" title="${title}" alt="${text}"/>${subText}</figure>`;
+            },
+            link(href, title, text) {
+                if (href.startsWith("https://mp.weixin.qq.com")) {
+                    return `<a href="${href}" title="${title || text}" ${getStyles(
+                        "wx_link"
+                    )}>${text}</a>`;
+                }
+                if (href === text) {
+                    return text;
+                }
+                if (status) {
+                    let ref = addFootnote(title || text, href);
+                    return `<span ${getStyles("link")}>${text}<sup>[${ref}]</sup></span>`;
+                }
+                return `<span ${getStyles("link")}>${text}</span>`;
+            },
+            strong(text) {
+                return `<strong ${getStyles("strong")}>${text}</strong>`;
+            },
+            em(text) {
+                return `<span style="font-style: italic;">${text}</span>`;
+            },
+            table(header, body) {
+                return `<section style="padding:0 8px;"><table class="preview-table"><thead ${getStyles(
+                    "thead"
+                )}>${header}</thead><tbody>${body}</tbody></table></section>`;
+            },
+            tablecell(text) {
+                return `<td ${getStyles("td")}>${text}</td>`
+            },
+            hr(hr: any) {
+                console.log(hr)
+                return `<hr ${getStyles("hr")}>`
             }
         };
 

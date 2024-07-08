@@ -98,7 +98,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
             if (res.status) {
                 const markdown = res.mdcontent;
                 const html = wxRenderer(markdown)
-                console.log(html)
+                // console.log(html)
                 output.value = html
             }
         }, error => {
