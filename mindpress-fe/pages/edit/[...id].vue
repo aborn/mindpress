@@ -2,7 +2,7 @@
     <div>
         <NavBar />
         <main class="container">
-            <input id="title" ref="titleInput" name="title" style="height:2.5rem" placeholder="Article title"
+            <input id="title" ref="titleInput" name="title" placeholder="Article title"
                 v-model="title" required>
             <UAlert v-if="hint.title" icon="i-heroicons-chat-bubble-left-ellipsis" :color="`${hint.color}`"
                 variant="outline" :title="`${hint.title}`" :description="`${hint.desc}`" style="margin-bottom: 10px;" />

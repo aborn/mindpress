@@ -3,9 +3,9 @@
     <NavBar />
     <main class="container">
       <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
-        <input ref="searchInput" type="text" style="height:2.5rem" v-model="search"
+        <input ref="searchInput" type="text" v-model="search"
           placeholder="Please input your keyword." />
-        <UButton @click="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px"
+        <UButton @click="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px; font-size: larger;"
           block>Search</UButton>
       </form>
 
