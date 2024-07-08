@@ -7,6 +7,7 @@ class WxRenderer {
     getRenderer: Function
     styleMapping: Map<any, any>
     constructor(opt: any) {
+        console.log('create new instance...')
         const buildTheme = (themeTpl: any) => {
             let mapping = {} as any;
             let merge = (base: any, extend: any) => Object.assign({}, base, extend);
@@ -240,14 +241,17 @@ const macStyleCodeBlock = () => {
   `
 }
 
+const defaultOpts = {
+    theme: setColor(config.colorOption[0].value),
+    fonts: config.builtinFonts[0].value,
+    size: config.sizeOption[2].value,
+} as any
+
+const wxRender = new WxRenderer(defaultOpts)
+const renderer = wxRender.getRenderer()
+
 export function wxRenderer(mdcontent: string) {
-    const opt = {
-        theme: setColor(config.colorOption[0].value),
-        fonts: config.builtinFonts[0].value,
-        size: config.sizeOption[2].value,
-    } as any
-    const wxRender = new WxRenderer(opt)
-    marked.use({ renderer: wxRender.getRenderer() })
+    marked.use({ renderer: renderer })
     let output = marked.parse(mdcontent, { async: false }) + buildAddition() + macStyleCodeBlock()
     return output
 }
