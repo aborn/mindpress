@@ -43,6 +43,7 @@
 </template>
 
 <script lang="ts" setup>
+import { permalinkAdapt } from '~/unjs/utils'
 const props = defineProps({
     item: {
         type: Object,

@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { buildHeaderArray, permalinkAdapt } from '../server/utils/markdownUtils'
+import { buildHeaderArray } from '../server/utils/markdownUtils'
+import { permalinkAdapt } from '../unjs/utils'
+
 
 describe('markdownUtils test', () => {
     it('test buildHeaderArray', () => {
