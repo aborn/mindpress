@@ -55,7 +55,7 @@ const authors = assembyAuthors();
 const link = prelink()
 
 function prelink() {
-    return props.item.permalink || props.item._path
+    return permalinkAdapt(props.item.permalink || props.item._path)
 }
 
 function assembyAuthors() {
