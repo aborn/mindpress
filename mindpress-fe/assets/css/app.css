@@ -140,12 +140,15 @@ nav li :where(a, [role=link]):not(:hover) {
   text-decoration: none;
 }
 
-:where(a:not([role=button])).secondary, [role=link].secondary {
+:where(a:not([role=button])).secondary,
+[role=link].secondary {
   color: #5d6b89;
 }
 
-:where(a:not([role=button])).contrast, [role=link].contrast {
-  color: #181c25;;
+:where(a:not([role=button])).contrast,
+[role=link].contrast {
+  color: #181c25;
+  ;
 }
 
 nav>ul>li {
@@ -364,4 +367,9 @@ nav>ul:first-of-type li:nth-of-type(2) {
   right: 0;
   bottom: 0;
   width: 12.5rem;
+}
+
+.hljs {
+  color: #abb2bf;
+  background: #282c34;
 }

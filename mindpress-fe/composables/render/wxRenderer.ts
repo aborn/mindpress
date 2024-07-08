@@ -78,6 +78,7 @@ class WxRenderer {
                 return `<blockquote ${getStyles("blockquote")}>${text}</blockquote>`;
             },
             code(text: any, lang = "") {
+                console.log(text)
                 if (lang.startsWith("mermaid")) {
                     setTimeout(() => {
                         window.mermaid?.run();
@@ -191,6 +192,25 @@ class WxRenderer {
     }
 }
 
+const buildAddition = () => {
+    return `
+          <style>
+          .preview-wrapper pre::before {
+              position: absolute;
+              top: 0;
+              right: 0;
+              color: #ccc;
+              text-align: center;
+              font-size: 0.8em;
+              padding: 5px 10px 0;
+              line-height: 15px;
+              height: 15px;
+              font-weight: 600;
+          }
+          </style>
+      `;
+};
+
 export function wxRenderer(mdcontent: string) {
     const opt = {
         theme: setColor(config.colorOption[0].value),
@@ -199,5 +219,33 @@ export function wxRenderer(mdcontent: string) {
     } as any
     const wxRender = new WxRenderer(opt)
     marked.use({ renderer: wxRender.getRenderer() })
-    return marked.parse(mdcontent, { async: false })
+    let output = marked.parse(mdcontent, { async: false }) + buildAddition()
+    output += `
+    <style>
+      .hljs.code__pre::before {
+        position: initial;
+        padding: initial;
+        content: '';
+        display: block;
+        height: 25px;
+        background-color: transparent;
+        background-image: url("https://doocs.oss-cn-shenzhen.aliyuncs.com/img/123.svg");
+        background-position: 14px 10px!important;
+        background-repeat: no-repeat;
+        background-size: 40px!important;
+      }
+
+      .hljs.code__pre {
+        padding: 0!important;
+      }
+
+      .hljs.code__pre code {
+        display: -webkit-box;
+        padding: 0.5em 1em 1em;
+        overflow-x: auto;
+        text-indent: 0;
+      }
+    </style>
+  `
+    return output
 }
