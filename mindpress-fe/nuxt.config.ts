@@ -17,6 +17,9 @@ export default defineNuxtConfig({
         '@nuxt/content',
         '@nuxt/ui'
     ],
+    ui: {
+        global: true,
+    },
     content: {
         highlight: {
             theme: "one-dark-pro",
