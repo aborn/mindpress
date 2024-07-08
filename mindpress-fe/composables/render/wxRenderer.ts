@@ -35,7 +35,7 @@ class WxRenderer {
         this.styleMapping = buildTheme(opt.theme);
         let footnotes = [];
         let footnoteIndex = 0;
-        let addFootnote = (title, link) => {
+        let addFootnote = (title: string, link: string) => {
             footnotes.push([++footnoteIndex, title, link]);
             return footnoteIndex;
         };
@@ -65,7 +65,7 @@ class WxRenderer {
                         return `<h4 ${getStyles("h4")}>${text}</h4>`;
                 }
             },
-            paragraph(text) {
+            paragraph(text: string) {
                 if (text.indexOf("<figure") != -1 && text.indexOf("<img") != -1) {
                     return text;
                 }
@@ -90,7 +90,7 @@ class WxRenderer {
                 text = text
                     .replace(/\r\n/g, "<br/>")
                     .replace(/\n/g, "<br/>")
-                    .replace(/(>[^<]+)|(^[^<]+)/g, function (str) {
+                    .replace(/(>[^<]+)|(^[^<]+)/g, function (str: string) {
                         return str.replace(/\s/g, "&nbsp;");
                     });
 
@@ -100,7 +100,7 @@ class WxRenderer {
                     "code"
                 )}>${text}</code></pre>`;
             },
-            codespan(text) {
+            codespan(text: string) {
                 return `<code ${getStyles("codespan")}>${text}</code>`;
             },
             listitem(text: any) {
@@ -108,7 +108,7 @@ class WxRenderer {
                     return `<li ${getStyles("listitem")}><span><%s/></span>${text.text}</li>`;
                 }
             },
-            list(text, ordered, start) {
+            list(text: any, ordered: any) {
                 // const ordered = false;
                 text = text.replace(/<\/*p .*?>/g, "").replace(/<\/*p>/g, "");
                 let segments = text.split(`<%s/>`);
@@ -122,15 +122,15 @@ class WxRenderer {
                 }
                 return `<ol ${getStyles("ol")}>${text}</ol>`;
             },
-            image(href, title, text) {
-                const createSubText = (s) => {
+            image(href: string, title: string, text: string) {
+                const createSubText = (s: string) => {
                     if (!s) {
                         return "";
                     }
 
                     return `<figcaption ${getStyles("figcaption")}>${s}</figcaption>`;
                 };
-                const transform = (title, alt) => {
+                const transform = (title: string, alt: string) => {
                     const legend = localStorage.getItem("legend");
                     switch (legend) {
                         case "alt":
@@ -150,7 +150,7 @@ class WxRenderer {
                 const imgStyles = getStyles("image");
                 return `<figure ${figureStyles}><img ${imgStyles} src="${href}" title="${title}" alt="${text}"/>${subText}</figure>`;
             },
-            link(href, title, text) {
+            link(href: any, title: string, text: string) {
                 if (href.startsWith("https://mp.weixin.qq.com")) {
                     return `<a href="${href}" title="${title || text}" ${getStyles(
                         "wx_link"
@@ -165,18 +165,18 @@ class WxRenderer {
                 }
                 return `<span ${getStyles("link")}>${text}</span>`;
             },
-            strong(text) {
+            strong(text: string) {
                 return `<strong ${getStyles("strong")}>${text}</strong>`;
             },
-            em(text) {
+            em(text: string) {
                 return `<span style="font-style: italic;">${text}</span>`;
             },
-            table(header, body) {
+            table(header: any, body: any) {
                 return `<section style="padding:0 8px;"><table class="preview-table"><thead ${getStyles(
                     "thead"
                 )}>${header}</thead><tbody>${body}</tbody></table></section>`;
             },
-            tablecell(text) {
+            tablecell(text: string) {
                 return `<td ${getStyles("td")}>${text}</td>`
             },
             hr(hr: any) {
@@ -210,16 +210,8 @@ const buildAddition = () => {
       `;
 };
 
-export function wxRenderer(mdcontent: string) {
-    const opt = {
-        theme: setColor(config.colorOption[0].value),
-        fonts: config.builtinFonts[0].value,
-        size: config.sizeOption[2].value,
-    } as any
-    const wxRender = new WxRenderer(opt)
-    marked.use({ renderer: wxRender.getRenderer() })
-    let output = marked.parse(mdcontent, { async: false }) + buildAddition()
-    output += `
+const macStyleCodeBlock = () => {
+    return `
     <style>
       .hljs.code__pre::before {
         position: initial;
@@ -246,5 +238,16 @@ export function wxRenderer(mdcontent: string) {
       }
     </style>
   `
+}
+
+export function wxRenderer(mdcontent: string) {
+    const opt = {
+        theme: setColor(config.colorOption[0].value),
+        fonts: config.builtinFonts[0].value,
+        size: config.sizeOption[2].value,
+    } as any
+    const wxRender = new WxRenderer(opt)
+    marked.use({ renderer: wxRender.getRenderer() })
+    let output = marked.parse(mdcontent, { async: false }) + buildAddition() + macStyleCodeBlock()
     return output
 }
