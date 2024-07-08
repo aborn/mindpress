@@ -3,13 +3,7 @@ export default defineNuxtConfig({
     app: {
         baseURL: process.env.BUILD_MODE === 'ghpages' ? '/mindpress/' : '/',   // default '/'  (change to your need.)
         head: {
-            title: 'MindPress, Press your mind gracefully.',
-            link: [
-                {
-                    rel: 'stylesheet',
-                    href: 'https://unpkg.com/@picocss/pico@latest/css/pico.min.css'
-                }
-            ]
+            title: 'MindPress, Press your mind gracefully.'
         }
     },
     routeRules: {

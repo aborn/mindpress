@@ -49,6 +49,10 @@ img {
 }
 */
 
+:root {
+  font-size: larger;
+}
+
 /* MindPress style css */
 [data-theme=light],
 :root:not([data-theme=dark]) {
@@ -99,13 +103,53 @@ div>nav {
   box-shadow: 0px 1px 0 var(--nav-border-color);
 }
 
+.container-fluid {
+  width: 100%;
+  margin-left: auto;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  justify-content: space-between;
+  font-size: larger;
+  max-height: 90px;
+}
+
+nav,
+nav ul {
+  display: flex;
+}
+
 nav>a {
   border-radius: 0;
 }
 
+nav>ul {
+  align-items: center;
+  padding: 0;
+  list-style: none;
+}
+
+nav li :where(a, [role=link]):not(:hover) {
+  text-decoration: none;
+}
+
+:where(a:not([role=button])).secondary, [role=link].secondary {
+  color: #5d6b89;
+}
+
+:where(a:not([role=button])).contrast, [role=link].contrast {
+  color: #181c25;;
+}
+
+ul>li {
+  list-style: square;
+  display: inline-block;
+  padding: 1rem;
+}
+
 a.first {
   color: var(--h1-color);
-  font-weight: bold;
+  font-weight: 700;
+  margin-left: -45px;
 }
 
 nav>svg {
@@ -161,7 +205,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
   width: 100%;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 80px;
+  margin-top: 90px;
   padding-right: var(--spacing);
   padding-left: var(--spacing);
 }
@@ -187,7 +231,6 @@ nav>ul:first-of-type li:nth-of-type(2) {
   color: #8a919f;
   line-height: 22px;
   vertical-align: middle;
- 
 }
 
 .article-edit {
