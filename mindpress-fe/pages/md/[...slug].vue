@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import { marked } from "marked";
 import { wxRenderer } from "~/composables/render/wxRenderer";
+import { config } from '~/composables/render/config'
 const route = useRoute()
 const articles = ref()
 const hint = ref('')
@@ -53,6 +54,23 @@ const articleid = ((mp.mode === MINDPRESS_MODE.SSG || mp.mode === MINDPRESS_MODE
 if (!articleid.value && queryV.id) {
     articleid.value = queryV.id
 }
+
+onMounted(() => {
+  if (import.meta.client) {
+    let cssUrl = config.codeThemeOption[2].value
+      let el = document.getElementById(`hljs`)
+      if (el != undefined) {
+        el.setAttribute(`href`, cssUrl)
+      } else {
+        const link = document.createElement(`link`)
+        link.setAttribute(`type`, `text/css`)
+        link.setAttribute(`rel`, `stylesheet`)
+        link.setAttribute(`href`, cssUrl)
+        link.setAttribute(`id`, `hljs`)
+        document.head.appendChild(link)
+      }
+  }
+})
 
 console.log('mode===>' + mp.mode)
 if (mp.mode === MINDPRESS_MODE.SSG) {

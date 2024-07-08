@@ -78,7 +78,6 @@ class WxRenderer {
                 return `<blockquote ${getStyles("blockquote")}>${text}</blockquote>`;
             },
             code(text: any, lang = "") {
-                console.log(text)
                 if (lang.startsWith("mermaid")) {
                     setTimeout(() => {
                         window.mermaid?.run();
