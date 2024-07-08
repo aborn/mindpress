@@ -36,6 +36,7 @@
 
 <script setup lang="ts">
 import { marked } from "marked";
+import { wxRenderer } from "~/composables/render/wxRenderer";
 const route = useRoute()
 const articles = ref()
 const hint = ref('')
@@ -44,7 +45,7 @@ const toc = ref('')
 const formatDate = mpFormatDate;
 const mp = mpConfig(useRuntimeConfig().public.mindpress)
 const queryV = route.query
-let file = ref<string | undefined>('');
+let file = ref < string | undefined > ('');
 
 const articleids = route.params.slug
 const articleid = ((mp.mode === MINDPRESS_MODE.SSG || mp.mode === MINDPRESS_MODE.FCM) && 'undefined' === articleids[0]) ?
@@ -94,26 +95,15 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
             }
         }).then((res) => {
             // console.log(res)
-            if (!res.status) {
-                hint.value = {
-                    title: 'Info',
-                    desc: res.msg,
-                    color: 'primary'
-                }
-            } else {
+            if (res.status) {
                 const markdown = res.mdcontent;
-                const html = marked.parse(markdown, { async: false })
+                const html = wxRenderer(markdown)
                 console.log(html)
                 output.value = html
             }
         }, error => {
             console.log('exception...')
             console.log(error)
-            hint.value = {
-                title: 'Error',
-                desc: "request exception" + error,
-                color: 'orange'
-            }
         })
     } catch (error) {
         console.warn(error)
