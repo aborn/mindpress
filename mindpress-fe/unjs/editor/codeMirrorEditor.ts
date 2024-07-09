@@ -1,6 +1,15 @@
+import { basicSetup, minimalSetup } from "codemirror"
 import { EditorView, keymap } from "@codemirror/view"
 import { defaultKeymap } from "@codemirror/commands"
+import { tags } from "@lezer/highlight"
+import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import prettier from 'prettier/standalone'
+import { basicLight, basicLightTheme, basicLightHighlightStyle } from "./themes/defauult-theme"
+import { javascript } from "@codemirror/lang-javascript"
+import { EditorState, Compartment } from "@codemirror/state"
+import { htmlLanguage, html } from "@codemirror/lang-html"
+import { language } from "@codemirror/language"
+
 
 
 export function formatDoc(content: string) {
@@ -8,6 +17,47 @@ export function formatDoc(content: string) {
 }
 
 const modPrefix = `Ctrl`
+
+let baseTheme = EditorView.baseTheme({
+    ".cm-o-replacement": {
+        display: "inline-block",
+        width: ".5em",
+        height: ".5em",
+        borderRadius: ".25em"
+    },
+    "&light .cm-o-replacement": {
+        backgroundColor: "#04c"
+    },
+    "&dark .cm-o-replacement": {
+        backgroundColor: "#5bf"
+    }
+})
+
+let myTheme = EditorView.theme({
+    "&": {
+        color: "white",
+        backgroundColor: "#034"
+    },
+    ".cm-content": {
+        caretColor: "#0e9"
+    },
+    "&.cm-focused .cm-cursor": {
+        borderLeftColor: "#0e9"
+    },
+    "&.cm-focused .cm-selectionBackground, ::selection": {
+        backgroundColor: "#074"
+    },
+    ".cm-gutters": {
+        backgroundColor: "#045",
+        color: "#ddd",
+        border: "none"
+    }
+}, { dark: true })
+
+const myHighlightStyle = HighlightStyle.define([
+    { tag: tags.keyword, color: "#fc6" },
+    { tag: tags.comment, color: "#f5d", fontStyle: "italic" }
+])
 
 function editorFromTextArea(textarea: any, extensions: any) {
     let view = new EditorView({ doc: textarea.value, extensions })
@@ -19,6 +69,18 @@ function editorFromTextArea(textarea: any, extensions: any) {
     return view
 }
 
+const languageConf = new Compartment
+
+const autoLanguage = EditorState.transactionExtender.of(tr => {
+    if (!tr.docChanged) return null
+    let docIsHTML = /^\s*</.test(tr.newDoc.sliceString(0, 100))
+    let stateIsHTML = tr.startState.facet(language) == htmlLanguage
+    if (docIsHTML == stateIsHTML) return null
+    return {
+        effects: languageConf.reconfigure(docIsHTML ? html() : javascript())
+    }
+})
+
 export function initEditorEntity(content: string) {
     if (!import.meta.client) {
         return
@@ -29,7 +91,9 @@ export function initEditorEntity(content: string) {
     if (!editorDom.value) {
         editorDom.value = formatDoc(content)
     }
-    const editor = editorFromTextArea(editorDom, [keymap.of(defaultKeymap)])
+    //const editor = editorFromTextArea(editorDom, [basicSetup, languageConf.of(javascript()), autoLanguage, myTheme, syntaxHighlighting(myHighlightStyle)])
+    const editor = editorFromTextArea(editorDom, [basicSetup, languageConf.of(javascript()), autoLanguage, basicLight])
+
 
     return editor;
 
