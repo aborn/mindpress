@@ -217,7 +217,8 @@ nav>ul:first-of-type li:nth-of-type(2) {
   width: 100%;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 60px; /* 90 px*/
+  margin-top: 60px;
+  /* 90 px*/
   padding-right: var(--spacing);
   padding-left: var(--spacing);
 }
@@ -376,6 +377,11 @@ nav>ul:first-of-type li:nth-of-type(2) {
 
 .row {
   display: flex;
+  
+}
+
+.containerRow {
+  height: calc(100vh - 230px);
 }
 
 input[type=title] {
@@ -398,7 +404,28 @@ input[type=title] {
   width: 12.5rem;
 }
 
+.CoderMirror {
+  height: 100%;
+}
+
+section {
+  height: 100%;
+}
+
 .hljs {
   color: #abb2bf;
   background: #282c34;
+}
+
+.contentContainer {
+  max-width: 1130px;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 60px;
+  /* 90 px*/
+  padding-right: var(--spacing);
+  padding-left: var(--spacing);
+  display: flex;
+  flex-direction: column;
 }

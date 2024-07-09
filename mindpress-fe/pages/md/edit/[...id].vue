@@ -1,14 +1,15 @@
 <template>
     <div>
         <NavBar />
-        <main class="container">
+        <main class="contentContainer">
             <div class="row">
                 <div class="column-all">
-                <input type="title" id="title" ref="titleInput" name="title" placeholder="Article title" v-model="title"
-                    required>
+                    <input type="title" id="title" ref="titleInput" name="title" placeholder="Article title"
+                        v-model="title" required>
                 </div>
             </div>
-            <div class="row">
+
+            <div class="row containerRow">
                 <div class="column" id="editorCol">
                     <div class="CoderMirror" id="editorTextArea">
                         <textarea id="editor" ref="editor" type="textarea" v-model="mkdContent"
@@ -16,7 +17,11 @@
                     </div>
                 </div>
                 <div class="column" id="preview">
-                    <section class="preview-wrapper" id="output" v-html="output"></section>
+                    <section id="output-wrapper" class="preview-wrapper">
+                        <div class="preview">
+                            <section id="output" v-html="output"></section>
+                        </div>
+                    </section>
                 </div>
             </div>
         </main>
@@ -408,4 +413,19 @@ const changeAction = (content: string) => {
     }
 }
 </script>
-<style scoped></style>
+<style scoped>
+.preview-wrapper_night {
+    overflow-y: inherit;
+    position: relative;
+    left: -3px;
+
+    .preview {
+        background-color: #fff;
+    }
+}
+
+#output-wrapper {
+    position: relative;
+    user-select: text;
+}
+</style>
