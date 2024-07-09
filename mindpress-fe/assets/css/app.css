@@ -360,6 +360,8 @@ nav>ul:first-of-type li:nth-of-type(2) {
 .content-container {
   width: 820px;
   max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .siderbar-container {
