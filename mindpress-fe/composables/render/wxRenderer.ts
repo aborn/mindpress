@@ -14,7 +14,7 @@ class WxRenderer {
 
             let base = merge(themeTpl.BASE, {
                 "font-family": config.builtinFonts[0].value,
-                "font-size": config.sizeOption[2].value,
+                "font-size": config.sizeOption[3].value,
             });
             for (let ele in themeTpl.inline) {
                 if (themeTpl.inline.hasOwnProperty(ele)) {
@@ -244,7 +244,7 @@ const macStyleCodeBlock = () => {
 const defaultOpts = {
     theme: setColor(config.colorOption[0].value),
     fonts: config.builtinFonts[0].value,
-    size: config.sizeOption[2].value,
+    size: config.sizeOption[3].value,
 } as any
 
 const wxRender = new WxRenderer(defaultOpts)

@@ -14,20 +14,13 @@
                         </UTooltip>
                         <span class="article-meta" style="margin-left:0.3rem">{{ articles.author }}</span>
                         <span class="article-meta">
-                            <NuxtLink :to="'/edit?id=' + articles.articleid">
+                            <NuxtLink :to="'/md/edit?id=' + articles.articleid">
                                 <UIcon name="i-heroicons-pencil-square" />
                                 <span class="article-edit">Edit</span>
                             </NuxtLink>
                         </span>
                     </div>
                     <section id="output" v-html="output"></section>
-                    <!--
-                    <ContentRenderer :value="articles">
-                        <template #empty>
-                            <label style="margin-bottom:1rem" v-html="hint"></label>
-                        </template>
-</ContentRenderer>
--->
                 </div>
             </div>
         </main>
