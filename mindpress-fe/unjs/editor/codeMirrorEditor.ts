@@ -29,7 +29,9 @@ export function initEditorEntity(content: string) {
     if (!editorDom.value) {
         editorDom.value = formatDoc(content)
     }
+    const editor = editorFromTextArea(editorDom, [keymap.of(defaultKeymap)])
 
+    /*
     const editor = editorFromTextArea(editorDom, {
         mode: `text/x-markdown`,
         theme: `xq-light`,
@@ -37,6 +39,7 @@ export function initEditorEntity(content: string) {
         lineWrapping: true,
         styleActiveLine: true,
         autoCloseBrackets: true,
+        extensions: [keymap.of(defaultKeymap)],
         extraKeys: {
             [`${modPrefix}-F`]: function autoFormat(editor: any) {
                 const doc = formatDoc(editor.getValue(0))
@@ -63,5 +66,5 @@ export function initEditorEntity(content: string) {
                 editor.replaceSelection(`\`${selected}\``)
             },
         },
-    })
+    })*/
 }
