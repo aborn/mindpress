@@ -217,7 +217,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
   width: 100%;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 90px;
+  margin-top: 60px; /* 90 px*/
   padding-right: var(--spacing);
   padding-left: var(--spacing);
 }
@@ -386,12 +386,7 @@ input[type=title] {
   font-size: larger;
 }
 
-.preview-wrapper{
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
-  padding: 0;
-  align-items: center;
-  justify-content: center;
-  display: flex;
+.preview-wrapper {
   overflow-y: scroll;
 }
 

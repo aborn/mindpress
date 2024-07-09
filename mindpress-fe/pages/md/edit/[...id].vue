@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="column" id="preview">
-                    <section id="output" v-html="output"></section>
+                    <section class="preview-wrapper" id="output" v-html="output"></section>
                 </div>
             </div>
         </main>
