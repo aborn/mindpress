@@ -31,6 +31,8 @@ export function initEditorEntity(content: string) {
     }
     const editor = editorFromTextArea(editorDom, [keymap.of(defaultKeymap)])
 
+    return editor;
+
     /*
     const editor = editorFromTextArea(editorDom, {
         mode: `text/x-markdown`,

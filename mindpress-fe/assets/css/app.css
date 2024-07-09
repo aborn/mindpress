@@ -367,10 +367,32 @@ nav>ul:first-of-type li:nth-of-type(2) {
 .column {
   width: 50%;
   padding: 10px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
+}
+
+.column-all {
+  width: 100%;
 }
 
 .row {
   display: flex;
+}
+
+input[type=title] {
+  margin-bottom: 0.8rem;
+  border-radius: 0rem;
+  background-color: #fbfcfc;
+  font-weight: 400;
+  font-size: larger;
+}
+
+.preview-wrapper{
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  overflow-y: scroll;
 }
 
 .siderbar-container {

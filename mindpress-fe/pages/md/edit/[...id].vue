@@ -3,10 +3,17 @@
         <NavBar />
         <main class="container">
             <div class="row">
-                <div class="column" id="editor">
-                    <input id="title" ref="titleInput" name="title" placeholder="Article title" v-model="title"
-                        required>
-                    <textarea id="editor" ref="editor" type="textarea" v-model="mkdContent" placeholder="Your markdown text here." ></textarea>
+                <div class="column-all">
+                <input type="title" id="title" ref="titleInput" name="title" placeholder="Article title" v-model="title"
+                    required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column" id="editorCol">
+                    <div class="CoderMirror" id="editorTextArea">
+                        <textarea id="editor" ref="editor" type="textarea" v-model="mkdContent"
+                            placeholder="Your markdown text here."></textarea>
+                    </div>
                 </div>
                 <div class="column" id="preview">
                     <section id="output" v-html="output"></section>
@@ -179,7 +186,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                     mdHeader.value = res.mdheader
                     const html = wxRenderer(mkdContent.value)
                     output.value = html
-                    initEditorEntity(mkdContent.value)
+                    editor.value = initEditorEntity(mkdContent.value)
                 }
             }, error => {
                 console.log('exception...')
