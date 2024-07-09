@@ -2,17 +2,16 @@
     <div>
         <NavBar />
         <main class="container">
-            <input id="title" ref="titleInput" name="title" placeholder="Article title"
-                v-model="title" required>
-            <UAlert v-if="hint.title" icon="i-heroicons-chat-bubble-left-ellipsis" :color="`${hint.color}`"
-                variant="outline" :title="`${hint.title}`" :description="`${hint.desc}`" style="margin-bottom: 10px;" />
-            <NuxtLink v-if="articleid" :to="`/article/${articleid}`" class="secondary" target="_blank">Article Detail
-            </NuxtLink>
-            <ColorScheme placeholder="loading..." tag="span">
-                <md-editor v-model="mkdContent" :theme="$colorMode.value as Themes"
-                    :toolbarsExclude="toolbarsExclude as ToolbarNames[]" style="height:480px;" @onChange="onChange"
-                    @onSave="saveAction" @onUploadImg="onUploadImg" />
-            </ColorScheme>
+            <div class="row">
+                <div class="column" id="editor">
+                    <input id="title" ref="titleInput" name="title" placeholder="Article title" v-model="title"
+                        required>
+                    <textarea id="editor" ref="editor" type="textarea" v-model="mkdContent" placeholder="Your markdown text here." ></textarea>
+                </div>
+                <div class="column" id="preview">
+                    <section id="output" v-html="output"></section>
+                </div>
+            </div>
         </main>
         <UModal v-model="isOpen" prevent-close>
             <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
@@ -38,15 +37,19 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { MdEditor, type Themes, type ToolbarNames } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css';
 import { mpConfig } from '~~/composables/utils';
 import axios from 'axios'
 import { imageMatches } from '~/server/utils/markdownUtils';
+import { wxRenderer } from "~/unjs/render/wxRenderer";
+import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
+
+const output = ref('');
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
 const titleInput = ref(null as any)
 const tokenInput = ref(null as any)
+const editor = ref(null as any)
 const title = ref<string | undefined>('')
 const token = ref<string | undefined>('')
 const mkdContent = ref('')
@@ -54,6 +57,7 @@ const hint = ref({} as any)
 const debounce = createDebounce()
 const articleids = route.params.id
 const queryV = route.query
+const source = ref('')
 console.log(queryV)
 
 const useReqURL = useRequestURL()
@@ -76,7 +80,6 @@ onMounted(() => {
     }
 })
 
-const toolbarsExclude = ['github']
 let file = ref<string | undefined>('');
 
 console.log('articleid === ' + articleid.value)
@@ -93,17 +96,6 @@ async function getDataAx() {
             articleid: articleid.value || file.value
         }
     }) as any;
-}
-
-async function getData() {
-    return await useFetch(
-        url,
-        {
-            method: "get",
-            headers: {
-                uid: ''
-            }
-        }) as any;
 }
 
 const bodyExtra: any = {};
@@ -185,6 +177,9 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                 } else {
                     mkdContent.value = res.mdcontent
                     mdHeader.value = res.mdheader
+                    const html = wxRenderer(mkdContent.value)
+                    output.value = html
+                    initEditorEntity(mkdContent.value)
                 }
             }, error => {
                 console.log('exception...')

@@ -29,8 +29,8 @@
 
 <script setup lang="ts">
 import { marked } from "marked";
-import { wxRenderer } from "~/composables/render/wxRenderer";
-import { config } from '~/composables/render/config'
+import { wxRenderer } from "~/unjs/render/wxRenderer";
+import { config } from '~/unjs/render/config'
 const route = useRoute()
 const articles = ref()
 const hint = ref('')
