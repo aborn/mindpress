@@ -1,6 +1,5 @@
 <template>
     <div ref="doc" class="doc">
-
     </div>
 </template>
 
@@ -25,16 +24,13 @@ export default {
     },
     watch: {
         doc(newV, oldV) {
-            console.log('changeeeeeeeeeeeed')
+            console.log('inner variable doc changed!')
         },
         content(newV, oldV) {
-            console.log('props updated!')
+            console.log('props.content changed!')
             if (!this.editor) {
                 this.createArea(newV);
             }
-
-            //console.log('oldV: \n' + oldV)
-            //console.log('newV: \n' + newV)
         }
     },
     computed: {
@@ -56,7 +52,7 @@ export default {
                     markdown({   //markdown语言解析扩展
                         codeLanguages: languages  //这里指定markdown中代码块使用的解析扩展
                     }),
-                    EditorView.lineWrapping,
+                    // EditorView.lineWrapping,
                     EditorView.updateListener.of(update => {
                         if (update.changes) {
                             console.log('MarkdownEditor content changed event!.')
