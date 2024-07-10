@@ -15,6 +15,7 @@ import { content } from "#tailwind-config"
 
 export default {
     props: ['content'],
+    emits: ['change'],
     name: "MarkdownEditor",
     data() {
         return {
@@ -46,7 +47,6 @@ export default {
             if (!content && content.length == 0) {
                 return
             }
-
             let view = new EditorView({
                 doc: content,  //文本内容
                 extensions: [  //扩展
@@ -55,6 +55,14 @@ export default {
                     syntaxHighlighting(basicLightHighlightStyle),
                     markdown({   //markdown语言解析扩展
                         codeLanguages: languages  //这里指定markdown中代码块使用的解析扩展
+                    }),
+                    EditorView.lineWrapping,
+                    EditorView.updateListener.of(update => {
+                        if (update.changes) {
+                            console.log('MarkdownEditor content changed event!.')
+                            console.log(update.state) // state.doc.toString()
+                            this.$emit('change', update.state.doc.toString())
+                        }
                     })
                 ],
                 parent: this.$refs.doc,  //挂载的div块

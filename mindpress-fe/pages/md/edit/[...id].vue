@@ -12,7 +12,7 @@
             <div class="row containerRow">
                 <div class="column" id="editorCol">
                     <div class="CoderMirror" id="editorTextArea">
-                        <MarkdownEditor :content="mkdContent"/>
+                        <MarkdownEditor :content="mkdContent" @change="onChange" />
                     </div>
                 </div>
                 <div class="column" id="preview">
@@ -369,13 +369,16 @@ const onUploadImg = async (files: any, callback: any) => {
 };
 
 const onChange = (content: string) => {
-    console.log('changed  ' + new Date())
+    console.log('changed .... ' + new Date())
     debounce(() => changeAction(content), 500)
 }
 
 const changeAction = (content: string) => {
     console.log(' ----------action: ' + new Date())
     // console.log(content)
+
+    const html = wxRenderer(content)
+    output.value = html
 
     const filterMatches = imageMatches(content) as any[];
     if (filterMatches && filterMatches.length > 0) {
