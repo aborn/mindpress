@@ -61,8 +61,9 @@ export default {
                         }
                     })
                 ],
-                parent: this.$refs.doc,  //挂载的div块
+                parent: this.$refs.doc as Element,  //挂载的div块
             })
+           
             this.editor = view
         }
 
