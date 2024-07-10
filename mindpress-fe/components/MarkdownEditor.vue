@@ -13,8 +13,8 @@ import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/ed
 import { content } from "#tailwind-config"
 
 export default {
-    props: ['content'],
-    emits: ['change'],
+    props: ['content', 'scrollTo'],
+    emits: ['change', 'scroll'],
     name: "MarkdownEditor",
     data() {
         return {
@@ -23,8 +23,16 @@ export default {
         }
     },
     watch: {
-        doc(newV, oldV) {
-            console.log('inner variable doc changed!')
+        scrollTo(newV, oldV) {
+            console.log('scrollTo!newV=' + newV + ', oldV=' + oldV)
+            if (!this.editor) {
+                return
+            }
+
+            const scrolView = this.editor.docView.view.scrollDOM;
+            const clientH = scrolView.clientHeight
+            const scrollH = scrolView.scrollHeight
+            scrolView.scrollTop = newV * (scrollH - clientH)
         },
         content(newV, oldV) {
             console.log('props.content changed!')
@@ -43,6 +51,31 @@ export default {
             if (!content && content.length == 0) {
                 return
             }
+            const that = this;
+            const scrollPlugin = () => {
+                return EditorView.domEventHandlers({
+                    scroll(e, view) {
+                        console.log(view)
+                        const from = view.viewport.from;
+                        const to = view.viewport.to;
+                        console.log(view.docView.view.scrollDOM)
+                        const scrolView = view.docView.view.scrollDOM;
+
+                        const clientH = scrolView.clientHeight
+                        const scrollH = scrolView.scrollHeight
+                        const scrollTop = scrolView.scrollTop
+                        const ratio = scrollTop / (scrollH - clientH)
+
+                        console.log('scroll......from:' + from + "  to:" + to + ' sH:' + scrollH + '   ' + clientH + '  sT:' + scrollTop)
+                        console.log(ratio)
+                        that.$emit('scroll', ratio)
+                    },
+                    mouseenter() {
+                        console.log('mouse enter...')
+                    },
+                })
+            }
+
             let view = new EditorView({
                 doc: content,  //文本内容
                 extensions: [  //扩展
@@ -59,12 +92,17 @@ export default {
                             console.log(update.state) // state.doc.toString()
                             this.$emit('change', update.state.doc.toString())
                         }
-                    })
+                    }),
+                    scrollPlugin()
                 ],
                 parent: this.$refs.doc as Element,  //挂载的div块
             })
-           
+
             this.editor = view
+            // this.editor.on("scroll", this.onEditorScroll);
+        },
+        onEditorScroll() {
+            console.log('scrolling.......')
         }
 
     },

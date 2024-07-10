@@ -12,11 +12,12 @@
             <div class="row containerRow">
                 <div class="column" id="editorCol">
                     <div class="CoderMirror" id="editorTextArea">
-                        <MarkdownEditor :content="mkdContent" @change="onChange" />
+                        <MarkdownEditor :content="mkdContent" @change="onChange" :scrollTo="scrollTo"
+                            @scroll="editScrollAction" />
                     </div>
                 </div>
                 <div class="column" id="preview">
-                    <section id="output-wrapper" class="preview-wrapper">
+                    <section id="output-wrapper" ref="previewRef" class="preview-wrapper" @scroll="scrollAction">
                         <div class="preview">
                             <section id="output" v-html="output"></section>
                         </div>
@@ -60,10 +61,12 @@ const output = ref('');
 const route = useRoute()
 const titleInput = ref(null as any)
 const tokenInput = ref(null as any)
+const previewRef = ref(null as any)
 const editor = ref(null as any)
 const title = ref<string | undefined>('')
 const token = ref<string | undefined>('')
 const mkdContent = ref('')
+const scrollTo = ref(0)
 const hint = ref({} as any)
 const debounce = createDebounce()
 const articleids = route.params.id
@@ -90,6 +93,24 @@ onMounted(() => {
         }
     }
 })
+
+function editScrollAction(ratio) {
+    console.log('edit scroll:' + ratio)
+    const clientH = previewRef.value.clientHeight
+    const scrollH = previewRef.value.scrollHeight
+    previewRef.value.scrollTop = ratio * (scrollH - clientH)
+}
+
+function scrollAction() {
+    const offsetH = previewRef.value.offsetHeight
+    const clientH = previewRef.value.clientHeight
+    const scrollH = previewRef.value.scrollHeight
+    const scrollTop = previewRef.value.scrollTop
+    const pecent = scrollTop / (scrollH - clientH)
+    scrollTo.value = pecent
+    console.log('scrolling....' + clientH + '  ' + scrollH + '  :' + scrollTop + "  " + offsetH)
+    console.log(pecent)
+}
 
 let file = ref<string | undefined>('');
 
