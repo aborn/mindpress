@@ -6,3 +6,8 @@ export function permalinkAdapt(link: string) {
 
     return link;
 }
+
+export function isBlank(txt: string) {
+    if (!txt) { return true }
+    return txt.trim().length === 0
+}

@@ -1,15 +1,20 @@
 import { basicSetup, minimalSetup } from "codemirror"
-import { EditorView, keymap } from "@codemirror/view"
+import { EditorView, keymap, lineNumbers } from "@codemirror/view"
 import { defaultKeymap } from "@codemirror/commands"
 import { tags } from "@lezer/highlight"
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import prettier from 'prettier/standalone'
-import { basicLight, basicLightTheme, basicLightHighlightStyle } from "./themes/defauult-theme"
+import { basicLight, basicLightTheme, basicLightHighlightStyle } from "./themes/default-theme"
 import { javascript } from "@codemirror/lang-javascript"
 import { EditorState, Compartment } from "@codemirror/state"
 import { htmlLanguage, html } from "@codemirror/lang-html"
 import { language } from "@codemirror/language"
-
+import { markdownLanguage, markdown } from "@codemirror/lang-markdown"
+import { indentWithTab } from "@codemirror/commands";
+import { color, oneDark, oneDarkHighlightStyle, oneDarkTheme } from "@codemirror/theme-one-dark";
+import { languages } from '@codemirror/language-data'
+import { CmWrapper } from './codemirror'
+import { testDoc } from './demo/doc-example'
 
 
 export function formatDoc(content: string) {
@@ -59,8 +64,10 @@ const myHighlightStyle = HighlightStyle.define([
     { tag: tags.comment, color: "#f5d", fontStyle: "italic" }
 ])
 
-function editorFromTextArea(textarea: any, extensions: any) {
-    let view = new EditorView({ doc: textarea.value, extensions })
+function editorFromTextArea(textarea: any, doc: string, extensions: any) {
+    const elCM = document.querySelector('#editorTextArea')
+
+    let view = new EditorView({ doc: testDoc, extensions })
     textarea.parentNode.insertBefore(view.dom, textarea)
     textarea.style.display = "none"
     if (textarea.form) textarea.form.addEventListener("submit", () => {
@@ -81,6 +88,7 @@ const autoLanguage = EditorState.transactionExtender.of(tr => {
     }
 })
 
+
 export function initEditorEntity(content: string) {
     if (!import.meta.client) {
         return
@@ -88,12 +96,16 @@ export function initEditorEntity(content: string) {
 
     const editorDom = document.getElementById(`editor`) as any
 
-    if (!editorDom.value) {
-        editorDom.value = formatDoc(content)
-    }
-    //const editor = editorFromTextArea(editorDom, [basicSetup, languageConf.of(javascript()), autoLanguage, myTheme, syntaxHighlighting(myHighlightStyle)])
-    const editor = editorFromTextArea(editorDom, [basicSetup, languageConf.of(javascript()), autoLanguage, basicLight])
+    //if (!editorDom.value) {
+    //    editorDom.value = formatDoc(content)
+    //}
 
+    //const editor = editorFromTextArea(editorDom, [basicSetup, languageConf.of(javascript()), autoLanguage, myTheme, syntaxHighlighting(myHighlightStyle)])
+    //const editor = editorFromTextArea(editorDom, [basicSetup, languageConf.of(javascript()), autoLanguage, basicLight])
+    const editor = editorFromTextArea(editorDom, content, [basicSetup, 
+        basicLightTheme,  //自定义主题
+                    syntaxHighlighting(basicLightHighlightStyle),
+        markdown({ codeLanguages: languages, base: markdownLanguage, addKeymap: true, extensions: [] })])
 
     return editor;
 

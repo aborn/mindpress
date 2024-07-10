@@ -17,6 +17,9 @@ importers:
       '@codemirror/state':
         specifier: ^6.4.1
         version: 6.4.1
+      '@codemirror/theme-one-dark':
+        specifier: ^6.1.2
+        version: 6.1.2
       '@nuxt/kit':
         specifier: ^3.12.2
         version: 3.12.3(magicast@0.3.4)(rollup@4.18.1)
@@ -409,6 +412,9 @@ packages:
 
   '@codemirror/state@6.4.1':
     resolution: {integrity: sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A==}
+
+  '@codemirror/theme-one-dark@6.1.2':
+    resolution: {integrity: sha512-F+sH0X16j/qFLMAfbciKTxVOwkdAS336b7AXTKOZhy8BR3eH/RelsnLgLFINrpST63mmN2OuwUt0W2ndUgYwUA==}
 
   '@codemirror/view@6.28.4':
     resolution: {integrity: sha512-QScv95fiviSQ/CaVGflxAvvvDy/9wi0RFyDl4LkHHWiMr/UPebyuTspmYSeN5Nx6eujcPYwsQzA6ZIZucKZVHQ==}
@@ -5501,6 +5507,13 @@ snapshots:
       crelt: 1.0.6
 
   '@codemirror/state@6.4.1': {}
+
+  '@codemirror/theme-one-dark@6.1.2':
+    dependencies:
+      '@codemirror/language': 6.10.2
+      '@codemirror/state': 6.4.1
+      '@codemirror/view': 6.28.4
+      '@lezer/highlight': 1.2.0
 
   '@codemirror/view@6.28.4':
     dependencies:

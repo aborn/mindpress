@@ -12,8 +12,7 @@
             <div class="row containerRow">
                 <div class="column" id="editorCol">
                     <div class="CoderMirror" id="editorTextArea">
-                        <textarea id="editor" ref="editor" type="textarea" v-model="mkdContent"
-                            placeholder="Your markdown text here."></textarea>
+                        <MarkdownEditor :content="mkdContent"/>
                     </div>
                 </div>
                 <div class="column" id="preview">
@@ -188,10 +187,12 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                     }
                 } else {
                     mkdContent.value = res.mdcontent
+                    console.log('content updated')
                     mdHeader.value = res.mdheader
                     const html = wxRenderer(mkdContent.value)
                     output.value = html
-                    editor.value = initEditorEntity(mkdContent.value)
+                    // editor.value = initEditorEntity(mkdContent.value)
+                    // console.log(editor.value)
                 }
             }, error => {
                 console.log('exception...')
