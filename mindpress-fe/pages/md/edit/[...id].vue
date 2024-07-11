@@ -13,7 +13,7 @@
                 <div class="column" id="editorCol">
                     <div class="CoderMirror" id="editorTextArea">
                         <MagicEditor :content="mkdContent" @change="onChange" :ratio="scrollToRatio"
-                            @scroll="syncScrollPreview" :csa="csa" @update:csa="updateCSA" />
+                            @scroll="syncScrollPreview" :csa="csa" @update:csa="updateCSA" @save="editorSaveAction" />
                     </div>
                 </div>
                 <div class="column" id="preview">
@@ -98,6 +98,11 @@ onMounted(() => {
 
 function updateCSA(editCSA: string) {
     csa.value = editCSA
+}
+
+function editorSaveAction(editView: any) {
+    console.log('save.........action.................')
+    console.log(editView)
 }
 
 function syncScrollPreview(ratio: number) {

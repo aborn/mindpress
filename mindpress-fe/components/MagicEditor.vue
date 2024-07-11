@@ -5,6 +5,7 @@
 
 <script lang="ts">
 import { basicSetup, EditorView } from "codemirror"
+import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
 import { markdown } from "@codemirror/lang-markdown"
 import { languages } from "@codemirror/language-data"
 import { testDoc } from '~/unjs/editor/demo/doc-example'
@@ -14,7 +15,7 @@ import { content } from "#tailwind-config"
 
 export default {
     props: ['content', 'ratio', 'csa'],   // current scroll area, only: 'preview', 'editor'
-    emits: ['change', 'scroll', 'update:csa'],
+    emits: ['change', 'scroll', 'update:csa', 'save'],
     name: "MarkdownEditor",
     data() {
         return {
@@ -110,6 +111,16 @@ export default {
                             this.$emit('change', update.state.doc.toString())
                         }
                     }),
+                    keymap.of([
+                        {
+                            key: 'Alt-s',
+                            mac: 'Cmd-s',
+                            run(_view: EditorView) {
+                                this.$emit('change', _view)
+                                return true
+                            }
+                        }
+                    ]),
                     scrollPlugin()
                 ],
                 parent: this.$refs.doc as Element,  //挂载的div块
