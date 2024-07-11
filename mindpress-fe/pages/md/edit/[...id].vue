@@ -8,7 +8,6 @@
                         v-model="title" required>
                 </div>
             </div>
-
             <div class="row containerRow">
                 <div class="column" id="editorCol">
                     <div class="CoderMirror" id="editorTextArea">
@@ -23,6 +22,11 @@
                             <section id="output" v-html="output"></section>
                         </div>
                     </section>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column-all-goodle">
+                    <UAlert v-if="hint.title" :title="`${hint.desc}`" :color="`${hint.color}`" />
                 </div>
             </div>
         </main>
@@ -100,9 +104,11 @@ function updateCSA(editCSA: string) {
     csa.value = editCSA
 }
 
-function editorSaveAction(editView: any) {
+function editorSaveAction(text: any) {
     console.log('save.........action.................')
-    console.log(editView)
+    // console.log(text)
+    console.log('now save it !...')
+    saveAction(text)
 }
 
 function syncScrollPreview(ratio: number) {

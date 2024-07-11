@@ -375,17 +375,22 @@ nav>ul:first-of-type li:nth-of-type(2) {
   width: 100%;
 }
 
+.column-all-goodle {
+  width:  calc(100% - 2rem);
+  margin-bottom: 0.5rem;
+}
+
 .row {
   display: flex;
   
 }
 
 .containerRow {
-  height: calc(100vh - 230px);
+  height: calc(100vh - 330px);
 }
 
 input[type=title] {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.5rem;
   border-radius: 0rem;
   background-color: #fbfcfc;
   font-weight: 400;
