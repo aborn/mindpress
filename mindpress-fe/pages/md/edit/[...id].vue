@@ -12,12 +12,13 @@
             <div class="row containerRow">
                 <div class="column" id="editorCol">
                     <div class="CoderMirror" id="editorTextArea">
-                        <MarkdownEditor :content="mkdContent" @change="onChange" :scrollTo="scrollTo"
-                            @scroll="editScrollAction" />
+                        <MagicEditor :content="mkdContent" @change="onChange" :ratio="scrollToRatio"
+                            @scroll="syncScrollPreview" :csa="csa" @update:csa="updateCSA" />
                     </div>
                 </div>
                 <div class="column" id="preview">
-                    <section id="output-wrapper" ref="previewRef" class="preview-wrapper" @scroll="scrollAction">
+                    <section id="output-wrapper" ref="previewRef" class="preview-wrapper" @scroll="scrollAction"
+                        @mouseenter="mouseeneterAction">
                         <div class="preview">
                             <section id="output" v-html="output"></section>
                         </div>
@@ -66,12 +67,13 @@ const editor = ref(null as any)
 const title = ref<string | undefined>('')
 const token = ref<string | undefined>('')
 const mkdContent = ref('')
-const scrollTo = ref(0)
+const scrollToRatio = ref(0)
 const hint = ref({} as any)
 const debounce = createDebounce()
 const articleids = route.params.id
 const queryV = route.query
 const source = ref('')
+const csa = ref('')
 console.log(queryV)
 
 const useReqURL = useRequestURL()
@@ -94,22 +96,32 @@ onMounted(() => {
     }
 })
 
-function editScrollAction(ratio) {
+function updateCSA(editCSA: string) {
+    csa.value = editCSA
+}
+
+function syncScrollPreview(ratio: number) {
+    console.log('syncScrollPreview csa = ' + csa.value)
+    if (csa.value !== 'editor') {
+        return;
+    }
     console.log('edit scroll:' + ratio)
     const clientH = previewRef.value.clientHeight
     const scrollH = previewRef.value.scrollHeight
-    previewRef.value.scrollTop = ratio * (scrollH - clientH)
+    previewRef.value.scrollTop = (ratio * (scrollH - clientH))
 }
 
 function scrollAction() {
+    console.log('preview ui scroll csa = ' + csa.value)
     const offsetH = previewRef.value.offsetHeight
     const clientH = previewRef.value.clientHeight
     const scrollH = previewRef.value.scrollHeight
-    const scrollTop = previewRef.value.scrollTop
-    const pecent = scrollTop / (scrollH - clientH)
-    scrollTo.value = pecent
+    const scrollTop = previewRef.value.scrollTop.toFixed(4)
+
+    if (csa.value === 'preview') {
+        scrollToRatio.value = (scrollTop / (scrollH - clientH))
+    }
     console.log('scrolling....' + clientH + '  ' + scrollH + '  :' + scrollTop + "  " + offsetH)
-    console.log(pecent)
 }
 
 let file = ref<string | undefined>('');
