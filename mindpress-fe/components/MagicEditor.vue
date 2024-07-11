@@ -4,14 +4,14 @@
 </template>
 
 <script lang="ts">
-import { ViewUpdate, keymap, BlockInfo, EditorView } from '@codemirror/view'
-
+// import { basicSetup, EditorView } from "codemirror"
+import { basicSetup, EditorView, myDefaultKeymap } from "~/unjs/editor/basicSetup.js"
+import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
 import { EditorState } from '@codemirror/state'
 import { markdown } from "@codemirror/lang-markdown"
 import { languages } from "@codemirror/language-data"
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/editor/themes/default-theme"
-import { basicSetup } from "~/unjs/editor/basicSetup.js"
 
 export default {
     props: ['content', 'ratio', 'csa'],   // current scroll area, only: 'preview', 'editor'
@@ -109,12 +109,12 @@ export default {
                                 that.$emit('save', _view.viewState.state.doc.toString())
                                 return true
                             }
-                        }
+                        },
+                        ...myDefaultKeymap
                     ]),
                     syntaxHighlighting(basicLightHighlightStyle),
                     markdown({   //markdown语言解析扩展
                         codeLanguages: languages,  //这里指定markdown中代码块使用的解析扩展
-                        addKeymap: false
                     }),
                     EditorView.lineWrapping,
                     EditorView.updateListener.of(update => {
@@ -124,7 +124,6 @@ export default {
                             this.$emit('change', update.state.doc.toString())
                         }
                     }),
-
                     scrollPlugin()
                 ],
                 parent: this.$refs.doc as Element,  //挂载的div块
