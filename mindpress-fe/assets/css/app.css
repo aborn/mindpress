@@ -200,7 +200,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
   /*flex-direction: row;
   flex-wrap: wrap;*/
   grid-gap: 1.5rem;
-  margin: 0 auto;
+  margin-top: 1rem;
   width: 100%;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
