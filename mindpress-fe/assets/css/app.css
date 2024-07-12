@@ -86,6 +86,7 @@ img {
   --code-background-color: #2e3440;
   --md-background-color: #fff;
   --input-border-color: #cfd5e2;
+  --md-base-color: #3f3f3f;
 }
 
 @media only screen and (prefers-color-scheme: dark) {
@@ -97,6 +98,7 @@ img {
     --nav-logo-color: #0e1419;
     --code-background-color: #2e3440;
     --md-background-color: #11191f;
+    --md-base-color: rgb(163, 163, 163);
   }
 }
 
@@ -109,6 +111,7 @@ img {
   --code-background-color: #2e3440;
   --md-background-color: #11191f;
   --input-border-color: #cfd5e2;
+  --md-base-color: rgb(163, 163, 163);
 }
 
 div > main {

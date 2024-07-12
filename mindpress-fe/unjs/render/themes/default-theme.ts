@@ -1,4 +1,5 @@
-let baseColor = `#3f3f3f`
+// let baseColor = `#3f3f3f`
+let baseColor = `var(--md-base-color)`
 
 export default {
   BASE: {
