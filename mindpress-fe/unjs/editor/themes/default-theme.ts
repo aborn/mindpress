@@ -12,8 +12,8 @@ const base00 = '#2e3440', // black
 
 // Snow Storm
 const base04 = '#d8dee9', // grey
-    base05 = '#e5e9f0', // off white
-    base06 = '#eceff4' // white
+    base05 = '#e5e9f0',   // off white
+    base06 = '#686868'    //'#eceff4' // white  // 代码行数背景颜色
 
 // Frost
 const base07 = '#8fbcbb', // moss green
@@ -31,7 +31,7 @@ const base0b = '#bf616a', // red
 const invalid = '#d30102',
     darkBackground = base06,
     highlightBackground = darkBackground,
-    background = '#ffffff',
+    background = `var(--md-background-color)`,
     tooltipBackground = base05,
     selection = darkBackground,
     cursor = base01
