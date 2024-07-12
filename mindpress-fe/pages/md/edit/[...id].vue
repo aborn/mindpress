@@ -54,7 +54,6 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import 'md-editor-v3/lib/style.css';
 import { mpConfig } from '~~/composables/utils';
 import axios from 'axios'
 import { imageMatches } from '~/server/utils/markdownUtils';
