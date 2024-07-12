@@ -342,6 +342,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
 
 .card-footer-date {
   flex-grow: 1;
+  color: #8a919f;
 }
 
 .card-footer-author {
@@ -351,6 +352,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
 
 .card-footer-author-item {
   margin-left: .5rem;
+  color: #8a919f; /**#c2c7d0   #8a919f*/
 }
 
 .main-container {
