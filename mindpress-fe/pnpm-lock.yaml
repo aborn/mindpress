@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@codemirror/lang-markdown':
-        specifier: ^6.2.4
+        specifier: ^6.2.5
         version: 6.2.5
       '@codemirror/language-data':
         specifier: ^6.4.1

@@ -5,13 +5,16 @@
 
 <script lang="ts">
 // import { basicSetup, EditorView } from "codemirror"
-import { basicSetup, EditorView, myDefaultKeymap } from "~/unjs/editor/basicSetup.js"
+import { basicSetup, EditorView, myDefaultKeymap } from "~/unjs/editor/basicSetup"
+import { markdown } from '~/unjs/editor/codemirror/markdown/index'
 import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
 import { EditorState } from '@codemirror/state'
-import { markdown } from "@codemirror/lang-markdown"
-import { languages } from "@codemirror/language-data"
+// import { markdown } from "@codemirror/lang-markdown"
+//import { languages } from "@codemirror/language-data"
+import { languages } from "~/unjs/editor/codemirror/language-data/language-data"
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/editor/themes/default-theme"
+import { oneDark } from '@codemirror/theme-one-dark'
 
 export default {
     props: ['content', 'ratio', 'csa'],   // current scroll area, only: 'preview', 'editor'

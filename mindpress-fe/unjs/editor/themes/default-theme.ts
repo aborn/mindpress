@@ -110,7 +110,7 @@ export const basicLightTheme = EditorView.theme(
             }
         }
     },
-    { dark: false }
+    { dark: true }
 )
 
 /// The highlighting style for code in the Basic Light theme.
