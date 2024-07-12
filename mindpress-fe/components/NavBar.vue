@@ -6,7 +6,7 @@
           <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="120pt" height="580.000000pt"
             viewBox="0 0 853.000000 580.000000" preserveAspectRatio="xMidYMid meet">
 
-            <g transform="translate(0.000000,580.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
+            <g transform="translate(0.000000,580.000000) scale(0.100000,-0.100000)" fill="#e60012" stroke="none">
               <path d="M5570 4170 c0 -159 -2 -290 -5 -290 -3 0 -25 15 -50 34 -155 119
 -430 119 -639 2 -284 -159 -390 -578 -230 -904 126 -257 412 -390 706 -328 77
 17 114 34 186 87 l52 40 0 -61 0 -60 215 0 215 0 0 885 0 885 -225 0 -225 0 0
