@@ -71,6 +71,7 @@ img {
   --nav-logo-color: #fff;
   --code-background-color: #2e3440;
   --md-background-color: #fff;
+  --input-border-color: #cfd5e2
 }
 
 @media only screen and (prefers-color-scheme: dark) {
@@ -93,6 +94,7 @@ img {
   --nav-logo-color: #0e1419;
   --code-background-color: #2e3440;
   --md-background-color: #11191f;
+  --input-border-color: #cfd5e2
 }
 
 div>main {
@@ -368,7 +370,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
 .column {
   width: 50%;
   padding: 10px;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
+  box-shadow: inset 0 0 0 1px var(--input-border-color);
 }
 
 .column-all {
@@ -382,7 +384,6 @@ nav>ul:first-of-type li:nth-of-type(2) {
 
 .row {
   display: flex;
-  
 }
 
 .containerRow {
@@ -392,7 +393,8 @@ nav>ul:first-of-type li:nth-of-type(2) {
 input[type=title] {
   margin-bottom: 0.5rem;
   border-radius: 0rem;
-  background-color: --md-background-color;
+  border-color: var(--input-border-color);
+  background-color: var(--md-background-color);
   font-weight: 400;
   font-size: larger;
   padding: 0.75rem 1rem;
