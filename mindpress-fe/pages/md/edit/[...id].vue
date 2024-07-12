@@ -59,6 +59,7 @@ import axios from 'axios'
 import { imageMatches } from '~/server/utils/markdownUtils';
 import { wxRenderer } from "~/unjs/render/wxRenderer";
 import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
+import { color } from '@codemirror/theme-one-dark';
 
 const output = ref('');
 // docs==> https://vuejs.org/api/sfc-script-setup.html
@@ -318,6 +319,7 @@ function saveAction(text: string) {
     }
     hint.value = {
         title: "save......",
+        color: 'primary',
     }
     console.log(bodyContent)
     console.log(mp.contentUrl)

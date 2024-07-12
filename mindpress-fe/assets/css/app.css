@@ -87,6 +87,7 @@ img {
   --md-background-color: #fff;
   --input-border-color: #cfd5e2;
   --md-base-color: #3f3f3f;
+  --md-cm-gutter-bg: #eceff4; 
 }
 
 @media only screen and (prefers-color-scheme: dark) {
@@ -99,6 +100,7 @@ img {
     --code-background-color: #2e3440;
     --md-background-color: #121212;
     --md-base-color: rgb(163, 163, 163);
+    --md-cm-gutter-bg: #686868;   /** --md-cm for default-theme.ts*/
   }
 }
 
@@ -112,6 +114,7 @@ img {
   --md-background-color: #121212;
   --input-border-color: #cfd5e2;
   --md-base-color: rgb(163, 163, 163);
+  --md-cm-gutter-bg: #686868; 
 }
 
 div > main {

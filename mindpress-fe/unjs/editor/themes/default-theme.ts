@@ -5,7 +5,7 @@ import { tags as t } from '@lezer/highlight'
 
 // Colors from https://www.nordtheme.com/docs/colors-and-palettes
 // Polar Night
-const base00 = '#2e3440', // black
+const base00 = `var(--md-base-color)`, // '#2e3440', // black
     base01 = '#3b4252', // dark grey
     base02 = '#434c5e',
     base03 = '#4c566a' // grey
@@ -13,7 +13,7 @@ const base00 = '#2e3440', // black
 // Snow Storm
 const base04 = '#d8dee9', // grey
     base05 = '#e5e9f0',   // off white
-    base06 = '#686868'    //'#eceff4' // white  // 代码行数背景颜色
+    base06 = `var(--md-cm-gutter-bg)`    //'#eceff4' // white  // 代码行数背景颜色
 
 // Frost
 const base07 = '#8fbcbb', // moss green
