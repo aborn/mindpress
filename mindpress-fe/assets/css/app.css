@@ -97,7 +97,7 @@ img {
     --nav-border-color: rgba(115, 130, 140, 0.2);
     --nav-logo-color: #0e1419;
     --code-background-color: #2e3440;
-    --md-background-color: #11191f;
+    --md-background-color: #121212;
     --md-base-color: rgb(163, 163, 163);
   }
 }
@@ -109,7 +109,7 @@ img {
   --nav-border-color: rgba(115, 130, 140, 0.2);
   --nav-logo-color: #0e1419;
   --code-background-color: #2e3440;
-  --md-background-color: #11191f;
+  --md-background-color: #121212;
   --input-border-color: #cfd5e2;
   --md-base-color: rgb(163, 163, 163);
 }
