@@ -21,7 +21,7 @@ input {
   margin-bottom: 1rem;
   border: 0.0625rem solid #cfd5e2;
   border-radius: 0.25rem;
-  background-color: #fbfcfc;
+  background-color: --md-background-color;
   font-weight: 400;
   font-size: larger;
   padding: 0.75rem 1rem;
@@ -392,7 +392,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
 input[type=title] {
   margin-bottom: 0.5rem;
   border-radius: 0rem;
-  background-color: #fbfcfc;
+  background-color: --md-background-color;
   font-weight: 400;
   font-size: larger;
   padding: 0.75rem 1rem;

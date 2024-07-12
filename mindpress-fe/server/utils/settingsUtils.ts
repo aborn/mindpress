@@ -1,8 +1,21 @@
 import fs from 'node:fs';
 
+export function useAdaptFile(runtimeConfigFile: string | undefined, confiFile: string, defFile: string) {
+    if (runtimeConfigFile && fs.existsSync(runtimeConfigFile)) {
+        return runtimeConfigFile;
+    } else if (fs.existsSync(confiFile)) {
+        return confiFile; 
+    } else if (fs.existsSync(defFile)) {
+        return defFile
+    } else {
+        throw new Error('config file doesnot exists!')
+    }
+}
 export async function validateToken(token: string): Promise<boolean> {
     const settings = await useStorage('MINDPRESS_CONFIG').getItem<SettingStruct>('settings')
     if (!settings) {
+        const file = await useStorage('MINDPRESS_CONFIG').getItem<string>('configfile') as string
+        console.log('config not in cache...' + file)
         return false;
     }
 

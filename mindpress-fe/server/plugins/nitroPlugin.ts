@@ -4,7 +4,7 @@ import { parseContent } from '#content/server'
 import fs from 'node:fs';
 import path from 'path'
 import { MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, makeSureImagePathExists } from '~/server/utils/markdownUtils'
-import { reloadConfigFile } from '../utils/settingsUtils';
+import { reloadConfigFile, useAdaptFile } from '../utils/settingsUtils';
 
 
 export default defineNitroPlugin(async (nitroApp) => {
@@ -40,9 +40,8 @@ export default defineNitroPlugin(async (nitroApp) => {
     const config = useRuntimeConfig();
     const mdConfig = config.public.mindpress
     const runtimeConfigFile = process.env.MINDPRESS_CONF
-    console.log('runtimeConfigFile=' + runtimeConfigFile)
-
-    const confFile = runtimeConfigFile || mdConfig.conf || path.join(process.cwd(), MINDPRESS_ROOT_PATH, "mindpress.conf")
+    const confFile = useAdaptFile(runtimeConfigFile, mdConfig.conf, path.join(process.cwd(), MINDPRESS_ROOT_PATH, "mindpress.conf"))
+    console.log('current use confFile=' + confFile + ', runtimeConfigFile=' + runtimeConfigFile)
     const configStorage = useStorage('MINDPRESS_CONFIG')
 
     try {
