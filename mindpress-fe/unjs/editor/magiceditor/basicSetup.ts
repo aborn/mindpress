@@ -15,6 +15,10 @@ import {
 import { searchKeymap, highlightSelectionMatches } from "@codemirror/search"
 import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete"
 import { lintKeymap } from "@codemirror/lint"
+import {
+  commandBold, commandItalic, commandStrike, commandFormatMarkdown, commandCode, commandImg, commandLink
+  , commandPre, commandCheckBox, commandSeparator, commandQuote, commandTable
+} from "~/unjs/editor/magiceditor/commands"
 
 // https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
 export const basicSetup: Extension = (() => [
@@ -72,33 +76,33 @@ type KeyBinding = /*unresolved*/ any
 export const myDefaultKeymap: readonly KeyBinding[] = ([
   { key: "Alt-ArrowLeft", mac: "Ctrl-ArrowLeft", run: cursorSyntaxLeft, shift: selectSyntaxLeft },
   { key: "Alt-ArrowRight", mac: "Ctrl-ArrowRight", run: cursorSyntaxRight, shift: selectSyntaxRight },
-
   { key: "Alt-ArrowUp", run: moveLineUp },
   { key: "Shift-Alt-ArrowUp", run: copyLineUp },
-
   { key: "Alt-ArrowDown", run: moveLineDown },
   { key: "Shift-Alt-ArrowDown", run: copyLineDown },
-
   { key: "Escape", run: simplifySelection },
   { key: "Mod-Enter", run: insertBlankLine },
-
   { key: "Alt-l", mac: "Ctrl-l", run: selectLine },
   { key: "Alt-,", mac: "Ctrl-,", run: demoCommand },
   { key: "Mod-i", run: selectParentSyntax, preventDefault: true },
-
   { key: "Mod-[", run: indentLess },
   { key: "Mod-]", run: indentMore },
   { key: "Mod-Alt-\\", run: indentSelection },
-
   { key: "Shift-Mod-k", run: deleteLine },
-
   { key: "Shift-Mod-\\", run: cursorMatchingBracket },
-
   { key: "Mod-/", run: toggleComment },
   { key: "Alt-A", run: toggleBlockComment },
-
   { key: "Ctrl-m", mac: "Shift-Alt-m", run: toggleTabFocusMode },
+  { key: "Ctrl-b", run: commandBold },
+  { key: 'Alt-t', mac: 'Cmd-t', run: commandTable },
+  { key: 'Alt-i', run: commandItalic },
+  { key: 'Alt-s', run: commandStrike },
+  { key: 'Alt-e', mac: 'Cmd-e', run: commandCode },
+  { key: 'Alt-m', mac: 'Cmd-m', run: commandImg },
+  { key: 'Alt-k', mac: 'Cmd-k', run: commandLink },
+  { key: 'Ctrl-Alt-e', mac: 'Ctrl-Cmd-e', run: commandPre },
+  { key: 'Ctrl-Alt-s', mac: 'Ctrl-Cmd-s', run: commandSeparator },
+  { key: 'Shift-Alt-f', mac: 'Shift-Alt-f', run: commandFormatMarkdown },
 ] as readonly KeyBinding[]).concat(standardKeymap)
-
 
 export { EditorView } from "@codemirror/view"

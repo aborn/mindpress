@@ -65,6 +65,10 @@ function replaceInlineCommand(editor: EditorView, range: SelectionRange, target:
     }
 }
 
+function insertBlockCommand(editor: EditorView, content: string) {
+    return editor.dispatch(editor.state.replaceSelection(content))
+}
+
 export function commandBold(_view: EditorView) {
     _view.dispatch(_view.state.changeByRange((range: SelectionRange) => {
         return replaceInlineCommand(_view, range, '**');
@@ -91,4 +95,37 @@ export function commandFormatMarkdown(editor: EditorView) {
             insert(editor, 0, maxLen, formatContent, position, position)
         })
     return true
+}
+
+export function commandImg(editor: EditorView) {
+    return insertBlockCommand(editor, `\n![]()\n`)
+}
+
+export function commandLink(editor: EditorView) {
+    return insertBlockCommand(editor, `\n[]()\n`)
+}
+
+export function commandCode(editor: EditorView) {
+    return editor.dispatch(editor.state.changeByRange((range: SelectionRange) => replaceInlineCommand(editor, range, '`')))
+}
+
+// code block
+export function commandPre(editor: EditorView) {
+    return insertBlockCommand(editor, `\n\`\`\`javascript\n\n\`\`\`\n`)
+}
+
+export function commandCheckBox(editor: EditorView) {
+    return insertBlockCommand(editor, `\n- [ ] \n`)
+}
+
+export function commandSeparator(editor: EditorView) {
+    return insertBlockCommand(editor, `\n---\n`)
+}
+
+export function commandQuote(editor: EditorView) {
+    return insertBlockCommand(editor, `\n>\n>\n`)
+}
+
+export function commandTable(editor: EditorView) {
+    return insertBlockCommand(editor, `\n|||\n|---|---|\n|||\n`)
 }

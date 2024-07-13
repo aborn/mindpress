@@ -6,7 +6,6 @@
 <script lang="ts">
 // import { basicSetup, EditorView } from "codemirror"
 import { basicSetup, EditorView, myDefaultKeymap } from "~/unjs/editor/magiceditor/basicSetup"
-import { commandBold, commandItalic, commandStrike, commandFormatMarkdown } from "~/unjs/editor/magiceditor/commands"
 import { markdown } from '~/unjs/editor/codemirror/markdown/index'
 import { languages } from "~/unjs/editor/codemirror/language-data/language-data"
 import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
@@ -117,26 +116,6 @@ export default {
                             {
                                 key: "Ctrl-s",
                                 run: that.commandSave
-                            },
-                            {
-                                key: 'Alt-i',
-                                run: commandItalic
-                            },
-                            {
-                                key: 'Alt-s',
-                                run: commandStrike
-                            },
-                            {
-                                key: "Ctrl-b",
-                                run: commandBold
-                            },
-                            {
-                                key: 'Shift-Alt-f',
-                                mac: 'Shift-Alt-f',
-                                run(view: EditorView) {
-                                    commandFormatMarkdown(view)
-                                    return true
-                                }
                             },
                             ...myDefaultKeymap
                         ]),
