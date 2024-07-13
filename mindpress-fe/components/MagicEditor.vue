@@ -4,13 +4,28 @@
             <div class="toolbaritems md-editor-toolbar-wrapper">
                 <div class="toolbar-col">
                     <span class="toolbaritem" @click="toobarItemAction('bold')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M6 3.75h7.125a4.125 4.125 0 1 1 0 8.25H6z"/><path d="M7.5 4.5h4.875a3.375 3.375 0 1 1 0 6.75H7.5zM6 11.25h7.5a4.5 4.5 0 1 1 0 9H6z"/><path d="M7.5 12h5.25a3.75 3.75 0 1 1 0 7.5H7.5z"/></g></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24">
+                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5">
+                                <path d="M6 3.75h7.125a4.125 4.125 0 1 1 0 8.25H6z" />
+                                <path
+                                    d="M7.5 4.5h4.875a3.375 3.375 0 1 1 0 6.75H7.5zM6 11.25h7.5a4.5 4.5 0 1 1 0 9H6z" />
+                                <path d="M7.5 12h5.25a3.75 3.75 0 1 1 0 7.5H7.5z" />
+                            </g>
+                        </svg>
                     </span>
                     <span class="toolbaritem" @click="toobarItemAction('underline')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 3.75v7.5a6 6 0 0 1-12 0v-7.5m-2.25 16.5h16.5"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5" d="M18 3.75v7.5a6 6 0 0 1-12 0v-7.5m-2.25 16.5h16.5" />
+                        </svg>
                     </span>
                     <span class="toolbaritem" @click="toobarItemAction('italic')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="22" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.25 3.75h3.696m3.804 0h-3.804M5.25 20.25h3.804m3.696 0H9.054m0 0l5.892-16.5"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="22" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5"
+                                d="M11.25 3.75h3.696m3.804 0h-3.804M5.25 20.25h3.804m3.696 0H9.054m0 0l5.892-16.5" />
+                        </svg>
                     </span>
                     <span class="toolbaritem" @click="toobarItemAction('strike')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 256 256">
@@ -19,7 +34,11 @@
                         </svg>
                     </span>
                     <span class="toolbaritem" @click="toobarItemAction('image')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10.5 5.707a.5.5 0 0 0-.146-.353l-1-1a.5.5 0 0 0-.708 0L9.354 9.646a.5.5 0 0 1-.708 0L6.354 7.354a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0-.146.353V12a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5zM12 5a1 1 0 1 1-2 0a1 1 0 0 1 2 0" clip-rule="evenodd"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 16 16">
+                            <path fill="currentColor" fill-rule="evenodd"
+                                d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10.5 5.707a.5.5 0 0 0-.146-.353l-1-1a.5.5 0 0 0-.708 0L9.354 9.646a.5.5 0 0 1-.708 0L6.354 7.354a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0-.146.353V12a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5zM12 5a1 1 0 1 1-2 0a1 1 0 0 1 2 0"
+                                clip-rule="evenodd" />
+                        </svg>
                     </span>
                     <span style=" text-align: center;display: inline-block;padding: 4px 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
@@ -28,8 +47,11 @@
                     </span>
                 </div>
                 <div class="toolbar-col">
-                    <span class="toolbaritem" @click="toobarItemAction('light')">
-                        <UIcon name="i-heroicons-light-bulb" />
+                    <span class="toolbaritem" @click="toobarItemAction('save')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 32 32">
+                            <path fill="currentColor"
+                                d="m27.71 9.29l-5-5A1 1 0 0 0 22 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V10a1 1 0 0 0-.29-.71M12 6h8v4h-8Zm8 20h-8v-8h8Zm2 0v-8a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8H6V6h4v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6.41l4 4V26Z" />
+                        </svg>
                     </span>
                 </div>
             </div>
@@ -52,12 +74,12 @@
 </template>
 
 <script lang="ts">
-// import { basicSetup, EditorView } from "codemirror"
 import { basicSetup, EditorView, myDefaultKeymap, runCommand } from "~/unjs/editor/magiceditor/basicSetup"
 import { markdown } from '~/unjs/editor/codemirror/markdown/index'
 import { languages } from "~/unjs/editor/codemirror/language-data/language-data"
 import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
 import { EditorState } from '@codemirror/state'
+// import { basicSetup, EditorView } from "codemirror"
 // import { markdown } from "@codemirror/lang-markdown"
 //import { languages } from "@codemirror/language-data"
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
@@ -127,7 +149,12 @@ export default {
         },
         toobarItemAction(type: string) {
             console.log(type)
-            runCommand(this.editor, type)
+            if ('save' === type) {
+                this.$emit('save', this.editor.viewState.state.doc.toString())
+                return true
+            } else {
+                runCommand(this.editor, type)
+            }
         },
         commandSave(_view: EditorView) {
             console.log('save action............')
