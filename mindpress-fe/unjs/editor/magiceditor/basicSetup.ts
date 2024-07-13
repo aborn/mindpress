@@ -17,7 +17,7 @@ import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap } 
 import { lintKeymap } from "@codemirror/lint"
 import {
   commandBold, commandItalic, commandStrike, commandFormatMarkdown, commandCode, commandImg, commandLink
-  , commandPre, commandCheckBox, commandSeparator, commandQuote, commandTable
+  , commandPre, commandCheckBox, commandSeparator, commandQuote, commandTable, commandUnderline
 } from "~/unjs/editor/magiceditor/commands"
 import type { EditorView } from "codemirror"
 
@@ -112,6 +112,7 @@ const funMap: any = {
   'link': commandLink,
   'strike': commandStrike,
   'italic': commandItalic,
+  'underline': commandUnderline,
 }
 
 export function runCommand(_view: EditorView, command: string) {

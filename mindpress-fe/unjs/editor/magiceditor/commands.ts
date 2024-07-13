@@ -35,18 +35,21 @@ function insert(editor: EditorView, istFrom: number, istTo: number, content: str
     editor.dispatch(changeByRange)
 }
 
-function replaceInlineCommand(editor: EditorView, range: SelectionRange, target: string): any {
+function replaceInlineCommand(editor: EditorView, range: SelectionRange, target: string, endTarget: string | null = null): any {
+    let endT = endTarget || target;
     let len = target.length
+    let lenEnTarget = endT.length;
 
     const prefixFrom: number = range.from - len
     const prefixTo: number = range.from
     const prefix = sliceDoc(editor, prefixFrom, prefixTo)
 
     const suffixFrom: number = range.to
-    const suffixTo: number = range.to + len
+    const suffixTo: number = range.to + lenEnTarget
     const suffix = sliceDoc(editor, suffixFrom, suffixTo)
     // 判断是取消还是添加, 如果被选中的文本前后已经是 target 字符, 则删除前后字符
-    if (prefix == target && suffix == target) {
+    console.log('prefix:' + prefix + ', suffix:' + suffix + ', endT:' + endT)
+    if (prefix == target && suffix == endT) {
         return {
             changes: [
                 { from: prefixFrom, to: prefixTo, insert: '' },
@@ -58,7 +61,7 @@ function replaceInlineCommand(editor: EditorView, range: SelectionRange, target:
         return {
             changes: [
                 { from: range.from, insert: target },
-                { from: range.to, insert: target }
+                { from: range.to, insert: endT }
             ],
             range: EditorSelection.range(range.from + len, range.to + len)
         }
@@ -81,6 +84,10 @@ export function commandItalic(editor: EditorView) {
     return true
 }
 
+export function commandUnderline(editor: EditorView) {
+    editor.dispatch(editor.state.changeByRange((range: SelectionRange) => replaceInlineCommand(editor, range, '<u>', '</u>')))
+    return true
+}
 
 export function commandStrike(editor: EditorView) {
     editor.dispatch(editor.state.changeByRange((range: SelectionRange) => replaceInlineCommand(editor, range, '~~')))
