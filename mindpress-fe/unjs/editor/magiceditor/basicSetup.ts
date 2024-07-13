@@ -19,6 +19,7 @@ import {
   commandBold, commandItalic, commandStrike, commandFormatMarkdown, commandCode, commandImg, commandLink
   , commandPre, commandCheckBox, commandSeparator, commandQuote, commandTable
 } from "~/unjs/editor/magiceditor/commands"
+import type { EditorView } from "codemirror"
 
 // https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
 export const basicSetup: Extension = (() => [
@@ -104,5 +105,18 @@ export const myDefaultKeymap: readonly KeyBinding[] = ([
   { key: 'Ctrl-Alt-s', mac: 'Ctrl-Cmd-s', run: commandSeparator },
   { key: 'Shift-Alt-f', mac: 'Shift-Alt-f', run: commandFormatMarkdown },
 ] as readonly KeyBinding[]).concat(standardKeymap)
+
+const funMap: any = {
+  'bold': commandBold,
+  'table': commandTable,
+  'link': commandLink,
+  'strike': commandStrike,
+  'italic': commandItalic,
+}
+
+export function runCommand(_view: EditorView, command: string) {
+  if (!_view) { return }
+  funMap[command] && funMap[command](_view)
+}
 
 export { EditorView } from "@codemirror/view"

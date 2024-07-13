@@ -1,11 +1,59 @@
 <template>
-    <div ref="doc" class="doc">
+    <div class="editorContainer">
+        <div class="row toolbarRow">
+            <div class="toolbaritems md-editor-toolbar-wrapper">
+                <div class="toolbar-col">
+                    <span class="toolbaritem" @click="toobarItemAction('bold')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M6 3.75h7.125a4.125 4.125 0 1 1 0 8.25H6z"/><path d="M7.5 4.5h4.875a3.375 3.375 0 1 1 0 6.75H7.5zM6 11.25h7.5a4.5 4.5 0 1 1 0 9H6z"/><path d="M7.5 12h5.25a3.75 3.75 0 1 1 0 7.5H7.5z"/></g></svg>
+                    </span>
+                    <span class="toolbaritem" @click="toobarItemAction('underline')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 3.75v7.5a6 6 0 0 1-12 0v-7.5m-2.25 16.5h16.5"/></svg>
+                    </span>
+                    <span class="toolbaritem" @click="toobarItemAction('italic')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="22" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.25 3.75h3.696m3.804 0h-3.804M5.25 20.25h3.804m3.696 0H9.054m0 0l5.892-16.5"/></svg>
+                    </span>
+                    <span class="toolbaritem" @click="toobarItemAction('strike')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 256 256">
+                            <path fill="currentColor"
+                                d="M224 128a8 8 0 0 1-8 8h-40.07c9.19 7.11 16.07 17.2 16.07 32c0 13.34-7 25.7-19.75 34.79C160.33 211.31 144.61 216 128 216s-32.33-4.69-44.25-13.21C71 193.7 64 181.34 64 168a8 8 0 0 1 16 0c0 17.35 22 32 48 32s48-14.65 48-32c0-14.85-10.54-23.58-38.77-32H40a8 8 0 0 1 0-16h176a8 8 0 0 1 8 8M76.33 104a8 8 0 0 0 7.61-10.49a17.3 17.3 0 0 1-.83-5.51c0-18.24 19.3-32 44.89-32c18.84 0 34.16 7.42 41 19.85a8 8 0 0 0 14-7.7C173.33 50.52 152.77 40 128 40c-34.71 0-60.89 20.63-60.89 48a33.7 33.7 0 0 0 1.62 10.49a8 8 0 0 0 7.6 5.51" />
+                        </svg>
+                    </span>
+                    <span class="toolbaritem" @click="toobarItemAction('image')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10.5 5.707a.5.5 0 0 0-.146-.353l-1-1a.5.5 0 0 0-.708 0L9.354 9.646a.5.5 0 0 1-.708 0L6.354 7.354a.5.5 0 0 0-.708 0l-2 2a.5.5 0 0 0-.146.353V12a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5zM12 5a1 1 0 1 1-2 0a1 1 0 0 1 2 0" clip-rule="evenodd"/></svg>
+                    </span>
+                    <span style=" text-align: center;display: inline-block;padding: 4px 4px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
+                            <path fill="currentColor" d="M7.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 .5-.5" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="toolbar-col">
+                    <span class="toolbaritem" @click="toobarItemAction('light')">
+                        <UIcon name="i-heroicons-light-bulb" />
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row containerRow">
+            <div class="column" id="editorCol">
+                <div class="CoderMirror" id="editorTextArea">
+                    <div ref="doc" class="doc"></div>
+                </div>
+            </div>
+            <div class="column" id="preview">
+                <section id="output-wrapper" ref="previewRef" class="preview-wrapper" @scroll="previewScrollAction">
+                    <div class="preview">
+                        <section id="output" v-html="output"></section>
+                    </div>
+                </section>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 // import { basicSetup, EditorView } from "codemirror"
-import { basicSetup, EditorView, myDefaultKeymap } from "~/unjs/editor/magiceditor/basicSetup"
+import { basicSetup, EditorView, myDefaultKeymap, runCommand } from "~/unjs/editor/magiceditor/basicSetup"
 import { markdown } from '~/unjs/editor/codemirror/markdown/index'
 import { languages } from "~/unjs/editor/codemirror/language-data/language-data"
 import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
@@ -16,42 +64,30 @@ import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/editor/themes/default-theme"
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorSelection, SelectionRange, Compartment } from '@codemirror/state'
+import { wxRenderer } from "~/unjs/render/wxRenderer";
+const debounce = createDebounce()
 
 export default {
-    props: ['content', 'ratio', 'csa'],   // current scroll area, only: 'preview', 'editor'
-    emits: ['change', 'scroll', 'update:csa', 'save'],
+    props: ['content', 'csa', 'tba'],   // current scroll area, only: 'preview', 'editor'
+    emits: ['change', 'save'],
     name: "MarkdownEditor",
     data() {
         return {
             doc: this.content,
             editor: null as any,
+            output: '' as string,
         }
+    },
+    setup() {
+        const previewRef = ref(null as any)
+        const innnerCSA = 'preview'
+        return { previewRef, innnerCSA }
     },
     computed: {
-        innnerCSA: {
-            get() {
-                return this.csa
-            },
-            set(value) {
-                this.$emit('update:csa', value)
-            }
-        },
-        doc() {
-            return this.content
-        }
     },
     watch: {
-        ratio(newV, oldV) {
-            console.log('syncScrollEditor csa = ' + this.innnerCSA)
-            console.log('scrollTo!newV=' + newV + ', oldV=' + oldV)
-            if (!this.editor || this.innnerCSA == 'editor') {
-                return
-            }
-
-            const scrolView = this.editor.docView.view.scrollDOM;
-            const clientH = scrolView.clientHeight
-            const scrollH = scrolView.scrollHeight
-            scrolView.scrollTop = newV * (scrollH - clientH)
+        tba(newV, oldV) {
+            console.log('action: ' + newV + '        oldV:' + oldV)
         },
         content(newV, oldV) {
             console.log('props.content changed!')
@@ -61,6 +97,38 @@ export default {
         }
     },
     methods: {
+        syncScrollPreview(ratio: number) {
+            console.log('syncScrollPreview csa = ' + this.innnerCSA)
+            if (this.innnerCSA !== 'editor') {
+                return;
+            }
+            console.log('edit scroll:' + ratio)
+            console.log(this.previewRef)
+
+            const clientH = this.previewRef.clientHeight
+            const scrollH = this.previewRef.scrollHeight
+            this.previewRef.scrollTop = (ratio * (scrollH - clientH))
+        },
+        previewScrollAction() {
+            console.log('preview ui scroll csa = ' + this.innnerCSA)
+            const offsetH = this.previewRef.offsetHeight
+            const clientH = this.previewRef.clientHeight
+            const scrollH = this.previewRef.scrollHeight
+            const scrollTop = this.previewRef.scrollTop.toFixed(4)
+
+            if (this.innnerCSA === 'preview') {
+                const ratio = (scrollTop / (scrollH - clientH))
+                const scrolView = this.editor.docView.view.scrollDOM;
+                const iclientH = scrolView.clientHeight
+                const iscrollH = scrolView.scrollHeight
+                scrolView.scrollTop = ratio * (iscrollH - iclientH)
+            }
+            //console.log('scrolling....' + clientH + '  ' + scrollH + '  :' + scrollTop + "  " + offsetH)
+        },
+        toobarItemAction(type: string) {
+            console.log(type)
+            runCommand(this.editor, type)
+        },
         commandSave(_view: EditorView) {
             console.log('save action............')
             console.log(_view)
@@ -74,9 +142,9 @@ export default {
             }
             const that = this;
             const languageComp = new Compartment()
-            const scrollPlugin = () => {
+            const domEventHandlersPlugin = () => {
                 return EditorView.domEventHandlers({
-                    scroll(e, view) {
+                    scroll(e: any, view: any) {
                         console.log('\n\n')
                         console.log('editor scroll csa = ' + that.innnerCSA)
 
@@ -93,7 +161,7 @@ export default {
 
                         console.log('scroll......from:' + from + "  to:" + to + ' sH:' + scrollH + '   ' + clientH + '  sT:' + scrollTop)
                         console.log(ratio)
-                        that.$emit('scroll', ratio)
+                        that.syncScrollPreview(ratio)
                     },
                     mouseenter() {
                         that.innnerCSA = 'editor'
@@ -124,36 +192,33 @@ export default {
                             codeLanguages: languages,  //这里指定markdown中代码块使用的解析扩展
                         }),
                         EditorView.lineWrapping,
-                        EditorView.updateListener.of(update => {
+                        EditorView.updateListener.of((update: any) => {
                             if (update.changes) {
                                 console.log('MarkdownEditor content changed event!.')
                                 console.log(update.state) // state.doc.toString()
-                                this.$emit('change', update.state.doc.toString())
+                                // this.$emit('change', update.state.doc.toString())
+                                const content = update.state.doc.toString();
+                                debounce(() => {
+                                    const html = wxRenderer(content)
+                                    this.output = html
+                                }, 500)
                             }
                         }),
-                        scrollPlugin()
+                        domEventHandlersPlugin()
                     ],
                 }),
                 parent: this.$refs.doc as Element,  //挂载的div块
             })
             this.editor = view
-            // this.editor.on("scroll", this.onEditorScroll);
         },
         onEditorScroll() {
             console.log('scrolling.......')
         }
-
     },
     mounted: function () {
         this.createArea(this.content);
     }
-
 }
 </script>
 
-<style scoped>
-div {
-    height: 100%;
-    text-align: left;
-}
-</style>
+<style scoped></style>

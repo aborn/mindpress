@@ -8,22 +8,7 @@
                         v-model="title" required>
                 </div>
             </div>
-            <div class="row containerRow">
-                <div class="column" id="editorCol">
-                    <div class="CoderMirror" id="editorTextArea">
-                        <MagicEditor :content="mkdContent" @change="onChange" :ratio="scrollToRatio"
-                            @scroll="syncScrollPreview" :csa="csa" @update:csa="updateCSA" @save="editorSaveAction" />
-                    </div>
-                </div>
-                <div class="column" id="preview">
-                    <section id="output-wrapper" ref="previewRef" class="preview-wrapper" @scroll="scrollAction"
-                        @mouseenter="mouseeneterAction">
-                        <div class="preview">
-                            <section id="output" v-html="output"></section>
-                        </div>
-                    </section>
-                </div>
-            </div>
+            <MagicEditor :content="mkdContent" @change="onChange" :ratio="scrollToRatio" @save="editorSaveAction" />
             <div class="row">
                 <div class="column-all-goodle">
                     <UAlert v-if="hint.title" :title="`${hint.desc}`" :color="`${hint.color}`" />
@@ -66,8 +51,6 @@ const output = ref('');
 const route = useRoute()
 const titleInput = ref(null as any)
 const tokenInput = ref(null as any)
-const previewRef = ref(null as any)
-const editor = ref(null as any)
 const title = ref<string | undefined>('')
 const token = ref<string | undefined>('')
 const mkdContent = ref('')
@@ -76,8 +59,6 @@ const hint = ref({} as any)
 const debounce = createDebounce()
 const articleids = route.params.id
 const queryV = route.query
-const source = ref('')
-const csa = ref('')
 console.log(queryV)
 
 const useReqURL = useRequestURL()
@@ -100,39 +81,11 @@ onMounted(() => {
     }
 })
 
-function updateCSA(editCSA: string) {
-    csa.value = editCSA
-}
-
 function editorSaveAction(text: any) {
     console.log('save.........action.................')
     // console.log(text)
     console.log('now save it !...')
     saveAction(text)
-}
-
-function syncScrollPreview(ratio: number) {
-    console.log('syncScrollPreview csa = ' + csa.value)
-    if (csa.value !== 'editor') {
-        return;
-    }
-    console.log('edit scroll:' + ratio)
-    const clientH = previewRef.value.clientHeight
-    const scrollH = previewRef.value.scrollHeight
-    previewRef.value.scrollTop = (ratio * (scrollH - clientH))
-}
-
-function scrollAction() {
-    console.log('preview ui scroll csa = ' + csa.value)
-    const offsetH = previewRef.value.offsetHeight
-    const clientH = previewRef.value.clientHeight
-    const scrollH = previewRef.value.scrollHeight
-    const scrollTop = previewRef.value.scrollTop.toFixed(4)
-
-    if (csa.value === 'preview') {
-        scrollToRatio.value = (scrollTop / (scrollH - clientH))
-    }
-    console.log('scrolling....' + clientH + '  ' + scrollH + '  :' + scrollTop + "  " + offsetH)
 }
 
 let file = ref<string | undefined>('');

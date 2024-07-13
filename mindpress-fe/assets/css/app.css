@@ -87,7 +87,7 @@ img {
   --md-background-color: #fff;
   --input-border-color: #cfd5e2;
   --md-base-color: #3f3f3f;
-  --md-cm-gutter-bg: #eceff4; 
+  --md-cm-gutter-bg: #eceff4;
 }
 
 @media only screen and (prefers-color-scheme: dark) {
@@ -100,7 +100,7 @@ img {
     --code-background-color: #2e3440;
     --md-background-color: #121212;
     --md-base-color: rgb(163, 163, 163);
-    --md-cm-gutter-bg: #686868;   /** --md-cm for default-theme.ts*/
+    --md-cm-gutter-bg: #686868; /** --md-cm for default-theme.ts*/
   }
 }
 
@@ -114,7 +114,7 @@ img {
   --md-background-color: #121212;
   --input-border-color: #cfd5e2;
   --md-base-color: rgb(163, 163, 163);
-  --md-cm-gutter-bg: #686868; 
+  --md-cm-gutter-bg: #686868;
 }
 
 div > main {
@@ -409,6 +409,46 @@ nav > ul:first-of-type li:nth-of-type(2) {
 
 .containerRow {
   height: calc(100vh - 330px);
+}
+
+.doc {
+  height: 100%;
+}
+
+.toolbaritems {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.toolbaritem {
+  display: inline-block;
+  padding: 4px 4px;
+  transition: all 0.3s;
+  border-radius: 0;
+  cursor: pointer;
+  list-style: none;
+  -webkit-user-select: none;
+  user-select: none;
+  text-align: center;
+}
+
+.toolbaritem:hover {
+  border-radius: 3px;
+  background-color: var(--md-cm-gutter-bg);
+}
+
+.toolbar-col {
+  display: flex;
+  margin-left: 10px;
+  margin-right: 14px;
+}
+
+.toolbarRow {
+  border-radius: 0rem;
+  border: 0.0625rem solid;
+  border-color: var(--input-border-color);
+  border-bottom: 0rem;
 }
 
 input[type="title"] {
