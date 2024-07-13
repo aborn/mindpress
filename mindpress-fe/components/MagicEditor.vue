@@ -7,11 +7,11 @@
 // import { basicSetup, EditorView } from "codemirror"
 import { basicSetup, EditorView, myDefaultKeymap } from "~/unjs/editor/basicSetup"
 import { markdown } from '~/unjs/editor/codemirror/markdown/index'
+import { languages } from "~/unjs/editor/codemirror/language-data/language-data"
 import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
 import { EditorState } from '@codemirror/state'
 // import { markdown } from "@codemirror/lang-markdown"
 //import { languages } from "@codemirror/language-data"
-import { languages } from "~/unjs/editor/codemirror/language-data/language-data"
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/editor/themes/default-theme"
 import { oneDark } from '@codemirror/theme-one-dark'
@@ -63,7 +63,6 @@ export default {
     methods: {
         sliceDoc(editor: EditorView, from?: number, to?: number): string {
             return editor.state.sliceDoc(from, to)
-
         },
         replaceInlineCommand(editor: EditorView, range: SelectionRange, target: string): any {
             let len = target.length
@@ -105,6 +104,7 @@ export default {
             editor.dispatch(editor.state.changeByRange((range: SelectionRange) => {
                 this.replaceInlineCommand(editor, range, '**')
             }))
+            return true;
         },
         createArea(content: string) {
             if (!content && content.length == 0) {
