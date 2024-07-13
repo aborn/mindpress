@@ -47,10 +47,11 @@ export const basicLightTheme = EditorView.theme(
         '.cm-content': {
             caretColor: cursor
         },
+        
 
         '.cm-cursor, .cm-dropCursor': { borderLeftColor: cursor },
         '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection':
-            { backgroundColor: selection },
+            { backgroundColor: base05 },
 
         '.cm-panels': { backgroundColor: darkBackground, color: base03 },
         '.cm-panels.cm-panels-top': { borderBottom: '2px solid black' },

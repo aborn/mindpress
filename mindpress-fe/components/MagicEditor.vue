@@ -5,7 +5,8 @@
 
 <script lang="ts">
 // import { basicSetup, EditorView } from "codemirror"
-import { basicSetup, EditorView, myDefaultKeymap } from "~/unjs/editor/basicSetup"
+import { basicSetup, EditorView, myDefaultKeymap } from "~/unjs/editor/magiceditor/basicSetup"
+import { commandBold, commandItalic, commandStrike, commandFormatMarkdown } from "~/unjs/editor/magiceditor/commands"
 import { markdown } from '~/unjs/editor/codemirror/markdown/index'
 import { languages } from "~/unjs/editor/codemirror/language-data/language-data"
 import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
@@ -15,7 +16,7 @@ import { EditorState } from '@codemirror/state'
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
 import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/editor/themes/default-theme"
 import { oneDark } from '@codemirror/theme-one-dark'
-import { EditorSelection, SelectionRange } from '@codemirror/state'
+import { EditorSelection, SelectionRange, Compartment } from '@codemirror/state'
 
 export default {
     props: ['content', 'ratio', 'csa'],   // current scroll area, only: 'preview', 'editor'
@@ -61,38 +62,6 @@ export default {
         }
     },
     methods: {
-        sliceDoc(editor: EditorView, from?: number, to?: number): string {
-            return editor.state.sliceDoc(from, to)
-        },
-        replaceInlineCommand(editor: EditorView, range: SelectionRange, target: string): any {
-            let len = target.length
-
-            const prefixFrom: number = range.from - len
-            const prefixTo: number = range.from
-            const prefix = this.sliceDoc(editor, prefixFrom, prefixTo)
-
-            const suffixFrom: number = range.to
-            const suffixTo: number = range.to + len
-            const suffix = this.sliceDoc(editor, suffixFrom, suffixTo)
-            // 判断是取消还是添加, 如果被选中的文本前后已经是 target 字符, 则删除前后字符
-            if (prefix == target && suffix == target) {
-                return {
-                    changes: [
-                        { from: prefixFrom, to: prefixTo, insert: '' },
-                        { from: suffixFrom, to: suffixTo, insert: '' }
-                    ],
-                    range: EditorSelection.range(prefixFrom, suffixFrom - len)
-                }
-            } else {
-                return {
-                    changes: [
-                        { from: range.from, insert: target },
-                        { from: range.to, insert: target }
-                    ],
-                    range: EditorSelection.range(range.from + len, range.to + len)
-                }
-            }
-        },
         commandSave(_view: EditorView) {
             console.log('save action............')
             console.log(_view)
@@ -100,17 +69,12 @@ export default {
             this.$emit('save', _view.viewState.state.doc.toString())
             return true
         },
-        commandBold(editor: EditorView) {
-            editor.dispatch(editor.state.changeByRange((range: SelectionRange) => {
-                this.replaceInlineCommand(editor, range, '**')
-            }))
-            return true;
-        },
         createArea(content: string) {
             if (!content && content.length == 0) {
                 return
             }
             const that = this;
+            const languageComp = new Compartment()
             const scrollPlugin = () => {
                 return EditorView.domEventHandlers({
                     scroll(e, view) {
@@ -155,8 +119,24 @@ export default {
                                 run: that.commandSave
                             },
                             {
+                                key: 'Alt-i',
+                                run: commandItalic
+                            },
+                            {
+                                key: 'Alt-s',
+                                run: commandStrike
+                            },
+                            {
                                 key: "Ctrl-b",
-                                run: that.commandBold
+                                run: commandBold
+                            },
+                            {
+                                key: 'Shift-Alt-f',
+                                mac: 'Shift-Alt-f',
+                                run(view: EditorView) {
+                                    commandFormatMarkdown(view)
+                                    return true
+                                }
                             },
                             ...myDefaultKeymap
                         ]),
