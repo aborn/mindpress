@@ -336,10 +336,10 @@ function saveAction(text: string) {
 }
 
 const onUploadImg = async (files: any, callback: any) => {
+    console.log('new ....')
     console.log(files)
-    const fileArray = Array.isArray(files) ? files : [files]
     const res = await Promise.all(
-        fileArray.map((file: any) => {
+        files.map((file: any) => {
             return new Promise((rev, rej) => {
                 const form = new FormData();
                 form.append('file', file);

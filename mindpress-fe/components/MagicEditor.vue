@@ -177,7 +177,19 @@ export default {
             if ('save' === type) {
                 this.$emit('save', this.editor.viewState.state.doc.toString())
                 return true
-            } else {
+            } else if ('image' === type) {
+                var input = document.createElement('input') as any;
+                input.type = 'file';
+                input.multiple = 'multiple';
+                input.onchange = (e: any) => {
+                    // getting a hold of the file reference
+                    var files = e.target.files;
+                    var fileArray = Object.keys(files).map((key) => [files[key]]);
+                    this.uploadImage(e, fileArray)
+                }
+                input.click();
+            }
+            else {
                 runCommand(this.editor, type)
             }
         },
@@ -187,6 +199,27 @@ export default {
             // console.log(_view.viewState.state.doc.toString())
             this.$emit('save', _view.viewState.state.doc.toString())
             return true
+        },
+        uploadImage(event: any, files: any = null) {
+            const imageCallBackFn = (image: any) => {
+                console.log('callback files........')
+                console.log(image)
+                const images = Array.isArray(image) ? image : [image];
+                images.forEach(item => {
+                    commandImg(this.editor, item)
+                })
+            }
+
+            if (files) {
+                const fileArray = Array.isArray(files) ? files : [files];
+                fileArray.forEach(file => {
+                    this.$emit('uploadImg', file, imageCallBackFn)
+                })
+            } else {
+                return uploadFileCallback(event, (file: string) => {
+                    this.$emit('uploadImg', file, imageCallBackFn)
+                })
+            }
         },
         createArea(content: string) {
             if (!content && content.length == 0) {
@@ -237,16 +270,7 @@ export default {
                         return
                     },
                     paste(event: ClipboardEvent) {
-                        uploadFileCallback(event, (file: string) => {
-                            that.$emit('uploadImg', file, (image: any) => {
-                                console.log('callback........')
-                                console.log(image)
-                                const images = Array.isArray(image) ? image : [image];
-                                images.forEach(item => {
-                                    commandImg(that.editor, item)
-                                })
-                            })
-                        })
+                        that.uploadImage(event)
                         return
                     }
                 })
