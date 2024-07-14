@@ -47,7 +47,7 @@
                     </span>
                 </div>
                 <div class="toolbar-col">
-                    <div class="toobar-message-box">{{message}}</div>
+                    <div class="toobar-message-box" :style="`color: ${msg.color};`">{{msg.desc}}</div>
                 </div>
                 <div class="toolbar-col">
                     <span class="toolbaritem" @click="toobarItemAction('save')">
@@ -127,7 +127,7 @@ export default {
         return { previewRef, innnerCSA }
     },
     computed: {
-        message() {
+        msg() {
             return this.tips
         }
     },

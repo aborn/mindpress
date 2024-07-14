@@ -8,7 +8,7 @@
                         v-model="title" required>
                 </div>
             </div>
-            <MagicEditor :content="mkdContent" @change="onChange" :tips="hint.desc" @save="editorSaveAction" />
+            <MagicEditor :content="mkdContent" @change="onChange" :tips="hint" @save="editorSaveAction" />
             <!--
             <div class="row">
                 <div class="column-all-goodle">
@@ -294,7 +294,7 @@ function saveAction(text: string) {
                 hint.value = {
                     title: 'Info',
                     desc: res.msg + " , Complete Time: " + mpFormatDate(new Date()),
-                    color: 'primary'
+                    color: 'green'
                 }
                 // scm mode
                 if (res.ext && res.ext.articleid) {
