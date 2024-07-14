@@ -301,7 +301,7 @@ function saveAction(text: string) {
             if (res && res.success) {
                 hint.value = {
                     title: 'Info',
-                    desc: res.msg + " , Complete Time: " + mpFormatDate(new Date()),
+                    desc: res.msg + " Finished Time: " + mpFormatDate(new Date()),
                     color: 'green'
                 }
                 // scm mode

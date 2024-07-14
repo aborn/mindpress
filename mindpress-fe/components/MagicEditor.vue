@@ -1,7 +1,7 @@
 <template>
     <div :class="`editorContainer ${editorfullcss}`" id="editorContainer" ref="editorContainerRef">
         <div class="row toolbarRow">
-            <div class="toolbaritems md-editor-toolbar-wrapper">
+            <div class="toolbaritems toolbaritems-wrapper">
                 <div class="toolbar-col">
                     <span class="toolbaritem" @click="toobarItemAction('bold')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24">
