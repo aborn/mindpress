@@ -5,6 +5,7 @@ import { generatePermalinkHash, downloadImageAndReplaseContent, MD_DIVIDER, buil
 import { validateToken } from '~/server/utils/settingsUtils';
 import { dateFormat } from '../../utils/date'
 import { updateCache } from '../../storage'
+import { isBlank } from '~/unjs/utils';
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -41,8 +42,17 @@ export default defineEventHandler(async (event) => {
     }
 
     const todayDate = dateFormat(new Date());
+    const articleTitle = body.title
+    if (isBlank(articleTitle)) {
+        return {
+            md: data,
+            success: false,
+            msg: 'article title cannot be blank!',
+        }
+    }
+
     let header =
-        `---\ntitle: '` + body.title + `'\n` +
+        `---\ntitle: '` + articleTitle + `'\n` +
         `date: '` + todayDate + `'\n`;
 
     console.log('---body header---')
@@ -93,7 +103,7 @@ export default defineEventHandler(async (event) => {
             fs.mkdirSync(baseDir + subDir, { recursive: true });
         }
 
-        file = subDir + body.title + ".md"
+        file = subDir + articleTitle + ".md"
         // if file exists, generate new random name!
         if (fs.existsSync(baseDir + file)) {
             file = subDir + permalinkHash + ".md"
