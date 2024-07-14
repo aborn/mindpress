@@ -47,6 +47,9 @@
                     </span>
                 </div>
                 <div class="toolbar-col">
+                    <div class="toobar-message-box">{{message}}</div>
+                </div>
+                <div class="toolbar-col">
                     <span class="toolbaritem" @click="toobarItemAction('save')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 32 32">
                             <path fill="currentColor"
@@ -108,7 +111,7 @@ import { wxRenderer } from "~/unjs/render/wxRenderer";
 const debounce = createDebounce()
 
 export default {
-    props: ['content', 'csa', 'tba'],   // current scroll area, only: 'preview', 'editor'
+    props: ['content', 'csa', 'tips'],   // current scroll area, only: 'preview', 'editor'
     emits: ['change', 'save'],
     name: "MarkdownEditor",
     data() {
@@ -124,6 +127,9 @@ export default {
         return { previewRef, innnerCSA }
     },
     computed: {
+        message() {
+            return this.tips
+        }
     },
     watch: {
         tba(newV, oldV) {

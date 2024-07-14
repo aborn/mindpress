@@ -423,7 +423,7 @@ nav > ul:first-of-type li:nth-of-type(2) {
 
 .toolbaritem {
   display: inline-block;
-  padding: 4px 4px;
+  padding: 4px 0px 4px 0px;
   transition: all 0.3s;
   border-radius: 0;
   cursor: pointer;
@@ -431,6 +431,7 @@ nav > ul:first-of-type li:nth-of-type(2) {
   -webkit-user-select: none;
   user-select: none;
   text-align: center;
+  margin-left: 4px;
 }
 
 .toolbaritem:hover {
@@ -442,6 +443,13 @@ nav > ul:first-of-type li:nth-of-type(2) {
   display: flex;
   margin-left: 10px;
   margin-right: 14px;
+  margin-top: 5px;
+}
+
+.toobar-message-box {
+  margin-top: 3px;
+  color: #8a919f;
+  font-size: smaller;
 }
 
 .toolbarRow {

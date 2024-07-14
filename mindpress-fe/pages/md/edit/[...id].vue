@@ -8,12 +8,14 @@
                         v-model="title" required>
                 </div>
             </div>
-            <MagicEditor :content="mkdContent" @change="onChange" :ratio="scrollToRatio" @save="editorSaveAction" />
+            <MagicEditor :content="mkdContent" @change="onChange" :tips="hint.desc" @save="editorSaveAction" />
+            <!--
             <div class="row">
                 <div class="column-all-goodle">
                     <UAlert v-if="hint.title" :title="`${hint.desc}`" :color="`${hint.color}`" />
                 </div>
             </div>
+            -->
         </main>
         <UModal v-model="isOpen" prevent-close>
             <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">

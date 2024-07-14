@@ -7,4 +7,9 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
   },
+  server: {
+    hmr: {
+      overlay: false
+    }
+  }
 })
