@@ -224,7 +224,16 @@ export default {
                         //console.log('mouse out...')
                     },
                     drop(event: DragEvent) {
-                        uploadFileCallback(event)
+                        uploadFileCallback(event, (file: string) => {
+                            that.$emit('uploadImg', file, (image: any) => {
+                                console.log('callback........')
+                                console.log(image)
+                                const images = Array.isArray(image) ? image : [image];
+                                images.forEach(item => {
+                                    commandImg(that.editor, item)
+                                })
+                            })
+                        })
                         return
                     },
                     paste(event: ClipboardEvent) {
