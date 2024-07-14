@@ -88,6 +88,7 @@ img {
   --input-border-color: #cfd5e2;
   --md-base-color: #3f3f3f;
   --md-cm-gutter-bg: #eceff4;
+  --md-cm-selected-text-bg: #bad5fa;
 }
 
 @media only screen and (prefers-color-scheme: dark) {
@@ -101,6 +102,7 @@ img {
     --md-background-color: #121212;
     --md-base-color: rgb(163, 163, 163);
     --md-cm-gutter-bg: #686868; /** --md-cm for default-theme.ts*/
+    --md-cm-selected-text-bg: #bad5fa;
   }
 }
 
@@ -115,6 +117,7 @@ img {
   --input-border-color: #cfd5e2;
   --md-base-color: rgb(163, 163, 163);
   --md-cm-gutter-bg: #686868;
+  --md-cm-selected-text-bg: #e5e9f0;
 }
 
 div > main {

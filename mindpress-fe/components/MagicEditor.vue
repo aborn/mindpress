@@ -106,12 +106,14 @@ import { basicSetup, EditorView, myDefaultKeymap, runCommand } from "~/unjs/edit
 import { uploadFileCallback, commandImg } from "~/unjs/editor/magiceditor/commands"
 import { markdown } from '~/unjs/editor/codemirror/markdown/index'
 import { languages } from "~/unjs/editor/codemirror/language-data/language-data"
-import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
-import { EditorState } from '@codemirror/state'
 // import { basicSetup, EditorView } from "codemirror"
 // import { markdown } from "@codemirror/lang-markdown"
-//import { languages } from "@codemirror/language-data"
+// import { languages } from "@codemirror/language-data"
+// @ts-ignore
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language"
+// @ts-ignore
+import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
+import { EditorState } from '@codemirror/state'
 import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/editor/themes/default-theme"
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorSelection, SelectionRange, Compartment } from '@codemirror/state'
