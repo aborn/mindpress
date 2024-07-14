@@ -47,7 +47,7 @@
                     </span>
                 </div>
                 <div class="toolbar-col">
-                    <div class="toobar-message-box" :style="`color: ${msg.color};`">{{msg.desc}}</div>
+                    <div class="toobar-message-box" :style="`color: ${msg.color};`">{{ msg.desc }}</div>
                 </div>
                 <div class="toolbar-col">
                     <span class="toolbaritem" @click="toobarItemAction('save')">
@@ -96,6 +96,7 @@
 
 <script lang="ts">
 import { basicSetup, EditorView, myDefaultKeymap, runCommand } from "~/unjs/editor/magiceditor/basicSetup"
+import { uploadFileCallback, commandImg } from "~/unjs/editor/magiceditor/commands"
 import { markdown } from '~/unjs/editor/codemirror/markdown/index'
 import { languages } from "~/unjs/editor/codemirror/language-data/language-data"
 import { ViewUpdate, keymap, BlockInfo } from '@codemirror/view'
@@ -112,7 +113,7 @@ const debounce = createDebounce()
 
 export default {
     props: ['content', 'csa', 'tips'],   // current scroll area, only: 'preview', 'editor'
-    emits: ['change', 'save'],
+    emits: ['change', 'save', 'uploadImg'],
     name: "MarkdownEditor",
     data() {
         return {
@@ -221,6 +222,23 @@ export default {
                     mouseleave() {
                         that.innnerCSA = 'preview'
                         //console.log('mouse out...')
+                    },
+                    drop(event: DragEvent) {
+                        uploadFileCallback(event)
+                        return
+                    },
+                    paste(event: ClipboardEvent) {
+                        uploadFileCallback(event, (file: string) => {
+                            that.$emit('uploadImg', file, (image: any) => {
+                                console.log('callback........')
+                                console.log(image)
+                                const images = Array.isArray(image) ? image : [image];
+                                images.forEach(item => {
+                                    commandImg(that.editor, item)
+                                })
+                            })
+                        })
+                        return
                     }
                 })
             }

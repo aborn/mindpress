@@ -8,7 +8,8 @@
                         v-model="title" required>
                 </div>
             </div>
-            <MagicEditor :content="mkdContent" @change="onChange" :tips="hint" @save="editorSaveAction" />
+            <MagicEditor :content="mkdContent" @change="onChange" :tips="hint" @save="editorSaveAction"
+                @uploadImg="onUploadImg" />
             <!--
             <div class="row">
                 <div class="column-all-goodle">
@@ -335,8 +336,10 @@ function saveAction(text: string) {
 }
 
 const onUploadImg = async (files: any, callback: any) => {
+    console.log(files)
+    const fileArray = Array.isArray(files) ? files : [files]
     const res = await Promise.all(
-        files.map((file: any) => {
+        fileArray.map((file: any) => {
             return new Promise((rev, rej) => {
                 const form = new FormData();
                 form.append('file', file);

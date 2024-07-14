@@ -104,8 +104,18 @@ export function commandFormatMarkdown(editor: EditorView) {
     return true
 }
 
-export function commandImg(editor: EditorView) {
-    return insertBlockCommand(editor, `\n![]()\n`)
+export interface MagicImage {
+    alt: string
+    title: string
+    url: string
+}
+
+export function commandImg(editor: EditorView, image: MagicImage | null = null) {
+    if (!image) {
+        return insertBlockCommand(editor, `\n![]()\n`)
+    } else {
+        return insertBlockCommand(editor, `\n![${image.title}](${image.url} '${image.alt}')\n`)
+    }
 }
 
 export function commandLink(editor: EditorView) {
@@ -135,4 +145,68 @@ export function commandQuote(editor: EditorView) {
 
 export function commandTable(editor: EditorView) {
     return insertBlockCommand(editor, `\n|||\n|---|---|\n|||\n`)
+}
+
+export const isArticle = (doc: DocInfo | undefined): boolean => {
+    if (isNull(doc)) {
+        return false
+    }
+    if (isNull(doc!.type) || doc!.type != 3) {
+        return false
+    }
+    return true
+}
+
+export const isNull = (val: any): boolean => {
+    if (typeof val === 'boolean') {
+        return false
+    }
+    if (typeof val === 'number') {
+        return false
+    }
+
+    // 控制
+    if (val == null || val === 'undefined' || val === undefined || val === '') {
+        return true
+    }
+
+    // 数组
+    if (Array.isArray(val) && val.length === 0) {
+        return true
+    }
+
+    // 对象, 但无字段
+    if (val instanceof Object && JSON.stringify(val) === '{}') {
+        return true
+    }
+    return false
+}
+
+export async function uploadFileCallback(event: DragEvent | ClipboardEvent, uploadFile: Function | null = null) {
+    /**
+     * 拖拽上传
+     */
+    if (event instanceof DragEvent) {
+        let data: DataTransfer | null = event.dataTransfer
+        if (data && data.files.length && data.files.length > 0) {
+            for (const file of data.files) {
+                uploadFile && uploadFile(file)
+            }
+        }
+    }
+
+    /**
+     * 黏贴上传
+     */
+    if (event instanceof ClipboardEvent) {
+        if (!event.clipboardData) return
+        if (event.clipboardData.items.length === 0) return
+        for (let i = 0; i < event.clipboardData.items.length; i++) {
+            const file: File | null = event.clipboardData.items[i].getAsFile()
+            if (file == null) {
+                return
+            }
+            uploadFile && uploadFile(file)
+        }
+    }
 }
