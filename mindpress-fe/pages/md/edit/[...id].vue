@@ -1,15 +1,15 @@
 <template>
     <div>
-        <NavBar />
+        <NavBar v-if="!isFullPage" />
         <main class="contentContainer">
-            <div class="row">
+            <div v-if="!isFullPage" class="row">
                 <div class="column-all">
                     <input type="title" id="title" ref="titleInput" name="title" placeholder="Article title"
                         v-model="title" required>
                 </div>
             </div>
             <MagicEditor :content="mkdContent" @change="onChange" :tips="hint" @save="editorSaveAction"
-                @uploadImg="onUploadImg" />
+                @uploadImg="onUploadImg" @fullpage="onFullPageChange" />
             <!--
             <div class="row">
                 <div class="column-all-goodle">
@@ -112,6 +112,12 @@ async function getDataAx() {
 const bodyExtra: any = {};
 const mdHeader: any = {};
 const isOpen = ref(false)
+const isFullPage = ref(false)
+
+function onFullPageChange(fullpage: boolean) {
+    console.log(fullpage)
+    isFullPage.value = fullpage;
+}
 
 console.log('mode===>' + mp.mode)
 if (mp.mode === MINDPRESS_MODE.SSG) {

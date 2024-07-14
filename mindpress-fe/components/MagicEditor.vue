@@ -1,5 +1,5 @@
 <template>
-    <div class="editorContainer" id="editorContainer" ref="editorContainerRef">
+    <div :class="`editorContainer ${editorfullcss}`" id="editorContainer" ref="editorContainerRef">
         <div class="row toolbarRow">
             <div class="toolbaritems md-editor-toolbar-wrapper">
                 <div class="toolbar-col">
@@ -57,12 +57,17 @@
                         </svg>
                     </span>
                     <span class="toolbaritem" @click="toobarItemAction('pagefull')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 24 24">
+                        <svg v-if="!fullPage" xmlns="http://www.w3.org/2000/svg" width="28" height="24"
+                            viewBox="0 0 24 24">
                             <path fill="currentColor" d="M21 11V3h-8l3.29 3.29l-10 10L3 13v8h8l-3.29-3.29l10-10z" />
                         </svg>
-                        <!--
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M22 3.41L16.71 8.7L20 12h-8V4l3.29 3.29L20.59 2zM3.41 22l5.29-5.29L12 20v-8H4l3.29 3.29L2 20.59z"/></svg>
-                        -->
+
+                        <svg v-if="fullPage" xmlns="http://www.w3.org/2000/svg" width="28" height="24"
+                            viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M22 3.41L16.71 8.7L20 12h-8V4l3.29 3.29L20.59 2zM3.41 22l5.29-5.29L12 20v-8H4l3.29 3.29L2 20.59z" />
+                        </svg>
+
                     </span>
                     <span class="toolbaritem" @click="toobarItemAction('screenfull')">
                         <svg v-if="!fullScreen" xmlns="http://www.w3.org/2000/svg" width="28" height="24"
@@ -79,7 +84,7 @@
                 </div>
             </div>
         </div>
-        <div class="row containerRow">
+        <div class="row containerRow" :style="`height: calc(100vh - ${heightExp}px)`">
             <div class="column" id="editorCol">
                 <div class="CoderMirror" id="editorTextArea">
                     <div ref="doc" class="doc"></div>
@@ -116,7 +121,7 @@ const debounce = createDebounce()
 
 export default {
     props: ['content', 'csa', 'tips'],   // current scroll area, only: 'preview', 'editor'
-    emits: ['change', 'save', 'uploadImg'],
+    emits: ['change', 'save', 'uploadImg', 'fullpage'],
     name: "MarkdownEditor",
     data() {
         return {
@@ -130,11 +135,18 @@ export default {
         const editorContainerRef = ref(null as any)
         const innnerCSA = 'preview'
         const fullScreen = ref(false)
-        return { previewRef, innnerCSA, editorContainerRef, fullScreen }
+        const fullPage = ref(false)
+        return { previewRef, innnerCSA, editorContainerRef, fullScreen, fullPage }
     },
     computed: {
         msg() {
             return this.tips
+        },
+        editorfullcss() {
+            return this.fullPage ? 'fullpage' : ''
+        },
+        heightExp() {
+            return (this.fullPage || this.fullScreen) ? 55 : 270;
         }
     },
     watch: {
@@ -150,6 +162,9 @@ export default {
                     changes: { from: 0, to: this.editor.state.doc.length, insert: newV }
                 });
             }
+        },
+        fullPage(newV, oldV) {
+            this.$emit('fullpage', newV)
         }
     },
     methods: {
@@ -203,13 +218,13 @@ export default {
                 console.log(this.fullScreen)
                 if (!this.fullScreen) {
                     this.editorContainerRef.requestFullscreen()
-                    this.fullScreen = true
                 } else {
                     document.exitFullscreen();
-                    this.fullScreen = false;
                 }
+                this.fullScreen = !this.fullScreen
             } else if ('pagefull' === type) {
-                //this.editorContainerRef.requestFullscreen()
+                console.log(this.fullPage)
+                this.fullPage = !this.fullPage
             }
             else {
                 runCommand(this.editor, type)
@@ -356,8 +371,20 @@ export default {
                     console.error('editor instance doesnot exists!')
                 }
                 this.$emit('save', this.editor.viewState.state.doc.toString())
+            } else if (e.key === "Escape") {
+                console.log('esc key click....')
+                this.fullPage = false;
+                this.fullScreen = false;
             }
         });
+        document.addEventListener('fullscreenchange', e => {
+            if (document.fullscreenElement) {
+                console.log('enter fullscreen')
+            } else {
+                console.log('exit fullscreen')
+                this.fullScreen = false;
+            }
+        })
     }
 }
 </script>
