@@ -1,4 +1,3 @@
-import { expectTypeOf } from 'vitest'
 import { EditorView } from './basicSetup'
 import { EditorSelection, SelectionRange, Compartment } from '@codemirror/state'
 import * as prettier from 'prettier/standalone'
@@ -147,6 +146,7 @@ export function commandTable(editor: EditorView) {
     return insertBlockCommand(editor, `\n|||\n|---|---|\n|||\n`)
 }
 
+type DocInfo = /*unresolved*/ any
 export const isArticle = (doc: DocInfo | undefined): boolean => {
     if (isNull(doc)) {
         return false
