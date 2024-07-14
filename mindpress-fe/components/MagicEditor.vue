@@ -1,5 +1,5 @@
 <template>
-    <div class="editorContainer">
+    <div class="editorContainer" id="editorContainer" ref="editorContainerRef">
         <div class="row toolbarRow">
             <div class="toolbaritems md-editor-toolbar-wrapper">
                 <div class="toolbar-col">
@@ -65,14 +65,16 @@
                         -->
                     </span>
                     <span class="toolbaritem" @click="toobarItemAction('screenfull')">
-
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 24 24">
+                        <svg v-if="!fullScreen" xmlns="http://www.w3.org/2000/svg" width="28" height="24"
+                            viewBox="0 0 24 24">
                             <path fill="currentColor"
                                 d="M5 19h2q.425 0 .713.288T8 20t-.288.713T7 21H4q-.425 0-.712-.288T3 20v-3q0-.425.288-.712T4 16t.713.288T5 17zm14 0v-2q0-.425.288-.712T20 16t.713.288T21 17v3q0 .425-.288.713T20 21h-3q-.425 0-.712-.288T16 20t.288-.712T17 19zM5 5v2q0 .425-.288.713T4 8t-.712-.288T3 7V4q0-.425.288-.712T4 3h3q.425 0 .713.288T8 4t-.288.713T7 5zm14 0h-2q-.425 0-.712-.288T16 4t.288-.712T17 3h3q.425 0 .713.288T21 4v3q0 .425-.288.713T20 8t-.712-.288T19 7z" />
                         </svg>
-                        <!--
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6 21v-3H3v-2h5v5zm10 0v-5h5v2h-3v3zM3 8V6h3V3h2v5zm13 0V3h2v3h3v2z"/></svg>
-                       -->
+                        <svg v-if="fullScreen" xmlns="http://www.w3.org/2000/svg" width="28" height="24"
+                            viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M6 21v-3H3v-2h5v5zm10 0v-5h5v2h-3v3zM3 8V6h3V3h2v5zm13 0V3h2v3h3v2z" />
+                        </svg>
                     </span>
                 </div>
             </div>
@@ -125,8 +127,10 @@ export default {
     },
     setup() {
         const previewRef = ref(null as any)
+        const editorContainerRef = ref(null as any)
         const innnerCSA = 'preview'
-        return { previewRef, innnerCSA }
+        const fullScreen = ref(false)
+        return { previewRef, innnerCSA, editorContainerRef, fullScreen }
     },
     computed: {
         msg() {
@@ -195,6 +199,17 @@ export default {
                     this.uploadImage(e, fileArray)
                 }
                 input.click();
+            } else if ('screenfull' === type) {
+                console.log(this.fullScreen)
+                if (!this.fullScreen) {
+                    this.editorContainerRef.requestFullscreen()
+                    this.fullScreen = true
+                } else {
+                    document.exitFullscreen();
+                    this.fullScreen = false;
+                }
+            } else if ('pagefull' === type) {
+                //this.editorContainerRef.requestFullscreen()
             }
             else {
                 runCommand(this.editor, type)
@@ -304,8 +319,8 @@ export default {
                         EditorView.lineWrapping,
                         EditorView.updateListener.of((update: any) => {
                             if (update.changes) {
-                               // all changes 
-                               // console.log('chnage. event.' + update.changes)
+                                // all changes 
+                                // console.log('chnage. event.' + update.changes)
                             }
 
                             if (update.docChanged || isBlank(this.output)) {
