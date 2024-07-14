@@ -56,6 +56,12 @@
                                 d="m27.71 9.29l-5-5A1 1 0 0 0 22 4H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V10a1 1 0 0 0-.29-.71M12 6h8v4h-8Zm8 20h-8v-8h8Zm2 0v-8a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8H6V6h4v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6.41l4 4V26Z" />
                         </svg>
                     </span>
+                    <span class="toolbaritem" @click="toobarItemAction('copyToWeChat')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" viewBox="0 0 256 256">
+                            <path fill="currentColor"
+                                d="M140 140a8 8 0 1 1-8-8a8 8 0 0 1 8 8m48-8a8 8 0 1 0 8 8a8 8 0 0 0-8-8m47.5 80.6a12 12 0 0 1-14.9 14.9l-26.21-7.71a76 76 0 0 1-105.15-40.11a75 75 0 0 1-27.63-7.89L35.4 179.5a12 12 0 0 1-14.9-14.9l7.71-26.21a76 76 0 1 1 138.58-62.07a76 76 0 0 1 61 110.07Zm-149-41.28A76 76 0 0 1 158 76.05a68 68 0 1 0-122 60a4.07 4.07 0 0 1 .31 3l-8.17 27.76a4 4 0 0 0 5 5l27.76-8.17a4.07 4.07 0 0 1 3 .31a66.9 66.9 0 0 0 22.6 7.37m141.33 43.54l-8.17-27.76a4.07 4.07 0 0 1 .31-3a68 68 0 1 0-27.89 27.9a4.1 4.1 0 0 1 1.89-.47a4 4 0 0 1 1.13.16l27.76 8.17a4 4 0 0 0 5-5Z" />
+                        </svg>
+                    </span>
                     <span class="toolbaritem" @click="toobarItemAction('pagefull')">
                         <svg v-if="!fullPage" xmlns="http://www.w3.org/2000/svg" width="28" height="24"
                             viewBox="0 0 24 24">
@@ -119,6 +125,7 @@ import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorSelection, SelectionRange, Compartment } from '@codemirror/state'
 import { wxRenderer } from "~/unjs/render/wxRenderer";
 import { forceToArray, isBlank } from "~/unjs/utils"
+import { copyToWechat, mergeCss, solveWeChatImage } from "~/unjs/editor/wechat"
 const debounce = createDebounce()
 
 export default {
@@ -205,6 +212,8 @@ export default {
                 }
                 this.$emit('save', this.editor.viewState.state.doc.toString())
                 return true
+            } else if ('copyToWeChat' === type) {
+                copyToWechat(this.output)
             } else if ('image' === type) {
                 var input = document.createElement('input') as any;
                 input.type = 'file';
