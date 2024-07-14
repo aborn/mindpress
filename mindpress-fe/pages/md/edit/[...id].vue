@@ -187,7 +187,9 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                         color: 'primary'
                     }
                 } else {
-                    mkdContent.value = res.mdcontent
+                    console.log('-----------')
+                    console.log(res.mdcontent)
+                    mkdContent.value = res.mdcontent || ' '
                     console.log('content updated')
                     mdHeader.value = res.mdheader
                     const html = wxRenderer(mkdContent.value)
