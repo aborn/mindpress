@@ -50,7 +50,6 @@ import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
 import { color } from '@codemirror/theme-one-dark';
 import { forceToArray } from '~/unjs/utils';
 
-const output = ref('');
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
 const titleInput = ref(null as any)
@@ -187,13 +186,11 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                         color: 'primary'
                     }
                 } else {
-                    console.log('-----------')
-                    console.log(res.mdcontent)
+                    // console.log('-----------')
+                    // console.log(res.mdcontent)
                     mkdContent.value = res.mdcontent || ' '
                     console.log('content updated')
                     mdHeader.value = res.mdheader
-                    const html = wxRenderer(mkdContent.value)
-                    output.value = html
                     // editor.value = initEditorEntity(mkdContent.value)
                     // console.log(editor.value)
                 }
@@ -382,9 +379,6 @@ const onChange = (content: string) => {
 const changeAction = (content: string) => {
     console.log(' ----------action: ' + new Date())
     // console.log(content)
-
-    const html = wxRenderer(content)
-    output.value = html
 
     const filterMatches = imageMatches(content) as any[];
     if (filterMatches && filterMatches.length > 0) {

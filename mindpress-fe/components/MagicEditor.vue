@@ -109,7 +109,7 @@ import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/ed
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorSelection, SelectionRange, Compartment } from '@codemirror/state'
 import { wxRenderer } from "~/unjs/render/wxRenderer";
-import { forceToArray } from "~/unjs/utils"
+import { forceToArray, isBlank } from "~/unjs/utils"
 const debounce = createDebounce()
 
 export default {
@@ -141,6 +141,10 @@ export default {
             console.log('props.content changed!')
             if (!this.editor) {
                 this.createArea(newV);
+            } else {
+                this.editor.dispatch({
+                    changes: { from: 0, to: this.editor.state.doc.length, insert: newV }
+                });
             }
         }
     },
@@ -176,6 +180,9 @@ export default {
         toobarItemAction(type: string) {
             console.log(type)
             if ('save' === type) {
+                if (!this.editor) {
+                    console.error('editor instance doesnot exists!')
+                }
                 this.$emit('save', this.editor.viewState.state.doc.toString())
                 return true
             } else if ('image' === type) {
@@ -294,9 +301,13 @@ export default {
                         EditorView.lineWrapping,
                         EditorView.updateListener.of((update: any) => {
                             if (update.changes) {
-                                console.log('MarkdownEditor content changed event!.')
-                                console.log(update.state) // state.doc.toString()
-                                // this.$emit('change', update.state.doc.toString())
+                               // all changes 
+                               // console.log('chnage. event.' + update.changes)
+                            }
+
+                            if (update.docChanged || isBlank(this.output)) {
+                                console.log('--------markdown content changed--------')
+                                this.$emit('change', update.state.doc.toString())
                                 const content = update.state.doc.toString();
                                 debounce(() => {
                                     const html = wxRenderer(content)
@@ -317,6 +328,18 @@ export default {
     },
     mounted: function () {
         this.createArea(this.content);
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && e.key === 's') {
+                // Prevent the Save dialog to open
+                e.preventDefault();
+                // Place your code here
+                console.log('CTRL + S');
+                if (!this.editor) {
+                    console.error('editor instance doesnot exists!')
+                }
+                this.$emit('save', this.editor.viewState.state.doc.toString())
+            }
+        });
     }
 }
 </script>
