@@ -261,6 +261,9 @@ export default {
                         that.innnerCSA = 'preview'
                         //console.log('mouse out...')
                     },
+                    focus() {
+                        console.log('fouced event.')
+                    },
                     drop(event: DragEvent) {
                         uploadFileCallback(event, (file: string) => {
                             that.$emit('uploadImg', file, (image: any) => {
