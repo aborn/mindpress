@@ -184,7 +184,7 @@ export default {
                 input.onchange = (e: any) => {
                     // getting a hold of the file reference
                     var files = e.target.files;
-                    var fileArray = Object.keys(files).map((key) => [files[key]]);
+                    var fileArray = Object.keys(files).map((key) => files[key]);
                     this.uploadImage(e, fileArray)
                 }
                 input.click();
@@ -212,9 +212,7 @@ export default {
 
             if (files) {
                 const fileArray = Array.isArray(files) ? files : [files];
-                fileArray.forEach(file => {
-                    this.$emit('uploadImg', file, imageCallBackFn)
-                })
+                this.$emit('uploadImg', fileArray, imageCallBackFn)
             } else {
                 return uploadFileCallback(event, (file: string) => {
                     this.$emit('uploadImg', file, imageCallBackFn)
