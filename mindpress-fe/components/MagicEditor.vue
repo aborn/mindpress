@@ -175,9 +175,8 @@ export default {
             if (this.innnerCSA !== 'editor') {
                 return;
             }
-            console.log('edit scroll:' + ratio)
-            console.log(this.previewRef)
-
+            // console.log('edit scroll:' + ratio)
+            // console.log(this.previewRef)
             const clientH = this.previewRef.clientHeight
             const scrollH = this.previewRef.scrollHeight
             this.previewRef.scrollTop = (ratio * (scrollH - clientH))
