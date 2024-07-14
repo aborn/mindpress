@@ -146,7 +146,8 @@ export default {
         const innnerCSA = 'preview'
         const fullScreen = ref(false)
         const fullPage = ref(false)
-        return { previewRef, innnerCSA, editorContainerRef, fullScreen, fullPage }
+        const curPos = 0;
+        return { previewRef, innnerCSA, editorContainerRef, fullScreen, fullPage, curPos }
     },
     computed: {
         msg() {
@@ -373,6 +374,16 @@ export default {
     mounted: function () {
         this.createArea(this.content);
         document.addEventListener('keydown', e => {
+            e.preventDefault();
+            const lineAt = this.editor.state.doc.lineAt(this.editor.state.selection.main.head)
+            const text = lineAt.text
+            if (text.length > 0) {
+                const curPos = this.editor.state.selection;
+                const from = curPos.ranges && curPos.ranges[0].from
+                const sArr = text.split(' ')
+                this.curPos = (sArr.length > 0 && text.startsWith('#')) ? lineAt.from + sArr[0].length : lineAt.from
+            }
+
             // windows: Ctrl + S, mac: Command + s
             if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                 // Prevent the Save dialog to open
@@ -390,16 +401,13 @@ export default {
                 const to = curPos.ranges && curPos.ranges[0].to
                 // current line info
                 // const lineAt = this.editor.state.doc.lineAt(this.editor.state.selection.main.head)
-
                 moveCursorToEndOfLine(this.editor)
-            } else if (e.altKey && e.key === '.') {
+            } else if (e.ctrlKey && e.key === 'a') {
                 e.preventDefault();
                 this.editor.focus()
-                const curPos = this.editor.state.selection;
-                const from = curPos.ranges && curPos.ranges[0].from
-                const to = curPos.ranges && curPos.ranges[0].to
-                console.log(' ###### from:' + from + ', to:' + to)
                 moveCursorToBeginOfLine(this.editor)
+                // console.log('from .....>>>>>' + this.from)
+                this.editor.dispatch({ selection: { anchor: this.curPos, head: this.curPos } })
             }
             else if (e.key === "Escape") {
                 console.log('esc key click....')
