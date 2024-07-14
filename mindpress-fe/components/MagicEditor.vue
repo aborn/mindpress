@@ -171,7 +171,7 @@ export default {
     },
     methods: {
         syncScrollPreview(ratio: number) {
-            console.log('syncScrollPreview csa = ' + this.innnerCSA)
+            // console.log('syncScrollPreview csa = ' + this.innnerCSA)
             if (this.innnerCSA !== 'editor') {
                 return;
             }
@@ -183,7 +183,7 @@ export default {
             this.previewRef.scrollTop = (ratio * (scrollH - clientH))
         },
         previewScrollAction() {
-            console.log('preview ui scroll csa = ' + this.innnerCSA)
+            // console.log('preview ui scroll csa = ' + this.innnerCSA)
             const offsetH = this.previewRef.offsetHeight
             const clientH = this.previewRef.clientHeight
             const scrollH = this.previewRef.scrollHeight
@@ -267,10 +267,10 @@ export default {
             const domEventHandlersPlugin = () => {
                 return EditorView.domEventHandlers({
                     scroll(e: any, view: any) {
-                        console.log('\n\n')
-                        console.log('editor scroll csa = ' + that.innnerCSA)
-
-                        console.log(view)
+                        // console.log('\n\n')
+                        // console.log('editor scroll csa = ' + that.innnerCSA)
+                        // console.log(view)
+                        
                         const from = view.viewport.from;
                         const to = view.viewport.to;
                         // console.log(view.docView.view.scrollDOM)
@@ -281,8 +281,8 @@ export default {
                         const scrollTop = scrolView.scrollTop
                         const ratio = scrollTop / (scrollH - clientH)
 
-                        console.log('scroll......from:' + from + "  to:" + to + ' sH:' + scrollH + '   ' + clientH + '  sT:' + scrollTop)
-                        console.log(ratio)
+                        // console.log('scroll......from:' + from + "  to:" + to + ' sH:' + scrollH + '   ' + clientH + '  sT:' + scrollTop)
+                        // console.log(ratio)
                         that.syncScrollPreview(ratio)
                     },
                     mouseenter() {
@@ -385,6 +385,7 @@ export default {
             } else {
                 console.log('exit fullscreen')
                 this.fullScreen = false;
+                this.fullPage = false;
             }
         })
     }
