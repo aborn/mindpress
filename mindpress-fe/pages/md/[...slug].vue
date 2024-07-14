@@ -28,6 +28,7 @@
                     </div>
                     <section id="output" v-html="output"></section>
                 </div>
+                <div id="snackbar"></div>
             </div>
         </main>
     </div>

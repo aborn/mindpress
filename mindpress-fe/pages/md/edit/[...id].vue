@@ -18,6 +18,7 @@
             </div>
             -->
         </main>
+        <div id="snackbar"></div>
         <UModal v-model="isOpen" prevent-close>
             <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                 <template #header>

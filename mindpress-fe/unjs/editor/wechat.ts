@@ -1,4 +1,5 @@
 import juice from 'juice'
+import { showToast } from '../utils'
 
 export function solveWeChatImage() {
     const clipboardDiv = document.getElementById(`output`) as any
@@ -67,8 +68,8 @@ export function copyToWechat(output: any) {
         document.execCommand(`copy`)
         window.getSelection().removeAllRanges()
         clipboardDiv.innerHTML = output
-
+        
+        showToast({ title: '已复制渲染后的文章到剪贴板，可直接到公众号后台粘贴！' })
         console.log('copy finished!')
-
     }, 350)
 }

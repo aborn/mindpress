@@ -19,3 +19,14 @@ export function forceToArray(item: any) {
         return Array.isArray(item) ? item : [item]
     }
 }
+
+export function showToast(info: any, timeout: number = 3000) {
+    var x = document.getElementById("snackbar") as HTMLFormElement;
+    if (!x) {
+        console.warn('snackbar doesnot exists!')
+        return
+    }
+    x.className = "show";
+    x.innerText = info.title || 'toast tips message!'
+    setTimeout(function () { x.className = x.className.replace("show", ""); }, timeout);
+}
