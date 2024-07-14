@@ -144,7 +144,7 @@ export async function downloadImage(url: string) {
 }
 
 export function buildImageUrl(dir: string, fileName: string): string {
-    return '/file/' + dir + '/' + fileName;
+    return '/file/' + dir + '/' + encodeURIComponent(fileName)
 }
 
 export async function downloadImageAxios(url: string) {

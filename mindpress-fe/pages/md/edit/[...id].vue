@@ -48,6 +48,7 @@ import { imageMatches } from '~/server/utils/markdownUtils';
 import { wxRenderer } from "~/unjs/render/wxRenderer";
 import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
 import { color } from '@codemirror/theme-one-dark';
+import { forceToArray } from '~/unjs/utils';
 
 const output = ref('');
 // docs==> https://vuejs.org/api/sfc-script-setup.html
@@ -336,10 +337,9 @@ function saveAction(text: string) {
 }
 
 const onUploadImg = async (files: any, callback: any) => {
-    console.log('new ....')
-    console.log(files)
+    const filesArray = forceToArray(files)
     const res = await Promise.all(
-        files.map((file: any) => {
+        filesArray.map((file: any) => {
             return new Promise((rev, rej) => {
                 const form = new FormData();
                 form.append('file', file);

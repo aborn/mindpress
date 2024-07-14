@@ -109,6 +109,7 @@ import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/ed
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorSelection, SelectionRange, Compartment } from '@codemirror/state'
 import { wxRenderer } from "~/unjs/render/wxRenderer";
+import { forceToArray } from "~/unjs/utils"
 const debounce = createDebounce()
 
 export default {
@@ -182,7 +183,6 @@ export default {
                 input.type = 'file';
                 input.multiple = 'multiple';
                 input.onchange = (e: any) => {
-                    // getting a hold of the file reference
                     var files = e.target.files;
                     var fileArray = Object.keys(files).map((key) => files[key]);
                     this.uploadImage(e, fileArray)
@@ -211,7 +211,7 @@ export default {
             }
 
             if (files) {
-                const fileArray = Array.isArray(files) ? files : [files];
+                const fileArray = forceToArray(files);
                 this.$emit('uploadImg', fileArray, imageCallBackFn)
             } else {
                 return uploadFileCallback(event, (file: string) => {
