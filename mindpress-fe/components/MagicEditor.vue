@@ -270,7 +270,7 @@ export default {
                         // console.log('\n\n')
                         // console.log('editor scroll csa = ' + that.innnerCSA)
                         // console.log(view)
-                        
+
                         const from = view.viewport.from;
                         const to = view.viewport.to;
                         // console.log(view.docView.view.scrollDOM)
@@ -379,6 +379,14 @@ export default {
                 this.fullScreen = false;
             }
         });
+
+        /**
+         * document.addEventListener('fullscreenchange', exitHandler);
+         * document.addEventListener('webkitfullscreenchange', exitHandler);
+         * document.addEventListener('mozfullscreenchange', exitHandler);
+         * document.addEventListener('MSFullscreenChange', exitHandler);
+         * */
+
         document.addEventListener('fullscreenchange', e => {
             if (document.fullscreenElement) {
                 console.log('enter fullscreen')
