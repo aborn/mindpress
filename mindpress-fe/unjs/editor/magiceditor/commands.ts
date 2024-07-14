@@ -210,3 +210,19 @@ export async function uploadFileCallback(event: DragEvent | ClipboardEvent, uplo
         }
     }
 }
+
+// codemirror 6, move cursor to end of current line
+export function moveCursorToEndOfLine(editor: EditorView) {
+    const lineAt = editor.state.doc.lineAt(editor.state.selection.main.head)
+    editor.dispatch({ selection: { anchor: lineAt.to, head: lineAt.to } })
+}
+
+export function moveCursorToBeginOfLine(editor: EditorView) {
+    const lineAt = editor.state.doc.lineAt(editor.state.selection.main.head)
+    console.log('line at----------------\n')
+    console.log(lineAt)
+    const text = lineAt.text
+    const sArr = text.split(' ')
+    const pos = (sArr.length > 0 && text.startsWith('#')) ? lineAt.from + sArr[0].length : lineAt.from
+    editor.dispatch({ selection: { anchor: pos, head: pos } })
+}

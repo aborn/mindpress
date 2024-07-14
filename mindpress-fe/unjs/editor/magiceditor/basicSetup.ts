@@ -17,7 +17,8 @@ import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap } 
 import { lintKeymap } from "@codemirror/lint"
 import {
   commandBold, commandItalic, commandStrike, commandFormatMarkdown, commandCode, commandImg, commandLink
-  , commandPre, commandCheckBox, commandSeparator, commandQuote, commandTable, commandUnderline
+  , commandPre, commandCheckBox, commandSeparator, commandQuote, commandTable, commandUnderline,
+  moveCursorToBeginOfLine
 } from "~/unjs/editor/magiceditor/commands"
 import type { EditorView } from "codemirror"
 
@@ -96,6 +97,7 @@ export const myDefaultKeymap: readonly KeyBinding[] = ([
   { key: "Ctrl-m", mac: "Shift-Alt-m", run: toggleTabFocusMode },
   { key: "Ctrl-b", mac: "Cmd-b", run: commandBold },
   { key: 'Alt-t', mac: 'Cmd-t', run: commandTable },
+  { key: 'Ctrl-a', run: moveCursorToBeginOfLine },
   { key: 'Alt-i', mac: "Cmd-i", run: commandItalic },
   { key: 'Alt-s', mac: "Shift-Cmd-s", run: commandStrike },
   { key: 'Alt-e', mac: 'Cmd-e', run: commandCode },

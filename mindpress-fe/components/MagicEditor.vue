@@ -111,7 +111,7 @@
 
 <script lang="ts">
 import { basicSetup, EditorView, myDefaultKeymap, runCommand } from "~/unjs/editor/magiceditor/basicSetup"
-import { uploadFileCallback, commandImg } from "~/unjs/editor/magiceditor/commands"
+import { uploadFileCallback, commandImg, moveCursorToEndOfLine, moveCursorToBeginOfLine } from "~/unjs/editor/magiceditor/commands"
 import { markdown } from '~/unjs/editor/codemirror/markdown/index'
 import { languages } from "~/unjs/editor/codemirror/language-data/language-data"
 // import { basicSetup, EditorView } from "codemirror"
@@ -381,7 +381,27 @@ export default {
                     console.error('editor instance doesnot exists!')
                 }
                 this.$emit('save', this.editor.viewState.state.doc.toString())
-            } else if (e.key === "Escape") {
+            } else if (e.ctrlKey && e.key === 'e') {
+                e.preventDefault();
+                this.editor.focus()
+                //  current select position from to, if not selected, use cursor
+                const curPos = this.editor.state.selection;
+                const from = curPos.ranges && curPos.ranges[0].from
+                const to = curPos.ranges && curPos.ranges[0].to
+                // current line info
+                // const lineAt = this.editor.state.doc.lineAt(this.editor.state.selection.main.head)
+
+                moveCursorToEndOfLine(this.editor)
+            } else if (e.altKey && e.key === '.') {
+                e.preventDefault();
+                this.editor.focus()
+                const curPos = this.editor.state.selection;
+                const from = curPos.ranges && curPos.ranges[0].from
+                const to = curPos.ranges && curPos.ranges[0].to
+                console.log(' ###### from:' + from + ', to:' + to)
+                moveCursorToBeginOfLine(this.editor)
+            }
+            else if (e.key === "Escape") {
                 console.log('esc key click....')
                 this.fullPage = false;
                 this.fullScreen = false;
