@@ -18,7 +18,8 @@ import { lintKeymap } from "@codemirror/lint"
 import {
   commandBold, commandItalic, commandStrike, commandFormatMarkdown, commandCode, commandImg, commandLink
   , commandPre, commandCheckBox, commandSeparator, commandQuote, commandTable, commandUnderline,
-  moveCursorToBeginOfLine
+  moveCursorToBeginOfLine,
+  getCommandInsertPairFn
 } from "~/unjs/editor/magiceditor/commands"
 import type { EditorView } from "codemirror"
 
@@ -113,7 +114,9 @@ const funMap: any = {
   'link': commandLink,
   'strike': commandStrike,
   'italic': commandItalic,
-  'underline': commandUnderline,
+  'underline': getCommandInsertPairFn('<u>', '</u>'),
+  'subscript': getCommandInsertPairFn('<sub>', '</sub>'),
+  'superscript': getCommandInsertPairFn('<sup>', '</sup>'),
 }
 
 export function runCommand(_view: EditorView, command: string) {

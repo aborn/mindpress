@@ -38,6 +38,20 @@
                             <path fill="currentColor" d="M7.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 .5-.5" />
                         </svg>
                     </span>
+                    <span class="toolbaritem" @click="toobarItemAction('subscript')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M19 20v-2q0-.425.288-.712T20 17h2v-1h-3v-1h3q.425 0 .713.288T23 16v1q0 .425-.288.713T22 18h-2v1h3v1zM5.875 18l4.625-7.275L6.2 4h2.65l3.1 5h.1l3.075-5H17.8l-4.325 6.725L18.125 18H15.45l-3.4-5.425h-.1L8.55 18z" />
+                        </svg>
+                    </span>
+                    <span class="toolbaritem" @click="toobarItemAction('superscript')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 9V7q0-.425.288-.712T20 6h2V5h-3V4h3q.425 0 .713.288T23 5v1q0 .425-.288.713T22 7h-2v1h3v1zM5.875 20l4.625-7.275L6.2 6h2.65l3.1 5h.1l3.075-5H17.8l-4.325 6.725L18.125 20H15.45l-3.4-5.425h-.1L8.55 20z"/></svg>
+                    </span>
+                    <span style=" text-align: center;display: inline-block;padding: 4px 4px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
+                            <path fill="currentColor" d="M7.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 .5-.5" />
+                        </svg>
+                    </span>
                     <span class="toolbaritem" @click="toobarItemAction('image')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 16 16">
                             <path fill="currentColor" fill-rule="evenodd"
@@ -374,7 +388,7 @@ export default {
     mounted: function () {
         this.createArea(this.content);
         document.addEventListener('keydown', e => {
-            e.preventDefault();
+            // e.preventDefault();
             const lineAt = this.editor.state.doc.lineAt(this.editor.state.selection.main.head)
             const text = lineAt.text
             if (text.length > 0) {

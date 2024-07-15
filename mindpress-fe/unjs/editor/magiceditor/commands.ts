@@ -88,6 +88,13 @@ export function commandUnderline(editor: EditorView) {
     return true
 }
 
+export function getCommandInsertPairFn(prefix: string, suffix: string) {
+    return (editor: EditorView) => {
+        editor.dispatch(editor.state.changeByRange((range: SelectionRange) => replaceInlineCommand(editor, range, prefix, suffix)))
+        return true;
+    }
+}
+
 export function commandStrike(editor: EditorView) {
     editor.dispatch(editor.state.changeByRange((range: SelectionRange) => replaceInlineCommand(editor, range, '~~')))
     return true
