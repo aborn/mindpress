@@ -229,6 +229,10 @@ export default {
         },
         fullPage(newV, oldV) {
             this.$emit('fullpage', newV)
+            this.processEditorHeight()
+        },
+        fullScreen(newV, oldV) {
+            this.processEditorHeight()
         }
     },
     methods: {
@@ -258,6 +262,22 @@ export default {
                 scrolView.scrollTop = ratio * (iscrollH - iclientH)
             }
             //console.log('scrolling....' + clientH + '  ' + scrollH + '  :' + scrollTop + "  " + offsetH)
+        },
+        processEditorHeight() {
+            console.log('... processEditorHeight:' + this.fullPage + ", this.fullS:" + this.fullScreen)
+            if (this.fullPage || this.fullScreen) {
+                var sboxes = document.querySelectorAll(".cm-editor");
+                sboxes.forEach(function (box, index) {
+                    console.log(box)
+                    box.classList.add('cm-editor-fullpage');
+                })
+            } else {
+                var sboxes = document.querySelectorAll(".cm-editor");
+                sboxes.forEach(function (box, index) {
+                    console.log(box)
+                    box.classList.remove('cm-editor-fullpage');
+                })
+            }
         },
         toobarItemAction(type: string) {
             console.log(type)

@@ -499,6 +499,14 @@ input[type="title"] {
   height: 100%;
 }
 
+.cm-editor {
+  height: calc(100vh - 310px);
+}
+
+.cm-editor-fullpage {
+  height: calc(100vh - 100px);
+}
+
 section {
   height: 100%;
 }
