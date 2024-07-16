@@ -510,6 +510,7 @@ section {
   padding-left: var(--spacing);
   display: flex;
   flex-direction: column;
+  max-width:1330px;
 }
 
 .fullpage {
