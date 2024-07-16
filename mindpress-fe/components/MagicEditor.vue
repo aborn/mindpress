@@ -171,7 +171,7 @@ import { EditorSelection, SelectionRange, Compartment, EditorState } from '@code
 import { wxRenderer } from "~/unjs/render/wxRenderer"
 import { forceToArray, isBlank, showToast } from "~/unjs/utils"
 import { copyToWechat, mergeCss, solveWeChatImage } from "~/unjs/editor/wechat"
-import { MD_ORIGIN_CONTENT, MD_RECENT_CONTENT } from "~/unjs/editor/staticValue"
+import { MD_CURRENT_CONTENT, MD_ORIGIN_CONTENT, MD_RECENT_CONTENT } from "~/unjs/editor/staticValue"
 const debounce = createDebounce()
 
 export default {
@@ -435,7 +435,7 @@ export default {
 
                             if (update.docChanged || isBlank(this.output)) {
                                 console.log('--------markdown content changed--------')
-
+                                localStorage.setItem(MD_CURRENT_CONTENT, content)
                                 this.$emit('change', content)
                                 debounce(() => {
                                     const html = wxRenderer(content)
