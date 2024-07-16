@@ -50,7 +50,6 @@ import { wxRenderer } from "~/unjs/render/wxRenderer";
 import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
 import { color } from '@codemirror/theme-one-dark';
 import { forceToArray } from '~/unjs/utils';
-import mdcontent from '~/server/api/md/mdcontent';
 
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
