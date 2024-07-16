@@ -295,7 +295,7 @@ export default {
                 if (!mdContent) {
                     console.warn('no recent content.!')
                 }
-               
+
                 if (!this.isrecovered) {
                     const content = this.editor.state.doc.toString();
                     localStorage.setItem(MD_RECENT_CONTENT, content)
@@ -453,6 +453,10 @@ export default {
         onEditorScroll() {
             console.log('scrolling.......')
         }
+    },
+    beforeUnmount: function() {
+        console.log('befor unmount...')
+        this.$emit('save', this.editor.viewState.state.doc.toString())
     },
     mounted: function () {
         this.createArea(this.content);
