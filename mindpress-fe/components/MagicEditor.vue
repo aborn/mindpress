@@ -186,6 +186,7 @@ export default {
             footerinfo: '' as string,
             footerinfoR: '' as string,
             isrecovered: false as boolean,
+            isContentChanged: false as boolean,
         }
     },
     setup() {
@@ -358,10 +359,18 @@ export default {
                 })
             }
         },
-        doBeforeUnloadAction(e: any) {
-            // e.preventDefault();
-            console.log('before unload ')
-            this.$emit('save', this.editor.viewState.state.doc.toString())
+        doBeforeUnloadAction(e: any = null) {
+            // e && e.preventDefault();
+            console.log(' --->before unload<---')
+            const currentContent = localStorage.getItem(MD_CURRENT_CONTENT)
+            const originCOntent = localStorage.getItem(MD_ORIGIN_CONTENT)
+
+            if (originCOntent !== currentContent) {
+                console.log('content changed, now save it!')
+                this.$emit('save', this.editor.viewState.state.doc.toString())
+            } else {
+                console.log('content not change, no need to save!')
+            }
         },
         createArea(content: string) {
             if (content == undefined || content == null) {
@@ -461,6 +470,7 @@ export default {
                                 console.log('--------markdown content changed--------')
                                 localStorage.setItem(MD_CURRENT_CONTENT, content)
                                 this.$emit('change', content)
+                                this.isContentChanged = true; // 第一次请求网络的时候，这个内容也会更新
                                 debounce(() => {
                                     const html = wxRenderer(content)
                                     this.output = html
@@ -481,7 +491,7 @@ export default {
     beforeUnmount: function () {
         console.log('befor unmount...')
         if (!this.editor) { return }
-        this.$emit('save', this.editor.viewState.state.doc.toString())
+        this.doBeforeUnloadAction()
     },
     unmounted: function () {
         console.log('editor unmounted...')
