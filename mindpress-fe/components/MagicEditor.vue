@@ -266,19 +266,15 @@ export default {
         },
         processEditorHeight() {
             console.log('... processEditorHeight:' + this.fullPage + ", this.fullS:" + this.fullScreen)
-            if (this.fullPage || this.fullScreen) {
-                var sboxes = document.querySelectorAll(".cm-editor");
-                sboxes.forEach(function (box, index) {
-                    console.log(box)
-                    box.classList.add('cm-editor-fullpage');
-                })
-            } else {
-                var sboxes = document.querySelectorAll(".cm-editor");
-                sboxes.forEach(function (box, index) {
-                    console.log(box)
-                    box.classList.remove('cm-editor-fullpage');
-                })
-            }
+            var editors = document.querySelectorAll(".cm-editor");
+            editors.forEach((editor, index) => {
+                // console.log(editor)
+                if (this.fullPage || this.fullScreen) {
+                    editor.classList.add('cm-editor-fullpage');
+                } else {
+                    editor.classList.remove('cm-editor-fullpage');
+                }
+            })
         },
         toobarItemAction(type: string) {
             console.log(type)
