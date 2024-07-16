@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import { parseFrontMatter } from 'remark-mdc'
 import { extractBody } from '~/server/utils/markdownUtils';
+import { queryFileContent } from '~/server/utils/query/server-query';
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -29,36 +30,5 @@ export default defineEventHandler(async (event) => {
         file = query.file;
         articleid = query.articleid;
     }
-    let mdcontent
-    try {
-        const baseDir = __rootDir + '/content/';
-        console.log('file--->' + baseDir + file)
-        if (!fs.existsSync(baseDir + file)) {
-            return {
-                mdcontent: '',
-                mdheader: {},
-                api: 'mdcontent api works',
-                status: false,
-                msg: 'cannot query content, because file:' + baseDir + file + ' doesnot exists!'
-            }
-        }
-        mdcontent = fs.readFileSync(baseDir + file, 'utf8');
-    } catch (err) {
-        console.error(JSON.stringify(err));
-    }
-
-    let mdheader: any = '';
-    if (mdcontent) {
-        const { content, data: frontmatter } = await parseFrontMatter(mdcontent)
-        mdheader = frontmatter;
-        data = extractBody(content)
-    }
-
-    return {
-        mdcontent: data,
-        mdheader,
-        api: 'mdcontent api works',
-        status: true,
-        msg: 'query success'
-    }
+    return await queryFileContent({ file, articleid })
 })

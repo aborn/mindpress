@@ -98,40 +98,21 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     // console.log(toc.value)
 } else if (mp.mode == MINDPRESS_MODE.FCM) {
     try {
-        const dataQ = await $fetch('/api/md/query?_id=' + articleid.value)
+        // const { data: data } = await useFetch('/api/md/queryContent?_id=' + articleid.value) as any
+        // const dataQ = data.value
+        const dataQ = await $fetch('/api/md/queryContent?_id=' + articleid.value) as any
         console.log('***************  client api ---')
         console.log(dataQ)
-        const dataL = dataQ
-        console.log(dataL)
-        articles.value = dataL
-        articles.value.time = dataL.date
-        articles.value.author = mpFormatAuthor(dataL)
+        articles.value = dataQ
+        articles.value.time = dataQ.date
+        articles.value.author = mpFormatAuthor(dataQ)
         articles.value.articleid = articleid.value
-        toc.value = dataL.body && dataL.body.toc;
-        file.value = dataL._file;
-
-        $fetch('/api/md/mdcontent', {
-            key: articleid.value,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: {
-                file: file.value,
-                articleid: articleid.value
-            }
-        }).then((res) => {
-            // console.log(res)
-            if (res.status) {
-                const markdown = res.mdcontent;
-                const html = wxRenderer(markdown)
-                // console.log(html)
-                output.value = html
-            }
-        }, error => {
-            console.log('exception...')
-            console.log(error)
-        })
+        toc.value = dataQ.body && dataQ.body.toc;
+        file.value = dataQ._file;
+        const markdown = dataQ.mdcontent;
+        const html = wxRenderer(markdown)
+        // console.log(html)
+        output.value = html
     } catch (error) {
         console.warn(error)
     }

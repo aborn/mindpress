@@ -1,6 +1,8 @@
 import { type StorageValue, prefixStorage, type Storage, createStorage } from 'unstorage'
 import type { QueryParams } from '~/types'
 import { sortList } from '~/server/utils/query/sort';
+import { parseFrontMatter } from 'remark-mdc'
+import fs from 'node:fs';
 
 // TODO add filter function.
 export async function serverQueryContent(query: QueryParams) {
@@ -43,7 +45,7 @@ export async function serverQueryContent(query: QueryParams) {
     const sortedList = sortList(res, query.sort || { 'createTime': -1, 'title': 1 })
     // console.log('!!!!!!!!------sorted')
     // console.log(sortedList)
-    
+
     let pageNo = query.pageNo
     const pageSize = query.pageSize || 10
     if (pageNo) {
@@ -63,4 +65,42 @@ export async function serverQueryContent(query: QueryParams) {
     }
 
     return sortedList
+}
+
+export async function queryFileContent(query: { file: string, articleid: string }) {
+    let mdcontent
+    let data = '';
+    const { file, articleid } = query;
+    try {
+        const __rootDir = process.cwd();
+        const baseDir = __rootDir + '/content/';
+        console.log('file--->' + baseDir + file)
+        if (!fs.existsSync(baseDir + file)) {
+            return {
+                mdcontent: '',
+                mdheader: {},
+                api: 'mdcontent api works',
+                status: false,
+                msg: 'cannot query content, because file:' + baseDir + file + ' doesnot exists!'
+            }
+        }
+        mdcontent = fs.readFileSync(baseDir + file, 'utf8');
+    } catch (err) {
+        console.error(JSON.stringify(err));
+    }
+
+    let mdheader: any = '';
+    if (mdcontent) {
+        const { content, data: frontmatter } = await parseFrontMatter(mdcontent)
+        mdheader = frontmatter;
+        data = extractBody(content)
+    }
+
+    return {
+        mdcontent: data,
+        mdheader,
+        api: 'mdcontent api works',
+        status: true,
+        msg: 'query success'
+    }
 }
