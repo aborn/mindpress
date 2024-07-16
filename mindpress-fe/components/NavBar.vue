@@ -98,7 +98,7 @@ c-43 0 -78 -1 -78 -3z" />
         <NuxtLink to="/search" class="secondary">Search</NuxtLink>
       </li>
       <li>
-        <NuxtLink to="/edit" class="secondary">New file</NuxtLink>
+        <NuxtLink to="/md/edit" class="secondary">New file</NuxtLink>
       </li>
       <li>
         <NuxtLink to="/my" class="secondary">My docs</NuxtLink>

@@ -337,7 +337,7 @@ export default {
             }
         },
         createArea(content: string) {
-            if (!content && content.length == 0) {
+            if (content == undefined || content == null) {
                 return
             }
             localStorage.setItem(MD_ORIGIN_CONTENT, content)
@@ -454,14 +454,16 @@ export default {
             console.log('scrolling.......')
         }
     },
-    beforeUnmount: function() {
+    beforeUnmount: function () {
         console.log('befor unmount...')
+        if (!this.editor) { return }
         this.$emit('save', this.editor.viewState.state.doc.toString())
     },
     mounted: function () {
         this.createArea(this.content);
         document.addEventListener('keydown', e => {
             // e.preventDefault();
+            if (!this.editor) { return; }
             const lineAt = this.editor.state.doc.lineAt(this.editor.state.selection.main.head)
             const text = lineAt.text
             if (text.length > 0) {

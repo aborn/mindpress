@@ -50,6 +50,7 @@ import { wxRenderer } from "~/unjs/render/wxRenderer";
 import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
 import { color } from '@codemirror/theme-one-dark';
 import { forceToArray } from '~/unjs/utils';
+import mdcontent from '~/server/api/md/mdcontent';
 
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
@@ -154,7 +155,10 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     }
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
     let dataL: any;
-    if (articleid.value) {
+    if (!articleid.value) {
+        console.log('create new file!')
+        mkdContent.value = '';
+    } else {
         try {
             const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
             console.log('***************')
@@ -195,7 +199,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                 } else {
                     // console.log('-----------')
                     // console.log(res.mdcontent)
-                    mkdContent.value = res.mdcontent || ' '
+                    mkdContent.value = res.mdcontent || ''
                     console.log('content updated')
                     mdHeader.value = res.mdheader
                     // editor.value = initEditorEntity(mkdContent.value)

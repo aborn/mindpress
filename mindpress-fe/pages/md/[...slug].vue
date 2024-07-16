@@ -106,7 +106,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
         articles.value.time = dataL.date
         articles.value.author = mpFormatAuthor(dataL)
         articles.value.articleid = articleid.value
-        toc.value = dataL.body.toc;
+        toc.value = dataL.body && dataL.body.toc;
         file.value = dataL._file;
 
         $fetch('/api/md/mdcontent', {
