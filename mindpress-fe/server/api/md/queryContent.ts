@@ -20,6 +20,9 @@ export default defineEventHandler(async (event) => {
         serverQuery.pageSize = body.pageSize;
     }
     const res = await serverQueryContent(serverQuery);
+    if (Array.isArray(res) || res.pageNo) {
+        console.warn('return error in queryContent')
+    }
     const result = await queryFileContent({ file: res._file, articleid: query._id })
     // console.log(res)
     return { ...res, ...result };

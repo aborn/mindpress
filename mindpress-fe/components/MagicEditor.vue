@@ -225,6 +225,7 @@ export default {
                     changes: { from: 0, to: this.editor.state.doc.length, insert: newV }
                 });
             }
+            localStorage.setItem(MD_ORIGIN_CONTENT, newV)
         },
         fullPage(newV, oldV) {
             this.$emit('fullpage', newV)
@@ -292,10 +293,11 @@ export default {
             } else if ('recover' === type) {
                 if (!this.editor) { return; }
                 const mdContent = this.isrecovered ? localStorage.getItem(MD_RECENT_CONTENT) : localStorage.getItem(MD_ORIGIN_CONTENT)
-                if (!mdContent) {
+                if (!mdContent || mdContent.length == 0) {
                     console.warn('no recent content.!')
+                    showToast('no content to be recovered!')
+                    return;
                 }
-
                 if (!this.isrecovered) {
                     const content = this.editor.state.doc.toString();
                     localStorage.setItem(MD_RECENT_CONTENT, content)
@@ -304,7 +306,7 @@ export default {
                     changes: { from: 0, to: this.editor.state.doc.length, insert: mdContent }
                 });
 
-                showToast({ title: this.isrecovered ? 'Markdown data recover to recent!' : 'Markdown data recover to origin!' })
+                showToast(this.isrecovered ? 'Markdown data recover to recent!' : 'Markdown data recover to origin!')
                 this.isrecovered = !this.isrecovered
             } else {
                 runCommand(this.editor, type)
@@ -345,9 +347,7 @@ export default {
             if (content == undefined || content == null) {
                 return
             }
-            localStorage.setItem(MD_ORIGIN_CONTENT, content)
             const that = this;
-            const languageComp = new Compartment()
             const domEventHandlersPlugin = () => {
                 return EditorView.domEventHandlers({
                     scroll(e: any, view: any) {

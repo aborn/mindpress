@@ -39,6 +39,8 @@ export async function serverQueryContent(query: QueryParams) {
         const fond = res.find(i => i.permalink === ('/article/' + query._id) || i._id == query._id)
         if (fond) {
             return fond
+        } else {
+            console.error(`not find articleid=${query._id} file in server side.`)
         }
     }
 

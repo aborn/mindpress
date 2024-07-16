@@ -19,7 +19,9 @@ export function forceToArray(item: any) {
         return Array.isArray(item) ? item : [item]
     }
 }
-
+export function isString(str: any): boolean {
+    return typeof str === 'string' || str instanceof String
+}
 export function showToast(info: any, timeout: number = 3000) {
     var x = document.getElementById("snackbar") as HTMLFormElement;
     if (!x) {
@@ -27,6 +29,6 @@ export function showToast(info: any, timeout: number = 3000) {
         return
     }
     x.className = "show";
-    x.innerText = info.title || 'toast tips message!'
+    x.innerText = (isString(info) ? info : info.title) || 'toast tips message!'
     setTimeout(function () { x.className = x.className.replace("show", ""); }, timeout);
 }
