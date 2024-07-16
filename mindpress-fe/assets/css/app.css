@@ -121,11 +121,11 @@ img {
   --md-cm-selected-text-bg: #e5e9f0;
 }
 
-div>main {
+div > main {
   padding-top: calc(var(--block-spacing-vertical) + 2rem);
 }
 
-div>nav {
+div > nav {
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   z-index: 99;
   position: fixed;
@@ -152,11 +152,11 @@ nav ul {
   display: flex;
 }
 
-nav>a {
+nav > a {
   border-radius: 0;
 }
 
-nav>ul {
+nav > ul {
   align-items: center;
   padding: 0;
   list-style: none;
@@ -176,7 +176,7 @@ nav li :where(a, [role="link"]):not(:hover) {
   color: #181c25;
 }
 
-nav>ul>li {
+nav > ul > li {
   list-style: square;
   display: inline-block;
   padding: 1rem;
@@ -189,11 +189,11 @@ a.first {
   font-size: 1.5rem;
 }
 
-nav>svg {
+nav > svg {
   vertical-align: text-bottom;
 }
 
-nav>ul:first-of-type li:first-of-type a {
+nav > ul:first-of-type li:first-of-type a {
   width: 3.5rem;
   height: 3.5rem;
   margin-left: calc(var(--spacing) * -1);
@@ -202,18 +202,18 @@ nav>ul:first-of-type li:first-of-type a {
   color: var(--nav-logo-color);
 }
 
-nav>ul:first-of-type li:first-of-type a svg {
+nav > ul:first-of-type li:first-of-type a svg {
   height: 3.5rem;
 }
 
-nav>ul:first-of-type li:nth-of-type(2) {
+nav > ul:first-of-type li:nth-of-type(2) {
   display: none;
   margin-left: var(--spacing);
   color: var(--h1-color);
 }
 
 @media (min-width: 992px) {
-  nav>ul:first-of-type li:nth-of-type(2) {
+  nav > ul:first-of-type li:nth-of-type(2) {
     display: inline;
   }
 }
@@ -455,6 +455,7 @@ nav>ul:first-of-type li:nth-of-type(2) {
   margin-top: 3px;
   color: #8a919f;
   font-size: smaller;
+  margin-right: 10px;
 }
 
 .toolbarRow {
@@ -462,6 +463,13 @@ nav>ul:first-of-type li:nth-of-type(2) {
   border: 0.0625rem solid;
   border-color: var(--input-border-color);
   border-bottom: 0rem;
+}
+
+.footerbarRow {
+  border-radius: 0rem;
+  border: 0.0625rem solid;
+  border-color: var(--input-border-color);
+  border-top: 0rem;
 }
 
 input[type="title"] {
@@ -510,7 +518,7 @@ section {
   padding-left: var(--spacing);
   display: flex;
   flex-direction: column;
-  max-width:1330px;
+  max-width: 1330px;
 }
 
 .fullpage {

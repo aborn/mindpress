@@ -45,7 +45,10 @@
                         </svg>
                     </span>
                     <span class="toolbaritem" @click="toobarItemAction('superscript')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 9V7q0-.425.288-.712T20 6h2V5h-3V4h3q.425 0 .713.288T23 5v1q0 .425-.288.713T22 7h-2v1h3v1zM5.875 20l4.625-7.275L6.2 6h2.65l3.1 5h.1l3.075-5H17.8l-4.325 6.725L18.125 20H15.45l-3.4-5.425h-.1L8.55 20z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M19 9V7q0-.425.288-.712T20 6h2V5h-3V4h3q.425 0 .713.288T23 5v1q0 .425-.288.713T22 7h-2v1h3v1zM5.875 20l4.625-7.275L6.2 6h2.65l3.1 5h.1l3.075-5H17.8l-4.325 6.725L18.125 20H15.45l-3.4-5.425h-.1L8.55 20z" />
+                        </svg>
                     </span>
                     <span style=" text-align: center;display: inline-block;padding: 4px 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
@@ -59,9 +62,6 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </span>
-                </div>
-                <div class="toolbar-col">
-                    <div class="toobar-message-box" :style="`color: ${msg.color};`">{{ msg.desc }}</div>
                 </div>
                 <div class="toolbar-col">
                     <span class="toolbaritem" @click="toobarItemAction('save')">
@@ -120,6 +120,17 @@
                 </section>
             </div>
         </div>
+        <div class="row footerbarRow">
+            <div class="toolbaritems toolbaritems-wrapper">
+                <div style="padding: 5px;font-size: x-small;">
+                    <div>{{ footerinfo }}</div>
+                </div>
+                <div class="toobar-message-box" :style="`color: ${msg.color};`">{{ msg.desc }}</div>
+                <div style="padding: 5px;font-size: x-small;">
+                    <div>{{ fr }}</div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -144,7 +155,7 @@ import { copyToWechat, mergeCss, solveWeChatImage } from "~/unjs/editor/wechat"
 const debounce = createDebounce()
 
 export default {
-    props: ['content', 'csa', 'tips'],   // current scroll area, only: 'preview', 'editor'
+    props: ['content', 'csa', 'tips', 'title'],   // current scroll area, only: 'preview', 'editor'
     emits: ['change', 'save', 'uploadImg', 'fullpage'],
     name: "MarkdownEditor",
     data() {
@@ -152,6 +163,8 @@ export default {
             doc: this.content,
             editor: null as any,
             output: '' as string,
+            footerinfo: '' as string,
+            footerinfoR: '' as string
         }
     },
     setup() {
@@ -161,7 +174,8 @@ export default {
         const fullScreen = ref(false)
         const fullPage = ref(false)
         const curPos = 0;
-        return { previewRef, innnerCSA, editorContainerRef, fullScreen, fullPage, curPos }
+        const pos = {} as { from: number, to: number, pos: number, row: number, col: number, info: string };
+        return { previewRef, innnerCSA, editorContainerRef, fullScreen, fullPage, curPos, pos }
     },
     computed: {
         msg() {
@@ -171,7 +185,10 @@ export default {
             return this.fullPage ? 'fullpage' : ''
         },
         heightExp() {
-            return (this.fullPage || this.fullScreen) ? 55 : 270;
+            return (this.fullPage || this.fullScreen) ? 75 : 290;
+        },
+        fr() {
+            return (this.fullPage || this.fullScreen) ? this.title : '';
         }
     },
     watch: {
@@ -359,15 +376,28 @@ export default {
                         }),
                         EditorView.lineWrapping,
                         EditorView.updateListener.of((update: any) => {
+                            const content = update.state.doc.toString();
+
                             if (update.changes) {
                                 // all changes 
                                 // console.log('chnage. event.' + update.changes)
+
+                                const lineAt = this.editor.state.doc.lineAt(this.editor.state.selection.main.head)
+                                const currentPos = this.editor.state.selection.main.head
+                                const info = lineAt.number + "," + (currentPos - lineAt.from)
+                                this.pos = {
+                                    from: lineAt.from, to: lineAt.to, pos: currentPos, row: lineAt.number, col: (currentPos - lineAt.from),
+                                    info: lineAt.number + ':' + (currentPos - lineAt.from)
+                                }
+                                this.footerinfo = 'Ln ' + this.pos.row + ', Col ' + this.pos.col
+                                if (content && content.length > 0) {
+                                    this.footerinfo = this.footerinfo + ' ' + content.length
+                                }
                             }
 
                             if (update.docChanged || isBlank(this.output)) {
                                 console.log('--------markdown content changed--------')
-                                this.$emit('change', update.state.doc.toString())
-                                const content = update.state.doc.toString();
+                                this.$emit('change', content)
                                 debounce(() => {
                                     const html = wxRenderer(content)
                                     this.output = html

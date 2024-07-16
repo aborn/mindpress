@@ -9,7 +9,7 @@
                 </div>
             </div>
             <MagicEditor :content="mkdContent" @change="onChange" :tips="hint" @save="editorSaveAction"
-                @uploadImg="onUploadImg" @fullpage="onFullPageChange" />
+                @uploadImg="onUploadImg" @fullpage="onFullPageChange" :title="title" />
             <!--
             <div class="row">
                 <div class="column-all-goodle">
