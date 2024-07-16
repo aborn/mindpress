@@ -62,6 +62,18 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </span>
+                    <span class="toolbaritem" @click="toobarItemAction('recover')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22" viewBox="0 0 24 24">
+                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5" color="currentColor">
+                                <path d="M3 12c0 1.657 3.582 3 8 3q.508 0 1-.023" />
+                                <path d="M19 5v6.5M3 5v14c0 1.657 3.582 3 8 3q.508 0 1-.023" />
+                                <ellipse cx="11" cy="5" rx="8" ry="3" />
+                                <path
+                                    d="M7 8v2m0 5v2m12.987-3l.5 2.084l-.83-.518a3.5 3.5 0 0 0-2.122-.715c-1.952 0-3.535 1.6-3.535 3.575C14 20.4 15.583 22 17.535 22c1.71 0 3.137-1.228 3.465-2.86" />
+                            </g>
+                        </svg>
+                    </span>
                 </div>
                 <div class="toolbar-col">
                     <span class="toolbaritem" @click="toobarItemAction('save')">
@@ -152,6 +164,7 @@ import { EditorSelection, SelectionRange, Compartment, EditorState } from '@code
 import { wxRenderer } from "~/unjs/render/wxRenderer"
 import { forceToArray, isBlank } from "~/unjs/utils"
 import { copyToWechat, mergeCss, solveWeChatImage } from "~/unjs/editor/wechat"
+import { MD_ORIGIN_CONTENT, MD_RECENT_CONTENT } from "~/unjs/editor/staticValue"
 const debounce = createDebounce()
 
 export default {
@@ -268,8 +281,16 @@ export default {
             } else if ('pagefull' === type) {
                 console.log(this.fullPage)
                 this.fullPage = !this.fullPage
-            }
-            else {
+            } else if ('recover' === type) {
+                if (!this.editor) { return; }
+                const mdContent = localStorage.getItem(MD_ORIGIN_CONTENT)
+                if (!mdContent) {
+                    console.warn('no recent content.!')
+                }
+                this.editor.dispatch({
+                    changes: { from: 0, to: this.editor.state.doc.length, insert: mdContent }
+                });
+            } else {
                 runCommand(this.editor, type)
             }
         },
@@ -303,6 +324,7 @@ export default {
             if (!content && content.length == 0) {
                 return
             }
+            localStorage.setItem(MD_ORIGIN_CONTENT, content)
             const that = this;
             const languageComp = new Compartment()
             const domEventHandlersPlugin = () => {
@@ -397,6 +419,7 @@ export default {
 
                             if (update.docChanged || isBlank(this.output)) {
                                 console.log('--------markdown content changed--------')
+                                localStorage.setItem(MD_RECENT_CONTENT, content)
                                 this.$emit('change', content)
                                 debounce(() => {
                                     const html = wxRenderer(content)
