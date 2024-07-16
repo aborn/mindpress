@@ -62,7 +62,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </span>
-                    <span class="toolbaritem" @click="toobarItemAction('recover')">
+                    <span v-if="!isrecovered" class="toolbaritem" @click="toobarItemAction('recover')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22" viewBox="0 0 24 24">
                             <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                 stroke-width="1.5" color="currentColor">
@@ -72,6 +72,13 @@
                                 <path
                                     d="M7 8v2m0 5v2m12.987-3l.5 2.084l-.83-.518a3.5 3.5 0 0 0-2.122-.715c-1.952 0-3.535 1.6-3.535 3.575C14 20.4 15.583 22 17.535 22c1.71 0 3.137-1.228 3.465-2.86" />
                             </g>
+                        </svg>
+                    </span>
+                    <span v-if="isrecovered" class="toolbaritem" @click="toobarItemAction('recover')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" fill-rule="evenodd"
+                                d="M1.25 12C1.25 6.063 6.063 1.25 12 1.25S22.75 6.063 22.75 12S17.937 22.75 12 22.75S1.25 17.937 1.25 12m16.321-.89l-.05.055l-3.5 3.375a.75.75 0 1 1-1.042-1.08l2.163-2.085H9.789l-.062.004a2.5 2.5 0 0 0-.982.281a1.74 1.74 0 0 0-.673.624c-.178.288-.322.71-.322 1.341c0 1.438.567 2.032 1.029 2.312a2.25 2.25 0 0 0 1.014.313h.807a.75.75 0 0 1 0 1.5h-.8a3.7 3.7 0 0 1-1.798-.53c-.933-.565-1.752-1.658-1.752-3.595c0-.87.202-1.572.545-2.128c.341-.554.796-.92 1.238-1.157A4 4 0 0 1 9.8 9.875h5.433L12.96 7.521a.75.75 0 0 1 1.08-1.042l3.498 3.623a.75.75 0 0 1 .033 1.009"
+                                clip-rule="evenodd" />
                         </svg>
                     </span>
                 </div>
@@ -162,7 +169,7 @@ import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/ed
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorSelection, SelectionRange, Compartment, EditorState } from '@codemirror/state'
 import { wxRenderer } from "~/unjs/render/wxRenderer"
-import { forceToArray, isBlank } from "~/unjs/utils"
+import { forceToArray, isBlank, showToast } from "~/unjs/utils"
 import { copyToWechat, mergeCss, solveWeChatImage } from "~/unjs/editor/wechat"
 import { MD_ORIGIN_CONTENT, MD_RECENT_CONTENT } from "~/unjs/editor/staticValue"
 const debounce = createDebounce()
@@ -177,7 +184,8 @@ export default {
             editor: null as any,
             output: '' as string,
             footerinfo: '' as string,
-            footerinfoR: '' as string
+            footerinfoR: '' as string,
+            isrecovered: false as boolean,
         }
     },
     setup() {
@@ -283,13 +291,21 @@ export default {
                 this.fullPage = !this.fullPage
             } else if ('recover' === type) {
                 if (!this.editor) { return; }
-                const mdContent = localStorage.getItem(MD_ORIGIN_CONTENT)
+                const mdContent = this.isrecovered ? localStorage.getItem(MD_RECENT_CONTENT) : localStorage.getItem(MD_ORIGIN_CONTENT)
                 if (!mdContent) {
                     console.warn('no recent content.!')
+                }
+               
+                if (!this.isrecovered) {
+                    const content = this.editor.state.doc.toString();
+                    localStorage.setItem(MD_RECENT_CONTENT, content)
                 }
                 this.editor.dispatch({
                     changes: { from: 0, to: this.editor.state.doc.length, insert: mdContent }
                 });
+
+                showToast({ title: this.isrecovered ? 'Markdown data recover to recent!' : 'Markdown data recover to origin!' })
+                this.isrecovered = !this.isrecovered
             } else {
                 runCommand(this.editor, type)
             }
@@ -419,7 +435,7 @@ export default {
 
                             if (update.docChanged || isBlank(this.output)) {
                                 console.log('--------markdown content changed--------')
-                                localStorage.setItem(MD_RECENT_CONTENT, content)
+
                                 this.$emit('change', content)
                                 debounce(() => {
                                     const html = wxRenderer(content)
