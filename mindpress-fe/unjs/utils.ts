@@ -22,7 +22,7 @@ export function forceToArray(item: any) {
 export function isString(str: any): boolean {
     return typeof str === 'string' || str instanceof String
 }
-export function showToast(info: any, timeout: number = 3000) {
+export function showToast(info: any, type: string = 'success', timeout: number = 3000) {
     var x = document.getElementById("snackbar") as HTMLFormElement;
     if (!x) {
         console.warn('snackbar doesnot exists!')
@@ -30,5 +30,7 @@ export function showToast(info: any, timeout: number = 3000) {
     }
     x.className = "show";
     x.innerText = (isString(info) ? info : info.title) || 'toast tips message!'
-    setTimeout(function () { x.className = x.className.replace("show", ""); }, timeout);
+    const bgColor = (info.type == 'error' || type == 'error') ? '#e60012' : '#22db84'
+    x.setAttribute("style", `background-color: ${bgColor}`);
+    setTimeout(() => { x.className = x.className.replace("show", ""); }, timeout);
 }
