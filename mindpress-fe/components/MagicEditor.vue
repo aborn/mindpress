@@ -336,6 +336,11 @@ export default {
                 })
             }
         },
+        doBeforeUnloadAction(e: any) {
+            // e.preventDefault();
+            console.log('before unload ')
+            this.$emit('save', this.editor.viewState.state.doc.toString())
+        },
         createArea(content: string) {
             if (content == undefined || content == null) {
                 return
@@ -394,7 +399,6 @@ export default {
                     }
                 })
             }
-
             let view = new EditorView({
                 state: EditorState.create({
                     doc: content,  //文本内容
@@ -459,6 +463,10 @@ export default {
         if (!this.editor) { return }
         this.$emit('save', this.editor.viewState.state.doc.toString())
     },
+    unmounted: function () {
+        console.log('editor unmounted...')
+        window.removeEventListener("beforeunload", this.doBeforeUnloadAction)
+    },
     mounted: function () {
         this.createArea(this.content);
         document.addEventListener('keydown', e => {
@@ -520,6 +528,7 @@ export default {
                 this.fullPage = false;
             }
         })
+        window.addEventListener("beforeunload", this.doBeforeUnloadAction);
     }
 }
 </script>

@@ -80,7 +80,7 @@ function copyToWeChatAction() {
     copyToWechat(output.value)
 }
 
-console.log('mode===>' + mp.mode)
+console.log('mode===>' + mp.mode + ',  articleid.value=' + articleid.value)
 if (mp.mode === MINDPRESS_MODE.SSG) {
     hint.value = 'No content found.'
     const permalink = '/article/' + articleid.value
@@ -98,9 +98,10 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     // console.log(toc.value)
 } else if (mp.mode == MINDPRESS_MODE.FCM) {
     try {
-        const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
-        console.log('***************')
-        const dataL = dataQ.value
+        const dataQ = await $fetch('/api/md/query?_id=' + articleid.value)
+        console.log('***************  client api ---')
+        console.log(dataQ)
+        const dataL = dataQ
         console.log(dataL)
         articles.value = dataL
         articles.value.time = dataL.date

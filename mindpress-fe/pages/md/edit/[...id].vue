@@ -86,6 +86,13 @@ onMounted(() => {
     }
 })
 
+/**
+onBeforeRouteLeave((to, from) => {
+    const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
+    if (!answer) return false
+})
+ */
+
 function editorSaveAction(text: any) {
     console.log('save.........action.................')
     // console.log(text)
