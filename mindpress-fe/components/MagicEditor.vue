@@ -334,8 +334,8 @@ export default {
             }
         },
         commandSave(_view: EditorView) {
-            console.log('save action............')
-            console.log(_view)
+            console.log('commandSave action............')
+            // console.log(_view)
             // console.log(_view.viewState.state.doc.toString())
             this.$emit('save', _view.viewState.state.doc.toString())
             return true
@@ -470,7 +470,7 @@ export default {
                                 console.log('--------markdown content changed--------')
                                 localStorage.setItem(MD_CURRENT_CONTENT, content)
                                 this.$emit('change', content)
-                                this.isContentChanged = true; // 第一次请求网络的时候，这个内容也会更新
+                                this.isContentChanged = true; // 第一次请求网络的时候，这个内容也会更新，如何检测是手工更新的呢？？
                                 debounce(() => {
                                     const html = wxRenderer(content)
                                     this.output = html
@@ -495,6 +495,7 @@ export default {
     },
     unmounted: function () {
         console.log('editor unmounted...')
+        this.editor && this.editor.destroy()
         window.removeEventListener("beforeunload", this.doBeforeUnloadAction)
     },
     mounted: function () {
