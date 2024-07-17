@@ -12,7 +12,8 @@ export function generatePermalinkHash(len: number = 16) {
 }
 
 export function generateAutoSaveTitle(date: Date = new Date()) {
-    return 'Auto Save ' + dateFormat(date, false)
+    const title = 'Auto Save ' + dateFormat(date, false)
+    return title.replace(/:/g, '');
 }
 
 export const MD_DIVIDER = '<!-- Content of the page -->';

@@ -49,7 +49,7 @@ import { generateAutoSaveTitle, imageMatches } from '~/server/utils/markdownUtil
 import { wxRenderer } from "~/unjs/render/wxRenderer";
 import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
 import { color } from '@codemirror/theme-one-dark';
-import { forceToArray, showToast } from '~/unjs/utils';
+import { forceToArray, isBlank, showToast } from '~/unjs/utils';
 import { AUTO_SAVE } from '~/unjs/editor/staticValue';
 
 // docs==> https://vuejs.org/api/sfc-script-setup.html
@@ -281,8 +281,14 @@ function saveAction(text: string, type: string = 'default') {
         return;
     }
 
-    if (type == AUTO_SAVE && !title.value) {
-        title.value = generateAutoSaveTitle()
+    if (type == AUTO_SAVE) {
+        if (!title.value) {
+            title.value = generateAutoSaveTitle()
+        }
+        if (isBlank(text)) {
+            console.log('auto save content is blank, not save it!')
+            return;
+        }
     }
 
     const bodyContent = {

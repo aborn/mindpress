@@ -5,7 +5,7 @@ import { generatePermalinkHash, downloadImageAndReplaseContent, MD_DIVIDER, buil
 import { validateToken } from '~/server/utils/settingsUtils';
 import { dateFormat } from '../../utils/date'
 import { updateCache } from '../../storage'
-import { isBlank } from '~/unjs/utils';
+import { isBlank, isValidFilename } from '~/unjs/utils';
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -104,8 +104,12 @@ export default defineEventHandler(async (event) => {
         }
 
         file = subDir + articleTitle + ".md"
+        const isValidate = isValidFilename(articleTitle);
+        if (!isValidate) {
+            console.warn('invalid fileName:' + file)
+        }
         // if file exists, generate new random name!
-        if (fs.existsSync(baseDir + file)) {
+        if (fs.existsSync(baseDir + file) || !isValidate) {
             file = subDir + permalinkHash + ".md"
         }
         isCreateFile = true;
@@ -145,7 +149,6 @@ export default defineEventHandler(async (event) => {
     header = header + `---\n\n${MD_DIVIDER}\n`;
     try {
         fs.writeFileSync(baseDir + file, header + content);
-
         // async updateCache.
         updateCache(file).then(() => {
             console.log('update cache success! triggle by:' + file)

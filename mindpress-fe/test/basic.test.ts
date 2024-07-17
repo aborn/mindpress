@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildHeaderArray, generateAutoSaveTitle } from '../server/utils/markdownUtils'
-import { permalinkAdapt } from '../unjs/utils'
+import { permalinkAdapt, isValidFilename } from '../unjs/utils'
 import { dateFormat } from '../server/utils/date'
 
 
@@ -12,8 +12,12 @@ describe('markdownUtils test', () => {
     }),
         it('test generateAutoSaveTitle', () => {
             const date = new Date();
-            const res = 'Auto Save ' + dateFormat(date, false);
+            const res = ('Auto Save ' + dateFormat(date, false)).replace(/:/g, '');;
             expect(generateAutoSaveTitle(date)).toBe(res);
+
+        }),
+        it('test validate file name', () => {
+            expect(isValidFilename('Auto Save 2024-07-17 231325.md')).toBe(true)
         })
 })
 
