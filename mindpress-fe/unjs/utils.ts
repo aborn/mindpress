@@ -22,6 +22,7 @@ export function forceToArray(item: any) {
 export function isString(str: any): boolean {
     return typeof str === 'string' || str instanceof String
 }
+
 export function showToast(info: any, type: string = 'success', timeout: number = 3000) {
     var x = document.getElementById("snackbar") as HTMLFormElement;
     if (!x) {

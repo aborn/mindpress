@@ -3,11 +3,16 @@ import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 import https from 'https'
+import { dateFormat } from './date'
 
 export function generatePermalinkHash(len: number = 16) {
     const uuid = uuidv4();
     const permalink = uuid.replace(/-/g, '');
     return permalink.length > len ? permalink.substring(permalink.length - len) : permalink
+}
+
+export function generateAutoSaveTitle(date: Date = new Date()) {
+    return 'Auto Save ' + dateFormat(date, false)
 }
 
 export const MD_DIVIDER = '<!-- Content of the page -->';

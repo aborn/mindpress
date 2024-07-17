@@ -171,7 +171,8 @@ import { EditorSelection, SelectionRange, Compartment, EditorState } from '@code
 import { wxRenderer } from "~/unjs/render/wxRenderer"
 import { forceToArray, isBlank, showToast } from "~/unjs/utils"
 import { copyToWechat, mergeCss, solveWeChatImage } from "~/unjs/editor/wechat"
-import { MD_CURRENT_CONTENT, MD_ORIGIN_CONTENT, MD_RECENT_CONTENT } from "~/unjs/editor/staticValue"
+import { AUTO_SAVE, MD_CURRENT_CONTENT, MD_ORIGIN_CONTENT, MD_RECENT_CONTENT } from "~/unjs/editor/staticValue"
+import { countWords, countLines } from "alfaaz";
 const debounce = createDebounce()
 
 export default {
@@ -363,7 +364,7 @@ export default {
 
             if (originCOntent !== currentContent) {
                 console.log('content changed, now save it!')
-                this.$emit('save', this.editor.viewState.state.doc.toString())
+                this.$emit('save', this.editor.viewState.state.doc.toString(), AUTO_SAVE)
             } else {
                 console.log('content not change, no need to save!')
             }
@@ -458,7 +459,7 @@ export default {
                                 }
                                 this.footerinfo = 'Ln ' + this.pos.row + ', Col ' + this.pos.col
                                 if (content && content.length > 0) {
-                                    this.footerinfo = this.footerinfo + ' ' + content.length
+                                    this.footerinfo = this.footerinfo + '  ch ' + content.length + ' word ' + countWords(content)
                                 }
                             }
 

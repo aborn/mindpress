@@ -45,11 +45,12 @@
 import { ref } from 'vue';
 import { mpConfig } from '~~/composables/utils';
 import axios from 'axios'
-import { imageMatches } from '~/server/utils/markdownUtils';
+import { generateAutoSaveTitle, imageMatches } from '~/server/utils/markdownUtils';
 import { wxRenderer } from "~/unjs/render/wxRenderer";
 import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
 import { color } from '@codemirror/theme-one-dark';
-import { forceToArray } from '~/unjs/utils';
+import { forceToArray, showToast } from '~/unjs/utils';
+import { AUTO_SAVE } from '~/unjs/editor/staticValue';
 
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
@@ -92,11 +93,11 @@ onBeforeRouteLeave((to, from) => {
 })
  */
 
-function editorSaveAction(text: any) {
-    console.log('save.........action.................')
+function editorSaveAction(text: any, type: string = 'default') {
+    console.log('save.........action.................' + type)
     // console.log(text)
     console.log('now save it !...')
-    saveAction(text)
+    saveAction(text, type)
 }
 
 let file = ref<string | undefined>('');
@@ -245,7 +246,7 @@ const onTokenSubmit = () => {
     }
 }
 
-function saveAction(text: string) {
+function saveAction(text: string, type: string = 'default') {
     if (mp.mode === MINDPRESS_MODE.SSG) {
         console.error("SSG mode cannot save edit content!")
         hint.value = {
@@ -264,7 +265,7 @@ function saveAction(text: string) {
     }
 
     console.log('title:' + title.value)
-    console.log('--- now save event triggled. articleid=' + articleid.value + '---')
+    console.log('--- now save event triggled. articleid=' + articleid.value + '---' + type)
     // console.log(text)            
     const requestSpace = articleid.value + "t" + new Date()
     // static mode for save to local files !!
@@ -272,11 +273,16 @@ function saveAction(text: string) {
 
     const token = localStorage.getItem('token');
     if (!token) {
+        console.warn('without token, save failed!')
         isOpen.value = true
         if (tokenInput && tokenInput.value) {
             tokenInput.value.focus()
         }
         return;
+    }
+
+    if (type == AUTO_SAVE && !title.value) {
+        title.value = generateAutoSaveTitle()
     }
 
     const bodyContent = {
@@ -339,6 +345,9 @@ function saveAction(text: string) {
                     desc: res.msg + " , Time: " + mpFormatDate(new Date()),
                     color: 'orange'
                 }
+                if (type === 'autosave') {
+                    console.error('autosave failed. reason: ' + res.msg, 'error');
+                }
             }
         }, error => {
             console.log('exception...')
@@ -349,7 +358,6 @@ function saveAction(text: string) {
                 color: 'orange'
             }
         })
-
 }
 
 const onUploadImg = async (files: any, callback: any) => {
