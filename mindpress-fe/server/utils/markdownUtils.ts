@@ -3,7 +3,7 @@ import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 import https from 'https'
-import { dateFormat } from './date'
+import { dateFormat } from '../../unjs/utils/date'
 
 export function generatePermalinkHash(len: number = 16) {
     const uuid = uuidv4();

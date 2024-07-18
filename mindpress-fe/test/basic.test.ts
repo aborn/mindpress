@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { buildHeaderArray, generateAutoSaveTitle } from '../server/utils/markdownUtils'
-import { permalinkAdapt, isValidFilename } from '../unjs/utils'
-import { dateFormat } from '../server/utils/date'
+import { permalinkAdapt, isValidFilename } from '../unjs/utils/utils'
+import { dateFormat } from '../unjs/utils/date'
 
 
 describe('markdownUtils test', () => {

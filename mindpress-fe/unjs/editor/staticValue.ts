@@ -4,3 +4,6 @@ export const MD_CURRENT_CONTENT = "MD_CURRENT_CONTENT";  // 当前内容，用�
 
 
 export const AUTO_SAVE = 'autosave'
+
+export const AUTH_TOKEN = 'token'
+export const AUTH_VALIDATE_SUCCESS_TIME = 'token_validate_success_time';

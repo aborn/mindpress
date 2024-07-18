@@ -1,8 +1,23 @@
+import { isString } from './utils'
+
 export const dateFormat = (date: Date, fullFormat: boolean = false) => {
     if (!date) {
         date = new Date();
     }
-    return fullFormat ? date.format("yyyy-MM-dd hh:mm:ss.S") :  date.format("yyyy-MM-dd hh:mm:ss");
+    return fullFormat ? date.format("yyyy-MM-dd hh:mm:ss.S") : date.format("yyyy-MM-dd hh:mm:ss");
+}
+
+export const diffSecond = (date: Date | String, currentDate: Date = new Date()) => {
+    const d = isString(date) ? new Date(date as string) : date as Date
+    let diffSecond =
+        (currentDate.getTime() - d.getTime()) / 1000;
+    return Math.round(diffSecond)
+}
+
+export const diffHour = (date: Date | String, currentDate: Date = new Date()) => {
+    if (!date) { return 0; }
+    const dS = diffSecond(date, currentDate);
+    return dS / 3600
 }
 
 Date.prototype.format = function (fmt) {

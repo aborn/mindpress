@@ -46,7 +46,6 @@ export function markdown(config: {
     /// disable this.
     completeHTMLTags?: boolean
 } = {}) {
-    console.log('now markdown extesion....')
     let { codeLanguages,
         defaultCodeLanguage,
         addKeymap = true,

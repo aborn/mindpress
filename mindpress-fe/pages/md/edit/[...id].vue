@@ -47,8 +47,10 @@ import { mpConfig } from '~~/composables/utils';
 import axios from 'axios'
 import { generateAutoSaveTitle, imageMatches } from '~/server/utils/markdownUtils';
 import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
-import { forceToArray, isBlank, showToast } from '~/unjs/utils';
-import { AUTO_SAVE } from '~/unjs/editor/staticValue';
+import { forceToArray, isBlank, showToast } from '~/unjs/utils/utils';
+import { validateToken } from '~/unjs/inf/auth'
+import { diffHour } from '~/unjs/utils/date'
+import { AUTH_VALIDATE_SUCCESS_TIME, AUTO_SAVE } from '~/unjs/editor/staticValue';
 
 // docs==> https://vuejs.org/api/sfc-script-setup.html
 const route = useRoute()
@@ -81,6 +83,22 @@ onMounted(() => {
         if (titleInput && titleInput.value) {
             titleInput.value.focus()
         }
+    }
+    const lastValidateTime = localStorage.getItem(AUTH_VALIDATE_SUCCESS_TIME) as string
+    console.log('lastValidate:' + lastValidateTime + '  diffHour:' + diffHour(lastValidateTime))
+    if (!lastValidateTime || diffHour(lastValidateTime) > 24) {
+        validateToken(() => {
+            isOpen.value = true
+            if (tokenInput && tokenInput.value) {
+                tokenInput.value.focus()
+            }
+        }).then((res: any) => {
+            console.log('finished')
+        }, error => {
+            console.log('err:' + error)
+        }).catch((res: any) => {
+            console.log('exp:' + res)
+        })
     }
 })
 
@@ -210,11 +228,23 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
 const onTokenSubmit = () => {
     console.log('token submit')
     console.log('value:' + token.value)
-    console.log(mkdContent.value)
     if (token.value && token.value.length > 0) {
         isOpen.value = false;
-        localStorage.setItem('token', token.value);
-        saveAction(mkdContent.value)
+        localStorage.setItem('token', token.value)
+        validateToken(() => {
+            console.warn('onTokenSubmit validate token failed token:' + token.value)
+            hint.value = {
+                title: 'Error',
+                desc: "Token:" + token.value + ' validate error, you can only view this file, cannot save it!',
+                color: 'orange'
+            }
+        }).then((res: any) => {
+            console.log('finished')
+        }, error => {
+            console.log('err:' + error)
+        }).catch((res: any) => {
+            console.log('exp:' + res)
+        })
     } else {
         isOpen.value = true;
     }
@@ -231,7 +261,7 @@ function saveAction(text: string, type: string = 'default') {
         return
     }
     const extInfo = simpleParser(text)
-    console.log(extInfo)
+    // console.log(extInfo)
 
     if ((!title.value || title.value.trim().length === 0) && extInfo.title && extInfo.title !== '') {
         title.value = extInfo.title
@@ -239,22 +269,12 @@ function saveAction(text: string, type: string = 'default') {
         title.value = generateAutoSaveTitle()
     }
 
-    console.log('title:' + title.value)
+    // console.log('title:' + title.value)
     console.log('--- now save event triggled. articleid=' + articleid.value + '---' + type)
     // console.log(text)            
     const requestSpace = articleid.value + "t" + new Date()
     // static mode for save to local files !!
     extInfo.mode = mp.mode;
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-        console.warn('without token, save failed!')
-        isOpen.value = true
-        if (tokenInput && tokenInput.value) {
-            tokenInput.value.focus()
-        }
-        return;
-    }
 
     if (type == AUTO_SAVE && isBlank(text)) {
         console.log('auto save content is blank, not save it!')
@@ -272,13 +292,15 @@ function saveAction(text: string, type: string = 'default') {
         header: mdHeader.value,
         ...bodyExtra
     }
+
     hint.value = {
         title: "save......",
         color: 'primary',
         desc: 'save......'
     }
-    console.log(bodyContent)
-    console.log(mp.contentUrl)
+    // console.log(bodyContent)
+    // console.log(mp.contentUrl)
+    const token = localStorage.getItem('token');
     $fetch(mp.mode === MINDPRESS_MODE.FCM ? '/api/md/savecontent' : mp.contentUrl,
         {
             key: requestSpace,

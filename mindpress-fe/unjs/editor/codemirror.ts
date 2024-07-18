@@ -11,7 +11,7 @@ import { search } from '@codemirror/search'
 import * as prettier from 'prettier/standalone'
 import pluginMarkdown from 'prettier/plugins/markdown'
 
-import { isBlank } from '../utils'
+import { isBlank } from '../utils/utils'
 
 
 /**

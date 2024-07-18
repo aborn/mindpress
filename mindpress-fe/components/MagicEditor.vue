@@ -169,7 +169,7 @@ import { basicLight, basicLightTheme, basicLightHighlightStyle } from "~/unjs/ed
 import { oneDark } from '@codemirror/theme-one-dark'
 import { EditorSelection, SelectionRange, Compartment, EditorState } from '@codemirror/state'
 import { wxRenderer } from "~/unjs/render/wxRenderer"
-import { forceToArray, isBlank, showToast } from "~/unjs/utils"
+import { forceToArray, isBlank, showToast } from "~/unjs/utils/utils"
 import { copyToWechat, mergeCss, solveWeChatImage } from "~/unjs/editor/wechat"
 import { AUTO_SAVE, MD_CURRENT_CONTENT, MD_ORIGIN_CONTENT, MD_RECENT_CONTENT } from "~/unjs/editor/staticValue"
 import { countWords, countLines } from "alfaaz";
