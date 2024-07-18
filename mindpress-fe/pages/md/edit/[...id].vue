@@ -46,9 +46,7 @@ import { ref } from 'vue';
 import { mpConfig } from '~~/composables/utils';
 import axios from 'axios'
 import { generateAutoSaveTitle, imageMatches } from '~/server/utils/markdownUtils';
-import { wxRenderer } from "~/unjs/render/wxRenderer";
 import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
-import { color } from '@codemirror/theme-one-dark';
 import { forceToArray, isBlank, showToast } from '~/unjs/utils';
 import { AUTO_SAVE } from '~/unjs/editor/staticValue';
 
@@ -161,66 +159,42 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
         }
     }
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
-    let dataL: any;
     if (!articleid.value) {
         console.log('create new file!')
         mkdContent.value = '';
     } else {
-        try {
-            const { data: dataQ } = await useFetch('/api/md/query?_id=' + articleid.value)
-            console.log('***************')
-            dataL = dataQ.value
-            console.log(dataL)
-        } catch (error) {
-            console.warn(error)
-        }
-        file.value = dataL._file;
-        console.log(dataL)
-        const idxNames = ['author', 'authors', 'permalink']
-        idxNames.forEach(item => {
-            if (dataL.hasOwnProperty(item)) {
-                bodyExtra[item] = dataL[item]
+        // const { data: data } = await useFetch('/api/md/queryContent?_id=' + articleid.value) as any
+        // const dataQ = data.value
+        $fetch('/api/md/queryContent?_id=' + articleid.value).then((res: any) => {
+            console.log(res)
+            if (!res.status) {
+                hint.value = {
+                    title: 'Info',
+                    desc: res.msg,
+                    color: 'primary'
+                }
+            } else {
+                mkdContent.value = res.mdcontent || ''
+                console.log('content updated')
+                mdHeader.value = res.mdheader
+                title.value = res.title
+                file.value = res._file;
+                const idxNames = ['author', 'authors', 'permalink']
+                idxNames.forEach(item => {
+                    if (res.hasOwnProperty(item)) {
+                        bodyExtra[item] = res[item]
+                    }
+                })
+            }
+        }, error => {
+            console.log('exception...')
+            console.log(error)
+            hint.value = {
+                title: 'Error',
+                desc: "request exception" + error,
+                color: 'orange'
             }
         })
-
-        title.value = dataL.title
-        $fetch('/api/md/mdcontent',
-            {
-                key: articleid,
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: {
-                    file: file.value,
-                    articleid: articleid.value
-                }
-            }).then((res: any) => {
-                // console.log(res)
-                if (!res.status) {
-                    hint.value = {
-                        title: 'Info',
-                        desc: res.msg,
-                        color: 'primary'
-                    }
-                } else {
-                    // console.log('-----------')
-                    // console.log(res.mdcontent)
-                    mkdContent.value = res.mdcontent || ''
-                    console.log('content updated')
-                    mdHeader.value = res.mdheader
-                    // editor.value = initEditorEntity(mkdContent.value)
-                    // console.log(editor.value)
-                }
-            }, error => {
-                console.log('exception...')
-                console.log(error)
-                hint.value = {
-                    title: 'Error',
-                    desc: "request exception" + error,
-                    color: 'orange'
-                }
-            })
     }
 } else {
     const dataAx = await getDataAx()
