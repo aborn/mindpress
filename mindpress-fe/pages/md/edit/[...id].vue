@@ -230,12 +230,13 @@ function saveAction(text: string, type: string = 'default') {
         }
         return
     }
-    const route = useRoute()
     const extInfo = simpleParser(text)
     console.log(extInfo)
 
     if ((!title.value || title.value.trim().length === 0) && extInfo.title && extInfo.title !== '') {
         title.value = extInfo.title
+    } else if (type == AUTO_SAVE && !title.value) {
+        title.value = generateAutoSaveTitle()
     }
 
     console.log('title:' + title.value)
@@ -255,14 +256,9 @@ function saveAction(text: string, type: string = 'default') {
         return;
     }
 
-    if (type == AUTO_SAVE) {
-        if (!title.value) {
-            title.value = generateAutoSaveTitle()
-        }
-        if (isBlank(text)) {
-            console.log('auto save content is blank, not save it!')
-            return;
-        }
+    if (type == AUTO_SAVE && isBlank(text)) {
+        console.log('auto save content is blank, not save it!')
+        return;
     }
 
     const bodyContent = {
