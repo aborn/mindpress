@@ -3,6 +3,7 @@ import type { QueryParams } from '~/types'
 import { sortList } from '~/server/utils/query/sort';
 import { parseFrontMatter } from 'remark-mdc'
 import fs from 'node:fs';
+import { getMindPressRootPath } from '~/unjs/inf/env'
 
 // TODO add filter function.
 export async function serverQueryContent(query: QueryParams) {
@@ -74,7 +75,7 @@ export async function queryFileContent(query: { file: string, articleid: string 
     let data = '';
     const { file, articleid } = query;
     try {
-        const __rootDir = process.cwd();
+        const __rootDir = getMindPressRootPath();
         const baseDir = __rootDir + '/content/';
         console.log('file--->' + baseDir + file)
         if (!fs.existsSync(baseDir + file)) {

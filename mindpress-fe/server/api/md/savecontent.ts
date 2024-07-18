@@ -6,6 +6,7 @@ import { validateToken } from '~/server/utils/settingsUtils';
 import { dateFormat } from '~/unjs/utils/date'
 import { updateCache } from '../../storage'
 import { isBlank, isValidFilename } from '~/unjs/utils/utils';
+import { getMindPressRootPath } from '~/unjs/inf/env'
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -91,7 +92,7 @@ export default defineEventHandler(async (event) => {
 
     let isCreateFile = false;
     const computerName = os.hostname()
-    const __rootDir = process.cwd();
+    const __rootDir = getMindPressRootPath();
     console.log('cccccccnnnnn->' + computerName + ",,,," + __rootDir)
 
     const baseDir = __rootDir + '/content/';
