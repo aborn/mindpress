@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import https from 'https'
 import { dateFormat } from '../../unjs/utils/date'
+import { getMindPressRootPath } from '../../unjs/inf/env'
 
 export function generatePermalinkHash(len: number = 16) {
     const uuid = uuidv4();
@@ -59,7 +60,8 @@ export function extraWithSurroundings(idx: IdxStruct, value: string) {
 }
 
 export function makeSureImagePathExists() {
-    const imagePath = path.join(process.cwd(), MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH)
+    const ROOT_PATH = getMindPressRootPath();
+    const imagePath = path.join(ROOT_PATH, IMAGE_UPLOAD_PATH)
     if (!fs.existsSync(imagePath)) {
         console.log(imagePath + ' doesnot exists! now create it!')
         fs.mkdirSync(imagePath, { recursive: true });

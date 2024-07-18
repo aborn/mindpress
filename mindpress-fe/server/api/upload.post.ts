@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import { generatePermalinkHash, IMAGE_UPLOAD_PATH, MINDPRESS_ROOT_PATH, makeSureImagePathExists, buildImageUrl } from '../utils/markdownUtils'
 import type { ImageItem } from '~/types';
+import { getMindPressRootPath } from '../../unjs/inf/env'
 
 export default defineEventHandler(async (event) => {
   console.log("----------- nitro ------------")
@@ -23,8 +24,9 @@ export default defineEventHandler(async (event) => {
     }
 
     const rdmFileName = buildRandomFileName(articleid as string, file.filename);
-    const destPath = path.join(MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, rdmFileName);
-    const filePath = path.join(process.cwd(), destPath)
+    const destPath = path.join(IMAGE_UPLOAD_PATH, rdmFileName);
+    const ROOT_PATH = getMindPressRootPath()
+    const filePath = path.join(ROOT_PATH, destPath)
 
     console.log(filePath)
     try {

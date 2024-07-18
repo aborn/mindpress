@@ -5,21 +5,23 @@ import fs from 'node:fs';
 import path from 'path'
 import { MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, makeSureImagePathExists } from '~/server/utils/markdownUtils'
 import { reloadConfigFile, useAdaptFile } from '../utils/settingsUtils';
+import { getMindPressRootPath } from '~/unjs/inf/env'
 
 
 export default defineNitroPlugin(async (nitroApp) => {
     //console.log('Nitro plugin', nitroApp)
     const storage = prefixStorage(useStorage(), 'markdown:source');
     const cacheParsedStorage = prefixStorage(useStorage(), 'cache:markdown:parsed')
-
+    const ROOT_PATH = getMindPressRootPath()
+    console.log('nitro init, mindpress rootpath=' + ROOT_PATH)
     const sources = {} as any;
     sources['markdown:source'] = {
         driver: 'fs',
-        base: './content'
+        base: path.join(ROOT_PATH, '/content')
     }
 
     for (const [key, source] of Object.entries(sources)) {
-        storage.mount(key, fsDriver({ base: './content' }));
+        storage.mount(key, fsDriver({ base: path.join(ROOT_PATH, '/content') }));
     }
     const length = 'markdown:source'.length;
     let keys = await storage.getKeys('markdown:source')
