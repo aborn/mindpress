@@ -38,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from "marked";
 import { wxRenderer } from "~/unjs/render/wxRenderer";
 import { config } from '~/unjs/render/config'
 import { copyToWechat } from "~/unjs/editor/wechat";
@@ -85,7 +84,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     hint.value = 'No content found.'
     const permalink = '/article/' + articleid.value
     console.log(permalink)
-    const dataL = articleid.value.indexOf(':') >= 0 ?
+    const dataL: any = articleid.value.indexOf(':') >= 0 ?
         await queryContent().where({ _id: { $eq: articleid.value } }).findOne()
         : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
     console.log(dataL)
@@ -120,7 +119,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     console.log('server mode.')
     const url = mp.contentUrl + "/" + articleid.value
     // console.log(url)
-    const { data } = await useFetch(url)
+    const { data } = await useFetch(url) as any
     // console.log(data.value)
     const content = ref(data.value.content)
     const { data: doc, refresh } = await useAsyncData(articleid.value, async () => {

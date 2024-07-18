@@ -10,13 +10,6 @@
             </div>
             <MagicEditor :content="mkdContent" @change="onChange" :tips="hint" @save="editorSaveAction"
                 @uploadImg="onUploadImg" @fullpage="onFullPageChange" :title="title" />
-            <!--
-            <div class="row">
-                <div class="column-all-goodle">
-                    <UAlert v-if="hint.title" :title="`${hint.desc}`" :color="`${hint.color}`" />
-                </div>
-            </div>
-            -->
         </main>
         <div id="snackbar"></div>
         <UModal v-model="isOpen" prevent-close>
@@ -46,7 +39,6 @@ import { ref } from 'vue';
 import { mpConfig } from '~~/composables/utils';
 import axios from 'axios'
 import { generateAutoSaveTitle, imageMatches } from '~/server/utils/markdownUtils';
-import { initEditorEntity } from '~/unjs/editor/codeMirrorEditor';
 import { forceToArray, isBlank, showToast } from '~/unjs/utils/utils';
 import { validateToken } from '~/unjs/inf/auth'
 import { diffHour } from '~/unjs/utils/date'
@@ -59,7 +51,6 @@ const tokenInput = ref(null as any)
 const title = ref<string | undefined>('')
 const token = ref<string | undefined>('')
 const mkdContent = ref('')
-const scrollToRatio = ref(0)
 const hint = ref({} as any)
 const debounce = createDebounce()
 const articleids = route.params.id
@@ -101,13 +92,6 @@ onMounted(() => {
         })
     }
 })
-
-/**
-onBeforeRouteLeave((to, from) => {
-    const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-    if (!answer) return false
-})
- */
 
 function editorSaveAction(text: any, type: string = 'default') {
     console.log('save.........action.................' + type)

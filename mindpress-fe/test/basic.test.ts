@@ -3,7 +3,6 @@ import { buildHeaderArray, generateAutoSaveTitle } from '../server/utils/markdow
 import { permalinkAdapt, isValidFilename } from '../unjs/utils/utils'
 import { dateFormat } from '../unjs/utils/date'
 
-
 describe('markdownUtils test', () => {
     it('test buildHeaderArray', () => {
         const input = ['demo', 'test']
