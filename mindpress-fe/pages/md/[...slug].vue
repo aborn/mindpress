@@ -93,6 +93,10 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     articles.value.author = mpFormatAuthor(dataL)
     articles.value.articleid = articleid.value
     toc.value = dataL.body.toc;
+    const markdown = compileHastToStringify(dataL.body)
+    const html = wxRenderer(markdown)
+    // console.log(html)
+    output.value = html
     // console.log('toc value....')
     // console.log(toc.value)
 } else if (mp.mode == MINDPRESS_MODE.FCM) {
