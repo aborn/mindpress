@@ -4,9 +4,9 @@ interface MindPressConfStrut {
     author: string
 }
 
-const DEFAULTCONF: MindPressConfStrut = {
+export const DEFAULTCONF: MindPressConfStrut = {
     "title": "MindPress",
-    "token": "",
+    "token": "",   // no need for validation for default.
     "author": "Aborn Jiang"
 }
 
