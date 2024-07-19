@@ -6,6 +6,7 @@ import path from 'path'
 import { MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, makeSureImagePathExists } from '~/server/utils/markdownUtils'
 import { reloadConfigFile, useAdaptFile } from '../utils/settingsUtils';
 import { getMindPressRootPath } from '~/unjs/inf/env'
+import { CONFIG_FILE_NAME } from '~/unjs/inf/conf';
 
 
 export default defineNitroPlugin(async (nitroApp) => {
@@ -42,24 +43,32 @@ export default defineNitroPlugin(async (nitroApp) => {
     const config = useRuntimeConfig();
     const mdConfig = config.public.mindpress
     const runtimeConfigFile = process.env.MINDPRESS_CONF
-    const confFile = useAdaptFile(runtimeConfigFile, mdConfig.conf, path.join(process.cwd(), MINDPRESS_ROOT_PATH, "mindpress.conf"))
+    // const confFile = useAdaptFile(runtimeConfigFile, mdConfig.conf, path.join(process.cwd(), MINDPRESS_ROOT_PATH, CONFIG_FILE_NAME))
+    const confFile = path.join(ROOT_PATH, CONFIG_FILE_NAME)
     console.log('current use confFile=' + confFile + ', runtimeConfigFile=' + runtimeConfigFile)
     const configStorage = useStorage('MINDPRESS_CONFIG')
+    let watched = false;
 
     try {
         if (fs.existsSync(confFile)) {
-            fs.watchFile(confFile, function (curr, prev) {
-                console.log(`file ${confFile} changed event`);
-                console.log(`the current mtime is: ${curr.mtime}`);
-                console.log(`the previous mtime was: ${prev.mtime}`);
-                reloadConfigFile().then(() => {
-                    console.log('reloadConfigFile success based on watch!')
-                })
-            });
-            await reloadConfigFile(confFile)
+            await watchConfigFile(confFile)
             await configStorage.setItem<any>('configfile', confFile)
         } else {
             console.warn(confFile + ' doesnot exists!')
+            fs.watch(ROOT_PATH, async function (event, filename) {
+                console.log('event is: ' + event);
+                if (filename === CONFIG_FILE_NAME) {
+                    if (event == 'rename' && fs.existsSync(confFile)) {
+                        if (!watched) {
+                            await watchConfigFile(confFile)
+                            watched = true;
+                        }
+                    }
+                    console.log(CONFIG_FILE_NAME + " event:" + event)
+                } else {
+                    console.log(`filename: ${filename} changed event:` + event);
+                }
+            });
         }
     } catch (err) {
         console.error(err)
@@ -68,3 +77,15 @@ export default defineNitroPlugin(async (nitroApp) => {
     console.log('-------mdConfig value---')
     console.log(mdConfig)
 })
+
+async function watchConfigFile(confFile: string) {
+    fs.watchFile(confFile, function (curr, prev) {
+        console.log(`file ${confFile} changed event`);
+        console.log(`the current mtime is: ${curr.mtime}`);
+        console.log(`the previous mtime was: ${prev.mtime}`);
+        reloadConfigFile().then(() => {
+            console.log('reloadConfigFile success based on watch!')
+        })
+    });
+    await reloadConfigFile(confFile)
+}
