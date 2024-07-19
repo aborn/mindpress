@@ -51,17 +51,18 @@ export default defineNitroPlugin(async (nitroApp) => {
 
     try {
         if (fs.existsSync(confFile)) {
+            watched = true
             await watchConfigFile(confFile)
             await configStorage.setItem<any>('configfile', confFile)
         } else {
             console.warn(confFile + ' doesnot exists!')
             fs.watch(ROOT_PATH, async function (event, filename) {
-                console.log('event is: ' + event);
+                console.log(ROOT_PATH + 'is watching, event is: ' + event);
                 if (filename === CONFIG_FILE_NAME) {
                     if (event == 'rename' && fs.existsSync(confFile)) {
                         if (!watched) {
-                            await watchConfigFile(confFile)
                             watched = true;
+                            await watchConfigFile(confFile)
                         }
                     }
                     console.log(CONFIG_FILE_NAME + " event:" + event)
