@@ -4,7 +4,7 @@
         <main class="container">
             <UTable :columns="selectedColumns" :rows="rows">
                 <template #title-data="{ row }">
-                    <NuxtLink :to="row.permalink">
+                    <NuxtLink :to="row.permdlink">
                         {{ row.title }}
                     </NuxtLink>
                 </template>

@@ -1,3 +1,4 @@
+import { permalinkAdapt } from '~/unjs/utils/utils';
 import type { MarkdownMetaS, MarkdownMeta } from './types';
 
 export const mpTransform = (server: MarkdownMetaS): MarkdownMeta => {
@@ -78,6 +79,8 @@ export const staticMdTransform = (md: any) => {
         permalinkOrigin: md.permalink,
         permalink: md.permalink ? md.permalink :
             (md._id ? ("/article?id=" + md._id) : md._path),
+        permdlink: md.permalink ? permalinkAdapt(md.permalink) :
+            (md._id ? ("/md?id=" + md._id) : md._path),
         date: md.date ? md.date : (md.createTime ? md.createTime : new Date()),
         createTime: md.createTime ? md.createTime : new Date(),
         updateTime: md.updateTime ? md.updateTime : (md.date ? md.date : new Date()),
