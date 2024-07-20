@@ -30,17 +30,9 @@ export default defineEventHandler(async (event) => {
     console.log(req.url)
     //console.log(query)
 
-    let file;
-    let articleid;
-    let body: any;
-    if (req.method === 'POST') {
-        body = await readBody(event)
-        file = body.file;
-        articleid = body.articleid;
-    } else {
-        file = query.file;
-        articleid = query.articleid;
-    }
+    let body: any = await readBody(event);
+    let file = body.file;
+    let articleid = body.articleid;
 
     const todayDate = dateFormat(new Date());
     const articleTitle = body.title
