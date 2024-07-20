@@ -1,7 +1,7 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import os from 'node:os';
-import { generatePermalinkHash, downloadImageAndReplaseContent, MD_DIVIDER, buildHeaderArray } from '../../utils/markdownUtils'
+import { generatePermalinkHash, downloadImageAndReplaseContent, MD_DIVIDER, buildHeaderArray, buildHeaderKeyValue, extractBody } from '../../utils/markdownUtils'
 import { validateToken } from '~/server/utils/settingsUtils';
 import { dateFormat } from '~/unjs/utils/date'
 import { updateCache } from '../../storage'
@@ -118,16 +118,7 @@ export default defineEventHandler(async (event) => {
 })
 
 async function buildContent(body: any) {
-    let content = body.content
-    if (body.content) {
-        let idx = body.content.lastIndexOf(MD_DIVIDER);
-        if (idx >= 0) {
-            // console.log('find it!!!' + idx)
-            content = body.content.substring(idx + MD_DIVIDER.length + 1)
-            // console.log(content)
-        }
-    }
-
+    let content = extractBody(body.content)
     const contentUpdate = await downloadImageAndReplaseContent(content);
     content = contentUpdate.state ? contentUpdate.content : content;
     return {
@@ -201,8 +192,4 @@ async function buildHeader(body: any, isCreateNewFile: boolean, extra: any = {})
 
     header = header + `---\n\n${MD_DIVIDER}\n`;
     return header;
-}
-
-function buildHeaderKeyValue(key: string, value: string) {
-    return `${key}: '` + value + `'\n`
 }

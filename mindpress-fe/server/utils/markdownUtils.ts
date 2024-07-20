@@ -27,6 +27,10 @@ export function extractBody(content: string | null) {
     return (idx >= 0) ? content.substring(idx + MD_DIVIDER.length + 1) : content
 }
 
+export function buildHeaderKeyValue(key: string, value: string) {
+    return `${key}: '` + value + `'\n`
+}
+
 export interface IdxStruct {
     s: number,
     e: number

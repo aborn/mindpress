@@ -1,7 +1,8 @@
 import { getMindPressRootPath } from '~/unjs/inf/env'
 import fs from 'node:fs';
 import { updateCache } from '../../storage'
-
+import { extractBody, buildHeaderArray, buildHeaderKeyValue } from '../../utils/markdownUtils'
+import { dateFormat } from '~/unjs/utils/date';
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -22,15 +23,14 @@ export default defineEventHandler(async (event) => {
     }
 
     console.log(req.url)
-    //console.log(query)
-
     let body: any = await readBody(event);
     let file = body.file;
     let articleid = body.articleid;
+    const mpstatus = body.mpstatus
     const articleTitle = body.title
 
-    let header: string = '';
-    const content = buildContent(body)
+    let header: string = buildHeader(body, mpstatus);
+    const content = extractBody(body)
     const __rootDir = getMindPressRootPath();
     const baseDir = __rootDir + '/content/';
 
@@ -62,15 +62,30 @@ export default defineEventHandler(async (event) => {
 
 })
 
-function buildContent(body: any) {
-    let content = body.content
-    if (body.content) {
-        let idx = body.content.lastIndexOf(MD_DIVIDER);
-        if (idx >= 0) {
-            // console.log('find it!!!' + idx)
-            content = body.content.substring(idx + MD_DIVIDER.length + 1)
-            // console.log(content)
+function buildHeader(body: any, mpstatus: string): string {
+    let header = ''
+    let mppubtimeIsUpdated = false;
+    if (body && body.header) {
+        for (let [key, value] of Object.entries(body.header)) {
+            if (body.header.hasOwnProperty(key)) {
+                if ('category' === key || 'tag' === key) {
+                    header = header + `${key}: ` + buildHeaderArray(value as any[]) + ``
+                } else if (mpstatus === 'publish' && key === 'mpstatus') {
+                    header = buildHeaderKeyValue(key, mpstatus)
+                    if (!mppubtimeIsUpdated) {
+                        header = buildHeaderKeyValue('mppubtime', dateFormat(new Date()))
+                        mppubtimeIsUpdated = true
+                    }
+                } else if (key === 'mppubtime' && mpstatus === 'publish') {
+                    if (!mppubtimeIsUpdated) {
+                        header = buildHeaderKeyValue('mppubtime', dateFormat(new Date()))
+                        mppubtimeIsUpdated = true
+                    }
+                } else {
+                    header = header + buildHeaderKeyValue(key, value as string)
+                }
+            }
         }
     }
-    return content
+    return header
 }
