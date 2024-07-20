@@ -56,6 +56,10 @@ function loadingMore() {
   if (!isLoading.value && !isLastPage.value) {
     isLoading.value = true
     try {
+      if (mp.mode == MINDPRESS_MODE.SSG) {
+        return;
+      }
+      
       console.log("pageNo==" + pageNo.value)
       const url = (mp.mode == MINDPRESS_MODE.FCM) ? '/api/md/query' : (mp.mode == MINDPRESS_MODE.SCM ? mp.metaUrl : null)
       queryPageData({ pageNo: pageNo.value, url: url }).then((res) => {
@@ -99,7 +103,6 @@ function handleScroll(e) {
       console.log('You are at the bottom! isLoading=' + isLoading.value + ', is isLastPage=' + isLastPage.value)
       showLoadingComponent.value = true;
       loadingMore()
-
     } else {
       showLoadingComponent.value = false;
     }
