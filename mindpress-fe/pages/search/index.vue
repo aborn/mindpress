@@ -23,7 +23,9 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import type { SearchParams } from "~/types";
+import { doMiniSearch, searchContentWrap, searchMindPressSSG } from "~/unjs/search/minisearch";
 import type { MarkdownMetaPageResponse, MarkdownMetaS, MarkdownMeta } from "~~/composables/types";
+
 const search = ref("")
 const mp = mpConfig(useRuntimeConfig().public.mindpress)
 const hint = ref("")
@@ -50,6 +52,24 @@ function searchShows(searchKey: string) {
   if (mp.mode === MINDPRESS_MODE.SSG) {
     loading.value = true
     let startTime = performance.now()
+
+    searchMindPressSSG(searchKey).then(async (searchResult: any) => {
+      console.log(searchResult)
+
+      if (searchResult.length > 0) {
+        articles.value = searchResult as any;
+        let endTime = performance.now()
+        let timeCost = (endTime - startTime).toFixed(2)
+        hint.value = `Mindpress found <span style="color:red">${searchResult.length}</span> files (key:<span style="color:red">${searchKey}</span>). Time cost: ${timeCost} milliseconds.`
+        loading.value = false
+      } else {
+        articles.value = []
+        hint.value = "no markdown file find." + mp.mode
+        loading.value = false
+      }
+    })
+
+    /**
     searchContent(searchKey).then(async (res: any) => {
       const searchResult = res.value
       console.log(searchResult)
@@ -75,7 +95,8 @@ function searchShows(searchKey: string) {
         hint.value = "no markdown file find." + mp.mode
         loading.value = false
       }
-    })
+    })*/
+
     articles.value = []
     hint.value = "no markdown file find." + mp.mode
     loading.value = false

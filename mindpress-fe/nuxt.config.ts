@@ -29,7 +29,10 @@ export default defineNuxtConfig({
         },
         experimental: {
             search: {
-                indexed: true
+                indexed: true,
+                options: {
+                    fields: ['title', 'content', 'description'],
+                }
             }
         }
     },
