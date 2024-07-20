@@ -2,6 +2,7 @@ import type { SearchParams } from "~/types";
 import { type StorageValue, prefixStorage, type Storage, createStorage } from 'unstorage'
 import MiniSearch from 'minisearch'
 import { hightlightTitle } from "../markdownUtils";
+import { extractBody } from '~/unjs/utils/markdown'
 
 export async function serverSearchContent(query: SearchParams) {
     console.log('    +++++ serverSearchContent --')

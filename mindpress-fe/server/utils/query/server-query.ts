@@ -4,6 +4,7 @@ import { sortList } from '~/server/utils/query/sort';
 import { parseFrontMatter } from 'remark-mdc'
 import fs from 'node:fs';
 import { getMindPressRootPath } from '~/unjs/inf/env'
+import { extractBody } from '~/unjs/utils/markdown'
 
 // TODO add filter function.
 export async function serverQueryContent(query: QueryParams) {

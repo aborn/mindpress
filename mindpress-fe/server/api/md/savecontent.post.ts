@@ -1,12 +1,13 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import os from 'node:os';
-import { generatePermalinkHash, downloadImageAndReplaseContent, MD_DIVIDER, buildHeaderArray, buildHeaderKeyValue, extractBody } from '../../utils/markdownUtils'
+import { generatePermalinkHash, downloadImageAndReplaseContent } from '../../utils/markdownUtils'
 import { validateToken } from '~/server/utils/settingsUtils';
 import { dateFormat } from '~/unjs/utils/date'
 import { updateCache } from '../../storage'
 import { isBlank, isValidFilename } from '~/unjs/utils/utils';
 import { getMindPressRootPath } from '~/unjs/inf/env'
+import { buildHeaderArray, MD_DIVIDER, buildHeaderKeyValue, extractBody } from '~/unjs/utils/markdown'
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")

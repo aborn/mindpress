@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { buildHeaderArray, generateAutoSaveTitle } from '../server/utils/markdownUtils'
+import { generateAutoSaveTitle } from '../server/utils/markdownUtils'
 import { permalinkAdapt, isValidFilename } from '../unjs/utils/utils'
 import { dateFormat } from '../unjs/utils/date'
+import { buildHeaderArray } from '../unjs/utils/markdown'
 
 describe('markdownUtils test', () => {
     it('test buildHeaderArray', () => {

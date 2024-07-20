@@ -17,20 +17,8 @@ export function generateAutoSaveTitle(date: Date = new Date()) {
     return title.replace(/:/g, '');
 }
 
-export const MD_DIVIDER = '<!-- Content of the page -->';
 export const IMAGE_UPLOAD_PATH = "uploads"
 export const MINDPRESS_ROOT_PATH = "mindpress"
-
-export function extractBody(content: string | null) {
-    if (!content) { return '' }
-    let idx = content.lastIndexOf(MD_DIVIDER);
-    return (idx >= 0) ? content.substring(idx + MD_DIVIDER.length + 1) : content
-}
-
-export function buildHeaderKeyValue(key: string, value: string) {
-    return `${key}: '` + value + `'\n`
-}
-
 export interface IdxStruct {
     s: number,
     e: number
@@ -209,16 +197,4 @@ async function downloadImageHttps(url: string, file: any, filePath: string) {
         });
     })
     return result;
-}
-
-export function buildHeaderArray(arrayVal: any[]) {
-    if (arrayVal.length == 0) {
-        return ''
-    }
-
-    let initValue = '\n';
-    arrayVal.forEach(item => {
-        initValue = initValue + "  - " + item + "\n"
-    })
-    return initValue
 }

@@ -1,8 +1,8 @@
 import { getMindPressRootPath } from '~/unjs/inf/env'
 import fs from 'node:fs';
 import { updateCache } from '../../storage'
-import { extractBody, buildHeaderArray, buildHeaderKeyValue } from '../../utils/markdownUtils'
 import { dateFormat } from '~/unjs/utils/date';
+import { buildHeaderArray, buildHeaderKeyValue, extractBody } from '~/unjs/utils/markdown'
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
