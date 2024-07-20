@@ -33,8 +33,6 @@ export default defineEventHandler(async (event) => {
     let body: any = await readBody(event);
     let file = body.file;
     let articleid = body.articleid;
-
-    const todayDate = dateFormat(new Date());
     const articleTitle = body.title
     if (isBlank(articleTitle)) {
         return {
@@ -43,44 +41,7 @@ export default defineEventHandler(async (event) => {
             msg: 'article title cannot be blank!',
         }
     }
-
-    let header =
-        `---\ntitle: '` + articleTitle + `'\n` +
-        `date: '` + todayDate + `'\n`;
-
-    console.log('---body header---')
-    console.log(body.header)
-    console.log('----------')
-    const idxNames = ['author', 'authors', 'permalink', 'category', 'tag']
-    idxNames.forEach(item => {
-        if (body.hasOwnProperty(item)) {
-            if ('permalink' === item) {
-                if (body.header && body.header.permalink) {
-                    header = header + `permalink: '` + body.header.permalink + `'\n`
-                } else if (body[item] && body[item].indexOf(':') < 0) {
-                    header = header + `permalink: '` + body[item] + `'\n`
-                }
-            } else {
-                if ('author' === item || 'authors' === item) {
-                    const value = JSON.stringify(body[item])
-                    header = header + item + `: ` + value + `\n`
-                } else {
-                    header = header + item + `: '` + body[item] + `'\n`
-                }
-            }
-        } else if (body && body.header && body.header.hasOwnProperty(item)) {
-            console.log('itttttteeeeeeeeeeemmm:' + item)
-            console.log(body.header[item])
-            if ('category' === item || 'tag' === item) {
-                header = header + `${item}: ` + buildHeaderArray(body.header[item]) + ``
-            } else {
-                header = header + `${item}: '` + body.header[item] + `'\n`
-            }
-        }
-    })
-
-    // console.log('------bodyheader-----')
-    // console.log(body.header)
+    let header: string;
 
     let isCreateFile = false;
     const computerName = os.hostname()
@@ -107,39 +68,21 @@ export default defineEventHandler(async (event) => {
         }
         isCreateFile = true;
         console.log("create new file, file name=" + file)
-        const settings = await useStorage('MINDPRESS_CONFIG').getItem<SettingStruct>('settings')
-        const author = settings && settings.author ?
-            `author: {"name":"${settings.author}","link":"${settings.author}"}\n` : ''
-        header = header +
-            `createTime: '` + dateFormat(new Date()) + `'\n` +
-            `permalink: '/article/` + permalinkHash + `'\n` + author
+        header = await buildHeader(body, true, { permalinkHash })
     } else { // file exists!
-        if (body.header && body.header.createTime) {
-            header = header + `createTime: '` + body.header.createTime + `'\n`
-        } else if (fs.existsSync(baseDir + file)) {
+        if (fs.existsSync(baseDir + file)) {
             const stats = fs.statSync(baseDir + file);
-            // console.log(stats);
-            header = header +
-                `createTime: '` + dateFormat(new Date(stats.birthtimeMs > 0 ? stats.birthtime : stats.ctime), true) + `'\n`
+            const createTime = dateFormat(new Date(stats.birthtimeMs > 0 ? stats.birthtime : stats.ctime), true)
+            header = await buildHeader(body, false, { createTime })
+        } else {
+            header = await buildHeader(body, false)
         }
     }
 
-    let content = body.content
-    if (body.content) {
-        let idx = body.content.lastIndexOf(MD_DIVIDER);
-        if (idx >= 0) {
-            // console.log('find it!!!' + idx)
-            content = body.content.substring(idx + MD_DIVIDER.length + 1)
-            // console.log(content)
-        }
-    }
-
-    const contentUpdate = await downloadImageAndReplaseContent(content);
-    content = contentUpdate.state ? contentUpdate.content : content;
-
-    console.log('hhhh--header-----' + contentUpdate.state)
+    let contentStruct = await buildContent(body)
+    const content = contentStruct.content
     console.log(header)
-    header = header + `---\n\n${MD_DIVIDER}\n`;
+
     try {
         fs.writeFileSync(baseDir + file, header + content);
         // async updateCache.
@@ -167,9 +110,93 @@ export default defineEventHandler(async (event) => {
         msg: 'articleid=' + (articleid || file) + ", save success!",
         ext: {
             file: file,
-            contentUpdate: contentUpdate.state,
-            content: contentUpdate.state ? contentUpdate.content : ''
+            contentUpdate: contentStruct.state,
+            content: contentStruct.state ? content : ''
         },
         isCreateFile
     }
 })
+
+async function buildContent(body: any) {
+    let content = body.content
+    if (body.content) {
+        let idx = body.content.lastIndexOf(MD_DIVIDER);
+        if (idx >= 0) {
+            // console.log('find it!!!' + idx)
+            content = body.content.substring(idx + MD_DIVIDER.length + 1)
+            // console.log(content)
+        }
+    }
+
+    const contentUpdate = await downloadImageAndReplaseContent(content);
+    content = contentUpdate.state ? contentUpdate.content : content;
+    return {
+        content,
+        state: contentUpdate.state
+    }
+}
+
+async function buildHeader(body: any, isCreateNewFile: boolean, extra: any = {}): Promise<string> {
+    const articleTitle = body.title
+    const todayDate = dateFormat(new Date());  // update time
+    let header =
+        `---\ntitle: '` + articleTitle + `'\n` +
+        `date: '` + todayDate + `'\n`;
+    const idxNames = ['author', 'authors', 'permalink', 'category', 'tag']
+
+    console.log('---body header---')
+    console.log(body.header)
+    console.log('----------')
+
+    idxNames.forEach(item => {
+        if (body.hasOwnProperty(item)) {
+            if ('permalink' === item) {
+                if (body.header && body.header.permalink) {
+                    header = header + `permalink: '` + body.header.permalink + `'\n`
+                } else if (body[item] && body[item].indexOf(':') < 0) {
+                    header = header + `permalink: '` + body[item] + `'\n`
+                }
+            } else {
+                if ('author' === item || 'authors' === item) {
+                    const value = JSON.stringify(body[item])
+                    header = header + item + `: ` + value + `\n`
+                } else {
+                    header = header + item + `: '` + body[item] + `'\n`
+                }
+            }
+        } else if (body && body.header && body.header.hasOwnProperty(item)) {
+            console.log('itttttteeeeeeeeeeemmm:' + item)
+            console.log(body.header[item])
+            if ('category' === item || 'tag' === item) {
+                header = header + `${item}: ` + buildHeaderArray(body.header[item]) + ``
+            } else {
+                header = header + `${item}: '` + body.header[item] + `'\n`
+            }
+        }
+    })
+
+    let createTimeUpdate = false;
+    if (body.header && body.header.createTime) {
+        header = header + `createTime: '` + body.header.createTime + `'\n`
+        createTimeUpdate = true
+    }
+
+    if (isCreateNewFile) {
+        const settings = await useStorage('MINDPRESS_CONFIG').getItem<SettingStruct>('settings')
+        const author = settings && settings.author ?
+            `author: {"name":"${settings.author}","link":"${settings.author}"}\n` : ''
+        const permalinkHash = extra.permalinkHash
+        header = header +
+            `createTime: '` + dateFormat(new Date()) + `'\n` +
+            `permalink: '/article/` + permalinkHash + `'\n` + author
+    } else {
+        const createTime = extra.createTime
+        if (createTime && !createTimeUpdate) {
+            header = header +
+                `createTime: '` + createTime + `'\n`
+        }
+    }
+
+    header = header + `---\n\n${MD_DIVIDER}\n`;
+    return header;
+}
