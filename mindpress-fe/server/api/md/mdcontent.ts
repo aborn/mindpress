@@ -1,7 +1,6 @@
 import { defineEventHandler } from 'h3'
 import fs from 'node:fs';
 import os from 'node:os';
-import { parseFrontMatter } from 'remark-mdc'
 import { queryFileContent } from '~/server/utils/query/server-query';
 
 export default defineEventHandler(async (event) => {

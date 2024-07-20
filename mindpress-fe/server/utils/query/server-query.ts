@@ -5,6 +5,8 @@ import { parseFrontMatter } from 'remark-mdc'
 import fs from 'node:fs';
 import { getMindPressRootPath } from '~/unjs/inf/env'
 import { extractBody } from '~/unjs/utils/markdown'
+import { MOCK_MD_CONTENT, MOCK_MD_CONTENT2, MOCK_MD_HEADER } from '~/test/mock/mockdata'
+
 
 // TODO add filter function.
 export async function serverQueryContent(query: QueryParams) {
@@ -94,8 +96,16 @@ export async function queryFileContent(query: { file: string, articleid: string 
     }
 
     let mdheader: any = '';
+    //console.warn('--------------mkdcont------')
+    //console.log(mdcontent)
+    if (mdcontent === MOCK_MD_CONTENT2) {
+        console.error('eeeeeeeeeeee')
+    } else {
+        console.warn('nooooooooooooooooooo' + MOCK_MD_CONTENT2.length + '   ,,,,' + mdcontent?.length)
+        
+    }
     if (mdcontent) {
-        const { content, data: frontmatter } = await parseFrontMatter(mdcontent)
+        const { content, data: frontmatter } = await parseFrontMatter(MOCK_MD_CONTENT2)
         mdheader = frontmatter;
         data = extractBody(content)
     }
