@@ -3,8 +3,9 @@ export const MD_DIVIDER = '<!-- Content of the page -->';
 export const MD_HEADER_KEYS = ['title', 'date', 'authors', 'author', 'permalink', 'category', 'tag', 'createTime', 'mpid', 'mpstatus']
 import { parseFrontMatter } from 'remark-mdc'
 
-export function buildHeaderKeyValue(key: string, value: string) {
-    return `${key}: '` + value + `'\n`
+export function buildHeaderKeyValue(key: string, value: string, useQuote: boolean = true) {
+    return useQuote ? `${key}: '` + value + `'\n`
+        : `${key}: ` + value + `\n`
 }
 
 export function updateHeaderKeyValue(headerObj: any, key: string, value: any) {
@@ -21,12 +22,13 @@ export function updateHeaderKeyValue(headerObj: any, key: string, value: any) {
     MD_HEADER_KEYS.forEach(item => {
         if (headerObj.hasOwnProperty(item)) {
             if ('category' === item || 'tag' === item) {
-                header = header + buildHeaderKeyValue(item, buildHeaderArray(headerObj[item]))
+                header = header + buildHeaderKeyValue(item, buildHeaderArray(headerObj[item]), false)
             } else {
                 header = header + buildHeaderKeyValue(item, headerObj[item] as string)
             }
         }
     })
+    header = header + `---\n\n${MD_DIVIDER}\n`;
     return header;
 }
 
@@ -42,8 +44,14 @@ export function buildHeaderArray(arrayVal: any[]) {
     }
 
     let initValue = '\n';
+    let count = 0;
     arrayVal.forEach(item => {
-        initValue = initValue + "  - " + item + "\n"
+        if (count == arrayVal.length - 1) {
+            initValue = initValue + "  - " + item + ""
+        } else {
+            initValue = initValue + "  - " + item + "\n"
+        }
+        count++
     })
     return initValue
 }
