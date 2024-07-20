@@ -142,7 +142,7 @@ async function buildHeader(body: any, isCreateNewFile: boolean, extra: any = {})
     let header =
         `---\ntitle: '` + articleTitle + `'\n` +
         `date: '` + todayDate + `'\n`;
-    const idxNames = ['author', 'authors', 'permalink', 'category', 'tag']
+    const idxNames = ['author', 'authors', 'permalink', 'category', 'tag', 'mpid', 'mpstatus']
 
     console.log('---body header---')
     console.log(body.header)
@@ -186,17 +186,23 @@ async function buildHeader(body: any, isCreateNewFile: boolean, extra: any = {})
         const author = settings && settings.author ?
             `author: {"name":"${settings.author}","link":"${settings.author}"}\n` : ''
         const permalinkHash = extra.permalinkHash
-        header = header +
-            `createTime: '` + dateFormat(new Date()) + `'\n` +
-            `permalink: '/article/` + permalinkHash + `'\n` + author
+        header = header
+            + buildHeaderKeyValue('createTime', dateFormat(new Date()))
+            + buildHeaderKeyValue('permalink', '/article/' + permalinkHash)
+            + buildHeaderKeyValue('mpid', permalinkHash)
+            + buildHeaderKeyValue('mpstatus', 'draft')  // draft publish  (mppubtime --> publish time)
+            + author
     } else {
         const createTime = extra.createTime
         if (createTime && !createTimeUpdate) {
-            header = header +
-                `createTime: '` + createTime + `'\n`
+            header = header + buildHeaderKeyValue('createTime', createTime)
         }
     }
 
     header = header + `---\n\n${MD_DIVIDER}\n`;
     return header;
+}
+
+function buildHeaderKeyValue(key: string, value: string) {
+    return `${key}: '` + value + `'\n`
 }
