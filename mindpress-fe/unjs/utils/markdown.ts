@@ -1,7 +1,6 @@
 
 export const MD_DIVIDER = '<!-- Content of the page -->';
-export const MD_HEADER_KEYS = ['title', 'date', 'authors', 'author', 'permalink', 'category', 'tag', 'createTime', 'mpid', 'mpstatus']
-import { parseFrontMatter } from 'remark-mdc'
+export const MD_HEADER_KEYS = ['title', 'date', 'authors', 'author', 'permalink', 'category', 'tag', 'createTime', 'mpid', 'mpstatus', 'mppubtime']
 
 export function buildHeaderKeyValue(key: string, value: string, useQuote: boolean = true) {
     return useQuote ? `${key}: '` + value + `'\n`
