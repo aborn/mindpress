@@ -7,16 +7,15 @@ import { dateFormat } from '~/unjs/utils/date'
 import { updateCache } from '../../storage'
 import { isBlank, isValidFilename } from '~/unjs/utils/utils';
 import { getMindPressRootPath } from '~/unjs/inf/env'
-import { buildHeaderArray, MD_DIVIDER, buildHeaderKeyValue, extractBody, buildMDHeaderWithUpdateKeyValue } from '~/unjs/utils/markdown'
+import { extractBody, buildMDHeaderWithUpdateKeyValue } from '~/unjs/utils/markdown'
 import { queryFileContent, serverQueryContent } from '~/server/utils/query/server-query'
-
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
     console.log("nitro: req comming...(savecontent)")
     const req = event.node.req
     const token = req.headers['token'] as string
-    console.log('token=' + token)
+    console.log(req.url + '  >> token=' + token)
 
     const validateResult = await validateToken(token)
     if (!validateResult) {
@@ -26,9 +25,6 @@ export default defineEventHandler(async (event) => {
             code: 501
         }
     }
-
-    console.log(req.url)
-    //console.log(query)
 
     let body: any = await readBody(event);
     let file = body.file;
@@ -101,6 +97,8 @@ export default defineEventHandler(async (event) => {
         const changedKeyValueObj = {
             title: body.title,
             date: todayDate,
+            mpid: mdheader.mpid || articleid,
+            mpstatus: mdheader.mpstatus || 'draft',
         } as any;
 
         if (fs.existsSync(baseDir + file) && !mdheader.createTime) {

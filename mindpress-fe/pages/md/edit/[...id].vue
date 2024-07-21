@@ -95,11 +95,11 @@ onMounted(() => {
     }
 })
 
-function editorSaveAction(text: any, type: string = 'default', articleid: string | null = null) {
+function editorSaveAction(text: any, type: string = 'default', mpid: string | null = null) {
     console.log('save.........action.................' + type)
     // console.log(text)
-    console.log('now save it !... articleid=' + articleid)
-    saveAction(text, type, articleid)
+    console.log('now save it !... articleid=' + mpid)
+    saveAction(text, type, mpid)
 }
 
 let file = ref<string | undefined>('');
