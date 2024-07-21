@@ -139,7 +139,7 @@ function onAction(type: string) {
         mpstatus,
         file: file.value,
     }
-    $fetch('/api/md/mdstatus' + articleid.value, {
+    $fetch('/api/md/mdstatus', {
         key: articleid.value + "t" + new Date(),
         method: "POST",
         headers: {
