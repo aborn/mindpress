@@ -15,15 +15,12 @@ export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
     console.log("nitro: req comming...(savecontent)")
     const req = event.node.req
-    const query = getQuery(event)
     const token = req.headers['token'] as string
     console.log('token=' + token)
-    let data = '';
 
     const validateResult = await validateToken(token)
     if (!validateResult) {
         return {
-            md: data,
             success: false,
             msg: 'validate token is error，please retry!',
             code: 501
@@ -39,7 +36,6 @@ export default defineEventHandler(async (event) => {
     const articleTitle = body.title
     if (isBlank(articleTitle)) {
         return {
-            md: data,
             success: false,
             msg: 'article title cannot be blank!',
         }
@@ -107,7 +103,7 @@ export default defineEventHandler(async (event) => {
             date: todayDate,
         } as any;
 
-        if (fs.existsSync(baseDir + file)) {
+        if (fs.existsSync(baseDir + file) && !mdheader.createTime) {
             const stats = fs.statSync(baseDir + file);
             const createTime = dateFormat(new Date(stats.birthtimeMs > 0 ? stats.birthtime : stats.ctime), true)
             changedKeyValueObj.createTime = createTime;
@@ -130,7 +126,6 @@ export default defineEventHandler(async (event) => {
     } catch (err) {
         console.error(err);
         return {
-            md: data,
             success: false,
             msg: 'articleid=' + (articleid || file) + ", save failed! reason:" + err,
             ext: {
@@ -141,7 +136,6 @@ export default defineEventHandler(async (event) => {
     }
 
     return {
-        md: data,
         success: true,
         msg: 'articleid=' + (articleid || file) + ", save success!",
         date: todayDate,
@@ -170,71 +164,4 @@ async function buildContent(body: any) {
         content,
         state: contentUpdate.state
     }
-}
-
-async function buildHeader(body: any, isCreateNewFile: boolean, extra: any = {}): Promise<string> {
-    const articleTitle = body.title
-    const todayDate = dateFormat(new Date());  // update time
-    let header =
-        `---\ntitle: '` + articleTitle + `'\n` +
-        `date: '` + todayDate + `'\n`;
-    const idxNames = ['author', 'authors', 'permalink', 'category', 'tag', 'mpid', 'mpstatus']
-
-    console.log('---body header---')
-    console.log(body.header)
-    console.log('----------')
-
-    idxNames.forEach(item => {
-        if (body.hasOwnProperty(item)) {
-            if ('permalink' === item) {
-                if (body.header && body.header.permalink) {
-                    header = header + `permalink: '` + body.header.permalink + `'\n`
-                } else if (body[item] && body[item].indexOf(':') < 0) {
-                    header = header + `permalink: '` + body[item] + `'\n`
-                }
-            } else {
-                if ('author' === item || 'authors' === item) {
-                    const value = JSON.stringify(body[item])
-                    header = header + item + `: ` + value + `\n`
-                } else {
-                    header = header + item + `: '` + body[item] + `'\n`
-                }
-            }
-        } else if (body && body.header && body.header.hasOwnProperty(item)) {
-            console.log('itttttteeeeeeeeeeemmm:' + item)
-            console.log(body.header[item])
-            if ('category' === item || 'tag' === item) {
-                header = header + buildHeaderKeyValue(item, buildHeaderArray(body.header[item]), false)
-            } else {
-                header = header + buildHeaderKeyValue(item, body.header[item] as string)
-            }
-        }
-    })
-
-    let createTimeUpdate = false;
-    if (body.header && body.header.createTime) {
-        header = header + `createTime: '` + body.header.createTime + `'\n`
-        createTimeUpdate = true
-    }
-
-    if (isCreateNewFile) {
-        const settings = await useStorage('MINDPRESS_CONFIG').getItem<SettingStruct>('settings')
-        const author = settings && settings.author ?
-            `author: {"name":"${settings.author}","link":"${settings.author}"}\n` : ''
-        const permalinkHash = extra.permalinkHash
-        header = header
-            + buildHeaderKeyValue('createTime', dateFormat(new Date()))
-            + buildHeaderKeyValue('permalink', '/article/' + permalinkHash)
-            + buildHeaderKeyValue('mpid', permalinkHash)
-            + buildHeaderKeyValue('mpstatus', 'draft')  // draft publish  (mppubtime --> publish time)
-            + author
-    } else {
-        const createTime = extra.createTime
-        if (createTime && !createTimeUpdate) {
-            header = header + buildHeaderKeyValue('createTime', createTime)
-        }
-    }
-
-    header = header + `---\n\n${MD_DIVIDER}\n`;
-    return header;
 }
