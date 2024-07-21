@@ -23,7 +23,11 @@ export async function serverQueryContent(query: QueryParams) {
         const realId = query._id.substring('content:'.length)
         const parsedKey = `cache:markdown:parsed:${realId}`;
         const paserdValue = await cacheParsedStorage.getItem(parsedKey);
-        return paserdValue;
+        if (paserdValue) {
+            return paserdValue;
+        } else {
+            console.warn('not find in cahce. -->' + query._id)
+        }
     }
 
     const length = 'markdown:source'.length;
@@ -39,11 +43,10 @@ export async function serverQueryContent(query: QueryParams) {
 
     if (query._id) {
         const fond = res.find(i => i.permalink === ('/article/' + query._id) || i._id == query._id)
-        if (fond) {
-            return fond
-        } else {
+        if (!fond) {
             console.error(`not find articleid=${query._id} file in server side.`)
         }
+        return fond
     }
 
     const sortedList = sortList(res, query.sort || { 'createTime': -1, 'title': 1 })
