@@ -14,7 +14,7 @@ export function buildMDHeaderWithUpdateKeyValue(mdheader: any, changedKeyValueOb
 
     MD_HEADER_KEYS.forEach(item => {
         if (headerObj.hasOwnProperty(item)) {
-            if ('authors' === item) {
+            if ('authors' === item || 'author' === item) {
                 header = header + buildHeaderKeyValue(item, JSON.stringify(headerObj[item]), false)
             } else if ('category' === item || 'tag' === item) {
                 header = header + buildHeaderKeyValue(item, buildHeaderArray(headerObj[item]), false)

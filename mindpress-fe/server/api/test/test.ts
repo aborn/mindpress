@@ -2,8 +2,8 @@
 import { defineEventHandler } from 'h3'
 import { createStorage, type WatchEvent, prefixStorage } from 'unstorage'
 import { parseFrontMatter } from 'remark-mdc'
-import { MOCK_MD_CONTENT, MOCK_MD_HEADER } from '~/test/mock/mockdata'
-import { buildMDHeaderWithUpdateKeyValue } from '~/unjs/utils/markdown'
+import { MOCK_MD_CONTENT, MOCK_MD_HEADER, MOCK_MD_CONTENT_BODY, MOCK_MD_CONTENT2 } from '~/test/mock/mockdata'
+import { buildMDHeaderWithUpdateKeyValue, extractBody } from '~/unjs/utils/markdown'
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -20,11 +20,12 @@ export default defineEventHandler(async (event) => {
  */
 
     console.error('-----------mockkkkkkkkkkkkk')
-    const { content, data: frontmatter } = parseFrontMatter(MOCK_MD_CONTENT)
+    const { content, data: frontmatter } = parseFrontMatter(MOCK_MD_CONTENT2)
     const mdheader = frontmatter;
     console.warn(mdheader)
-    const header = buildMDHeaderWithUpdateKeyValue(frontmatter, 'mpstatus', 'publish');
+    const header = buildMDHeaderWithUpdateKeyValue(frontmatter, { mpstatus: 'publish' });
     console.log(header)
+    const body = extractBody(MOCK_MD_CONTENT)
 
     //if (query.id) {
     //    const cacheParsedStorageLocal = prefixStorage(useStorage(), 'cache:content:parsed')
@@ -40,9 +41,7 @@ export default defineEventHandler(async (event) => {
     return {
         md: data,
         api: 'mindpress works',
-        mdheader,
-        header,
-        MOCK_MD_HEADER
+        header
     }
 })
 

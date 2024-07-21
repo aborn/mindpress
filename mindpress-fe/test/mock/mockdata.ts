@@ -15,8 +15,6 @@ mpstatus: 'draft'
 ---
 
 <!-- Content of the page -->
-
-
 # MindPress
 Press your mind gracefully, which is powered by nuxt.js 3.0 and nuxt.js content 2.0. You can use it for your personal site.
 
@@ -73,6 +71,61 @@ tag:
   - API
 createTime: '2024-06-05 22:29:37'
 mpid: '8dd81e'
+mpstatus: 'publish'
+---
+
+<!-- Content of the page -->
+`
+
+export const MOCK_MD_CONTENT_BODY = `# MindPress
+Press your mind gracefully, which is powered by nuxt.js 3.0 and nuxt.js content 2.0. You can use it for your personal site.
+
+## Setup
+
+Make sure to install the dependencies:
+
+\`\`\`bash
+# yarn
+yarn install
+
+# npm
+npm install
+
+# pnpm
+pnpm install --shamefully-hoist
+\`\`\`
+
+## Development Server
+
+Start the development server on http://localhost:3000
+
+\`\`\`bash
+npm run dev
+\`\`\`
+
+## Production
+
+Build the application for production:
+
+\`\`\`bash
+npm run build
+\`\`\`
+
+Locally preview production build:
+
+\`\`\`bash
+npm run preview
+\`\`\`
+
+Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment) for more information.
+`
+
+export const MOCK_MD_HEADER2 = `---
+title: 'Nuxt (Nitro) 服务端实现图片上传功能 2024-06-24'
+date: '2024-07-20 18:23:57'
+author: {"name":"Aborn Jiang","link":"Aborn Jiang"}
+permalink: '/article/8a5a7d9908ba2004'
+createTime: '2024-07-18 22:53:09'
 mpstatus: 'publish'
 ---
 
