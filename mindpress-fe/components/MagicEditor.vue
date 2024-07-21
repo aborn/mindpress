@@ -409,6 +409,7 @@ export default {
             } else {
                 console.log('content not change, no need to save!')
             }
+            localStorage.removeItem(MD_ORIGIN_CONTENT)
         },
         createArea(content: string) {
             if (content == undefined || content == null) {
