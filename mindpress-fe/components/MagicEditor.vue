@@ -122,6 +122,11 @@
                                 d="M6 21v-3H3v-2h5v5zm10 0v-5h5v2h-3v3zM3 8V6h3V3h2v5zm13 0V3h2v3h3v2z" />
                         </svg>
                     </span>
+                    <span style=" text-align: center;display: inline-block;padding: 4px 4px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
+                            <path fill="currentColor" d="M7.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 .5-.5" />
+                        </svg>
+                    </span>
                     <span v-if="markdown.mpstatus === 'draft'" class="toolbaritem" @click="toobarItemAction('publish')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 448 512">
                             <path fill="currentColor"
@@ -231,7 +236,7 @@ export default {
             return (this.fullPage || this.fullScreen) ? 75 : 290;
         },
         fr() {
-            return (this.fullPage || this.fullScreen) ? this.title : '';
+            return (this.fullPage || this.fullScreen) ? this.title : this.markdown.date || '';
         }
     },
     watch: {

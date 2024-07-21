@@ -153,10 +153,17 @@ function onAction(type: string) {
             hint.value = {
                 title: 'Info',
                 desc: res.msg,
-                color: 'primary'
+                color: 'orange'
             }
         } else {
             markdown.value.mpstatus = res.mpstatus
+            markdown.value.mppubtime = res.mppubtime
+            markdown.value.date = res.date
+            hint.value = {
+                title: 'Info',
+                desc: res.msg,
+                color: 'green'
+            }
         }
     }, error => {
         console.log('mdstatus exception...')
@@ -341,7 +348,7 @@ function saveAction(text: string, type: string = 'default') {
             if (res && res.success) {
                 hint.value = {
                     title: 'Info',
-                    desc: res.msg + " Finished Time: " + mpFormatDate(new Date()),
+                    desc: res.msg + " Finished Time: " + (res.date ? res.date : mpFormatDate(new Date())),
                     color: 'green'
                 }
                 // scm mode
@@ -359,6 +366,7 @@ function saveAction(text: string, type: string = 'default') {
                         mkdContent.value = res.ext.content
                     }
                     console.log('fcm mode, save articleid:' + file.value)
+                    markdown.value.date = res.date
                 }
             } else {
                 if (res.code === 501) {

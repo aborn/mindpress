@@ -66,7 +66,9 @@ export default defineEventHandler(async (event) => {
     return {
         md: data,
         status: true,
-        msg: 'articleid=' + (articleid || file) + ", update status success!",
-        mpstatus
+        msg: 'articleid=' + (articleid || file) + ", " + mpstatus + " success!",
+        mpstatus,
+        mppubtime: currentTime,
+        date: currentTime
     }
 })

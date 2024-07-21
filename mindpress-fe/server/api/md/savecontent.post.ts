@@ -48,6 +48,7 @@ export default defineEventHandler(async (event) => {
     const computerName = os.hostname()
     const __rootDir = getMindPressRootPath();
     console.log('cccccccnnnnn->' + computerName + ",,,," + __rootDir)
+    const todayDate = dateFormat(new Date());  // update time
 
     const baseDir = __rootDir + '/content/';
     if (!file || file.length == 0) { // create new file.
@@ -109,10 +110,11 @@ export default defineEventHandler(async (event) => {
         md: data,
         success: true,
         msg: 'articleid=' + (articleid || file) + ", save success!",
+        date: todayDate,
         ext: {
             file: file,
             contentUpdate: contentStruct.state,
-            content: contentStruct.state ? content : ''
+            content: contentStruct.state ? content : '',
         },
         isCreateFile
     }
