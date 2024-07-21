@@ -52,6 +52,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const baseDir = __rootDir + '/content/';
+    let mpstatus = 'draft'
     if (!file || file.length == 0) {   // create new file.
         const permalinkHash = generatePermalinkHash();
         articleid = permalinkHash;
@@ -77,7 +78,7 @@ export default defineEventHandler(async (event) => {
             createTime: todayDate,
             permalink: '/article/' + permalinkHash,
             mpid: permalinkHash,
-            mpstatus: 'draft',
+            mpstatus,
         } as any;
 
         if (settings && settings.author) {
@@ -106,6 +107,7 @@ export default defineEventHandler(async (event) => {
             const createTime = dateFormat(new Date(stats.birthtimeMs > 0 ? stats.birthtime : stats.ctime), true)
             changedKeyValueObj.createTime = createTime;
         }
+        mpstatus = changedKeyValueObj.mpstatus
         header = buildMDHeaderWithUpdateKeyValue(mdheader, changedKeyValueObj);
     }
 
@@ -138,6 +140,7 @@ export default defineEventHandler(async (event) => {
         msg: 'articleid=' + (articleid || file) + ", save success!",
         date: todayDate,
         articleid,
+        mpstatus,
         ext: {
             file: file,
             contentUpdate: contentStruct.state,

@@ -348,6 +348,7 @@ function saveAction(text: string, type: string = 'default', articleidinput: stri
                     console.log('fcm mode, save articleid:' + file.value)
                     markdown.value.date = res.date
                     markdown.value.articleid = res.articleid
+                    markdown.value.mpstatus = res.mpstatus
                     if (!articleid.value || res.isCreateFile) {
                         articleid.value = res.articleid
                         console.log('  $$ create new file articleid=' + res.articleid)
