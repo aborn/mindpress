@@ -9,7 +9,7 @@ import { MOCK_MD_CONTENT, MOCK_MD_HEADER } from './mock/mockdata'
 describe('markdownUtils test', () => {
     it('test buildHeaderArray', () => {
         const input = ['demo', 'test']
-        const result = "\n  - demo\n  - test\n"
+        const result = "\n  - demo\n  - test"
         expect(buildHeaderArray(input)).toBe(result)
     }),
         it('test generateAutoSaveTitle', () => {

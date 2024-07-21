@@ -9,7 +9,7 @@ export function buildHeaderKeyValue(key: string, value: string, useQuote: boolea
 }
 
 export function updateHeaderKeyValue(headerObj: any, key: string, value: any) {
-    let header = ''
+    let header = '---\n'
     for (let [headKey, headValue] of Object.entries(headerObj)) {
         if (key === headKey) {
             if (headValue !== value) {
@@ -21,7 +21,9 @@ export function updateHeaderKeyValue(headerObj: any, key: string, value: any) {
 
     MD_HEADER_KEYS.forEach(item => {
         if (headerObj.hasOwnProperty(item)) {
-            if ('category' === item || 'tag' === item) {
+            if ('authors' === item) {
+                header = header + buildHeaderKeyValue(item, JSON.stringify(headerObj[item]), false)
+            } else if ('category' === item || 'tag' === item) {
                 header = header + buildHeaderKeyValue(item, buildHeaderArray(headerObj[item]), false)
             } else {
                 header = header + buildHeaderKeyValue(item, headerObj[item] as string)
@@ -46,11 +48,7 @@ export function buildHeaderArray(arrayVal: any[]) {
     let initValue = '\n';
     let count = 0;
     arrayVal.forEach(item => {
-        if (count == arrayVal.length - 1) {
-            initValue = initValue + "  - " + item + ""
-        } else {
-            initValue = initValue + "  - " + item + "\n"
-        }
+        initValue = initValue + "  - " + item + (count == arrayVal.length - 1 ? "" : "\n")
         count++
     })
     return initValue
