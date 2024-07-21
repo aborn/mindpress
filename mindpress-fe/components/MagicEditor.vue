@@ -62,7 +62,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </span>
-                    <span v-if="!isrecovered" class="toolbaritem" @click="toobarItemAction('recover')">
+                    <span v-if="!isrecovered && showRecover" class="toolbaritem" @click="toobarItemAction('recover')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22" viewBox="0 0 24 24">
                             <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                 stroke-width="1.5" color="currentColor">
@@ -226,6 +226,7 @@ export default {
             footerinfoR: '' as string,
             isrecovered: false as boolean,
             isContentChanged: false as boolean,
+            showRecover: false as boolean,
         }
     },
     setup() {
@@ -508,6 +509,12 @@ export default {
                                 localStorage.setItem(MD_CURRENT_CONTENT, content)
                                 this.$emit('change', content)
                                 this.isContentChanged = true; // 第一次请求网络的时候，这个内容也会更新，如何检测是手工更新的呢？？
+                                const originCOntent = localStorage.getItem(MD_ORIGIN_CONTENT)
+                                if (!isBlank(originCOntent as string) && !isBlank(content) && originCOntent != content) {
+                                    this.showRecover = true
+                                } else {
+                                    this.showRecover = false
+                                }
                                 debounce(() => {
                                     const html = wxRenderer(content)
                                     this.output = html
