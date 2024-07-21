@@ -23,19 +23,6 @@ export function isString(str: any): boolean {
     return typeof str === 'string' || str instanceof String
 }
 
-export function showToast(info: any, type: string = 'success', timeout: number = 3000) {
-    var x = document.getElementById("snackbar") as HTMLFormElement;
-    if (!x) {
-        console.warn('snackbar doesnot exists!')
-        return
-    }
-    x.className = "show";
-    x.innerText = (isString(info) ? info : info.title) || 'toast tips message!'
-    const bgColor = (info.type == 'error' || type == 'error') ? '#e60012' : '#22db84'
-    x.setAttribute("style", `background-color: ${bgColor}`);
-    setTimeout(() => { x.className = x.className.replace("show", ""); }, timeout);
-}
-
 export function isValidFilename(filename: string) {
 	// https://stackoverflow.com/a/122431
 	// https://support.microsoft.com/en-us/office/restrictions-and-limitations-in-onedrive-and-sharepoint-64883a5d-228e-48f5-b3d2-eb39e07630fa#invalidcharacters

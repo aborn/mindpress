@@ -1,5 +1,5 @@
 import juice from 'juice'
-import { showToast } from '../utils/utils'
+import { showToast } from "~/client/popup/toast"
 
 export function solveWeChatImage() {
     const clipboardDiv = document.getElementById(`output`) as any

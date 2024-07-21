@@ -40,7 +40,7 @@ import { ref } from 'vue';
 import { mpConfig } from '~~/composables/utils';
 import axios from 'axios'
 import { generateAutoSaveTitle, imageMatches } from '~/server/utils/markdownUtils';
-import { forceToArray, isBlank, showToast } from '~/unjs/utils/utils';
+import { forceToArray, isBlank } from '~/unjs/utils/utils';
 import { validateToken } from '~/unjs/inf/auth'
 import { diffHour } from '~/unjs/utils/date'
 import { AUTH_VALIDATE_SUCCESS_TIME, AUTO_SAVE } from '~/unjs/editor/staticValue';
@@ -216,7 +216,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
             if (!res.status) {
                 hint.value = {
                     desc: res.msg,
-                    color: 'primary'
+                    color: 'orange'
                 }
             } else {
                 mkdContent.value = res.mdcontent || ''
@@ -224,7 +224,8 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                 console.log('content updated: articleid=' + articleid.value)
                 mdHeader.value = res.mdheader
                 title.value = res.title
-                file.value = res._file;
+                file.value = res._file
+                hint.value.desc = ''
             }
         }, error => {
             console.log('exception...')
