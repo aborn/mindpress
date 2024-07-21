@@ -95,11 +95,11 @@ onMounted(() => {
     }
 })
 
-function editorSaveAction(text: any, type: string = 'default') {
+function editorSaveAction(text: any, type: string = 'default', articleid: string | null = null) {
     console.log('save.........action.................' + type)
     // console.log(text)
-    console.log('now save it !...')
-    saveAction(text, type)
+    console.log('now save it !... articleid=' + articleid)
+    saveAction(text, type, articleid)
 }
 
 let file = ref<string | undefined>('');
@@ -283,7 +283,7 @@ const onTokenSubmit = () => {
     }
 }
 
-function saveAction(text: string, type: string = 'default') {
+function saveAction(text: string, type: string = 'default', articleidinput: string | null = null) {
     if (mp.mode === MINDPRESS_MODE.SSG) {
         console.error("SSG mode cannot save edit content!")
         hint.value = {
@@ -298,8 +298,15 @@ function saveAction(text: string, type: string = 'default') {
 
     if ((!title.value || title.value.trim().length === 0) && extInfo.title && extInfo.title !== '') {
         title.value = extInfo.title
-    } else if (type == AUTO_SAVE && !title.value) {
-        title.value = generateAutoSaveTitle()
+    }
+
+    if (type == AUTO_SAVE) {
+        if (!title.value) {
+            title.value = generateAutoSaveTitle()
+        }
+        if (!articleid.value && articleidinput) {
+            articleid.value = articleidinput
+        }
     }
 
     // console.log('title:' + title.value)
@@ -367,6 +374,12 @@ function saveAction(text: string, type: string = 'default') {
                     }
                     console.log('fcm mode, save articleid:' + file.value)
                     markdown.value.date = res.date
+                    markdown.value.articleid = res.articleid
+                    if (!articleid.value || res.isCreateFile) {
+                        articleid.value = res.articleid
+                        console.log('  $$ create new file articleid=' + res.articleid)
+                        markdown.value.mpstatus = 'draft'
+                    }
                 }
             } else {
                 if (res.code === 501) {

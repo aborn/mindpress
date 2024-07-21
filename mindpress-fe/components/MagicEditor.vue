@@ -122,7 +122,7 @@
                                 d="M6 21v-3H3v-2h5v5zm10 0v-5h5v2h-3v3zM3 8V6h3V3h2v5zm13 0V3h2v3h3v2z" />
                         </svg>
                     </span>
-                    <span style=" text-align: center;display: inline-block;padding: 4px 4px;">
+                    <span v-if="markdown.mpstatus" style=" text-align: center;display: inline-block;padding: 4px 4px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
                             <path fill="currentColor" d="M7.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-1 0v-9a.5.5 0 0 1 .5-.5" />
                         </svg>
@@ -391,7 +391,7 @@ export default {
 
             if (originCOntent !== currentContent) {
                 console.log('content changed, now save it!')
-                this.$emit('save', this.editor.viewState.state.doc.toString(), AUTO_SAVE)
+                this.$emit('save', this.editor.viewState.state.doc.toString(), AUTO_SAVE, this.markdown.articleid)
             } else {
                 console.log('content not change, no need to save!')
             }

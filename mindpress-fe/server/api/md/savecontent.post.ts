@@ -8,6 +8,8 @@ import { updateCache } from '../../storage'
 import { isBlank, isValidFilename } from '~/unjs/utils/utils';
 import { getMindPressRootPath } from '~/unjs/inf/env'
 import { buildHeaderArray, MD_DIVIDER, buildHeaderKeyValue, extractBody } from '~/unjs/utils/markdown'
+import { queryFileContent, serverQueryContent } from '~/server/utils/query/server-query'
+
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -47,12 +49,20 @@ export default defineEventHandler(async (event) => {
     let isCreateFile = false;
     const computerName = os.hostname()
     const __rootDir = getMindPressRootPath();
-    console.log('cccccccnnnnn->' + computerName + ",,,," + __rootDir)
+    console.log('cccccccnnnnn->' + computerName + ",,,," + __rootDir + '  articleid:' + articleid + '  file:' + file)
     const todayDate = dateFormat(new Date());  // update time
+
+    if ((!file || file.length == 0) && articleid) {
+        const res = await serverQueryContent({ _id: articleid } as any);
+        console.log(' ==== query by articleid ====' + articleid)
+        console.log(res)
+        file = res._file
+    }
 
     const baseDir = __rootDir + '/content/';
     if (!file || file.length == 0) { // create new file.
         const permalinkHash = generatePermalinkHash();
+        articleid = permalinkHash;
         const subDir = "test/"
         if (!fs.existsSync(baseDir + subDir)) {
             console.log(baseDir + subDir + ' doesnot exists! now create it!')
@@ -111,6 +121,7 @@ export default defineEventHandler(async (event) => {
         success: true,
         msg: 'articleid=' + (articleid || file) + ", save success!",
         date: todayDate,
+        articleid,
         ext: {
             file: file,
             contentUpdate: contentStruct.state,

@@ -23,9 +23,7 @@ export async function serverQueryContent(query: QueryParams) {
         const realId = query._id.substring('content:'.length)
         const parsedKey = `cache:markdown:parsed:${realId}`;
         const paserdValue = await cacheParsedStorage.getItem(parsedKey);
-        if (paserdValue) {
-            return paserdValue;
-        }
+        return paserdValue;
     }
 
     const length = 'markdown:source'.length;
@@ -97,7 +95,7 @@ export async function queryFileContent(query: { file: string, articleid: string 
     let mdheader: any = '';
     //console.warn('--------------mkdcont------')
     //console.log(mdcontent)
-    
+
     if (mdcontent) {
         const { content, data: frontmatter } = await parseFrontMatter(mdcontent)
         mdheader = frontmatter;
