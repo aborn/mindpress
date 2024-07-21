@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
         date: currentTime
     });
 
-    const content = extractBody(fileData.mdcontent)
+    const content = fileData.mdcontent
     const baseDir = getMindPressRootPath() + '/content/';
 
     if (fs.existsSync(baseDir + file)) {

@@ -99,7 +99,7 @@ export async function queryFileContent(query: { file: string, articleid: string 
     //console.log(mdcontent)
     
     if (mdcontent) {
-        const { content, data: frontmatter } = await parseFrontMatter(MOCK_MD_CONTENT2)
+        const { content, data: frontmatter } = await parseFrontMatter(mdcontent)
         mdheader = frontmatter;
         data = extractBody(content)
     }
