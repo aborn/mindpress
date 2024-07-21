@@ -3,7 +3,7 @@ import { defineEventHandler } from 'h3'
 import { createStorage, type WatchEvent, prefixStorage } from 'unstorage'
 import { parseFrontMatter } from 'remark-mdc'
 import { MOCK_MD_CONTENT, MOCK_MD_HEADER } from '~/test/mock/mockdata'
-import { updateHeaderKeyValue } from '~/unjs/utils/markdown'
+import { buildMDHeaderWithUpdateKeyValue } from '~/unjs/utils/markdown'
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     const { content, data: frontmatter } = parseFrontMatter(MOCK_MD_CONTENT)
     const mdheader = frontmatter;
     console.warn(mdheader)
-    const header = updateHeaderKeyValue(frontmatter, 'mpstatus', 'publish');
+    const header = buildMDHeaderWithUpdateKeyValue(frontmatter, 'mpstatus', 'publish');
     console.log(header)
 
     //if (query.id) {

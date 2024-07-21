@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { generateAutoSaveTitle } from '../server/utils/markdownUtils'
 import { permalinkAdapt, isValidFilename } from '../unjs/utils/utils'
 import { dateFormat } from '../unjs/utils/date'
-import { buildHeaderArray, updateHeaderKeyValue } from '~/unjs/utils/markdown'
+import { buildHeaderArray, buildMDHeaderWithUpdateKeyValue } from '~/unjs/utils/markdown'
 import { parseFrontMatter } from 'remark-mdc'
 import { MOCK_MD_CONTENT, MOCK_MD_HEADER } from './mock/mockdata'
 
@@ -35,10 +35,10 @@ describe('utils test', () => {
 })
 
 describe('markdown test', () => {
-    it('test updateHeaderKeyValue', async () => {
+    it('test buildMDHeaderWithUpdateKeyValue', async () => {
         const { content, data: frontmatter } = await parseFrontMatter(MOCK_MD_CONTENT)
         console.log(frontmatter)
-        const header = updateHeaderKeyValue(frontmatter, 'mpstatus', 'publish');
+        const header = buildMDHeaderWithUpdateKeyValue(frontmatter, { mpstatus: 'publish' });
         console.log(header)
         expect(header).toBe(MOCK_MD_HEADER)
     })

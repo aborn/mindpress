@@ -8,16 +8,9 @@ export function buildHeaderKeyValue(key: string, value: string, useQuote: boolea
         : `${key}: ` + value + `\n`
 }
 
-export function updateHeaderKeyValue(headerObj: any, key: string, value: any) {
+export function buildMDHeaderWithUpdateKeyValue(mdheader: any, changedKeyValueObj: any) {
     let header = '---\n'
-    for (let [headKey, headValue] of Object.entries(headerObj)) {
-        if (key === headKey) {
-            if (headValue !== value) {
-                console.log('changed key:' + headKey + ' value from:' + headValue + ' to:' + value)
-                headerObj[key] = value
-            }
-        }
-    }
+    const headerObj = { ...mdheader, ...changedKeyValueObj }
 
     MD_HEADER_KEYS.forEach(item => {
         if (headerObj.hasOwnProperty(item)) {
