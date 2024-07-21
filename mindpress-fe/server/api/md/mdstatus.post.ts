@@ -44,7 +44,6 @@ export default defineEventHandler(async (event) => {
             updateCache(file).then(() => {
                 console.log('update cache success! triggle by:' + file)
             })
-            console.log('update status success!')
         } catch (err) {
             console.error(err);
             return {
@@ -60,7 +59,11 @@ export default defineEventHandler(async (event) => {
             success: false,
             msg: `file ${file} does not exists!`,
         }
-
     }
 
+    return {
+        md: data,
+        success: true,
+        msg: 'articleid=' + (articleid || file) + ", update status success!",
+    }
 })
