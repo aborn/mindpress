@@ -94,7 +94,9 @@ export const staticMdTransform = (md: any) => {
         category: md.category,
         tag: md.tag,
         highlightHtml: md.highlightHtml,
-        highlightTitle: md.highlightTitle
+        highlightTitle: md.highlightTitle,
+        mpid: md.mpid,
+        mpstatus: md.mpstatus
     }
 }
 

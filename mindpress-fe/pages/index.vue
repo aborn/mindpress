@@ -133,13 +133,13 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
       }
     });
     pageNo.value = pageNo.value + 1
-    // console.log(dataQ.value.data)
+    console.log(dataQ.value.data)
     const tdata = dataQ.value.data.map((value) => {
       return staticMdTransform(value)
     })
     articles.value = tdata
-    // console.log('***************')
-    // console.log(tdata)
+    console.log('***************')
+    //console.log(tdata)
   } catch (error) {
     console.warn(error)
   }

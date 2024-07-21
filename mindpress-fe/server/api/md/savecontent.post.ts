@@ -160,9 +160,9 @@ async function buildHeader(body: any, isCreateNewFile: boolean, extra: any = {})
             console.log('itttttteeeeeeeeeeemmm:' + item)
             console.log(body.header[item])
             if ('category' === item || 'tag' === item) {
-                header = header + `${item}: ` + buildHeaderArray(body.header[item]) + ``
+                header = header + buildHeaderKeyValue(item, buildHeaderArray(body.header[item]), false)
             } else {
-                header = header + `${item}: '` + body.header[item] + `'\n`
+                header = header + buildHeaderKeyValue(item, body.header[item] as string)
             }
         }
     })

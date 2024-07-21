@@ -9,7 +9,7 @@
                 </div>
             </div>
             <MagicEditor :content="mkdContent" @change="onChange" :tips="hint" @save="editorSaveAction"
-                @uploadImg="onUploadImg" @fullpage="onFullPageChange" :title="title" />
+                @uploadImg="onUploadImg" @fullpage="onFullPageChange" :title="title" :markdown="markdown" />
         </main>
         <div id="snackbar"></div>
         <UModal v-model="isOpen" prevent-close>
@@ -51,6 +51,7 @@ const tokenInput = ref(null as any)
 const title = ref<string | undefined>('')
 const token = ref<string | undefined>('')
 const mkdContent = ref('')
+const markdown = ref({});
 const hint = ref({} as any)
 const debounce = createDebounce()
 const articleids = route.params.id
@@ -177,6 +178,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
                 }
             } else {
                 mkdContent.value = res.mdcontent || ''
+                markdown.value = { ...res }
                 console.log('content updated')
                 mdHeader.value = res.mdheader
                 title.value = res.title
