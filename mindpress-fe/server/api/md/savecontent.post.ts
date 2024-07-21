@@ -7,7 +7,7 @@ import { dateFormat } from '~/unjs/utils/date'
 import { updateCache } from '../../storage'
 import { isBlank, isValidFilename } from '~/unjs/utils/utils';
 import { getMindPressRootPath } from '~/unjs/inf/env'
-import { buildHeaderArray, MD_DIVIDER, buildHeaderKeyValue, extractBody } from '~/unjs/utils/markdown'
+import { buildHeaderArray, MD_DIVIDER, buildHeaderKeyValue, extractBody, buildMDHeaderWithUpdateKeyValue } from '~/unjs/utils/markdown'
 import { queryFileContent, serverQueryContent } from '~/server/utils/query/server-query'
 
 
@@ -60,40 +60,64 @@ export default defineEventHandler(async (event) => {
     }
 
     const baseDir = __rootDir + '/content/';
-    if (!file || file.length == 0) { // create new file.
+    if (!file || file.length == 0) {   // create new file.
         const permalinkHash = generatePermalinkHash();
         articleid = permalinkHash;
         const subDir = "test/"
-        if (!fs.existsSync(baseDir + subDir)) {
-            console.log(baseDir + subDir + ' doesnot exists! now create it!')
-            fs.mkdirSync(baseDir + subDir, { recursive: true });
-        }
+        createFolderIfNotExists(baseDir + subDir)
 
         file = subDir + articleTitle + ".md"
         const isValidate = isValidFilename(articleTitle);
         if (!isValidate) {
             console.warn('invalid fileName:' + file)
         }
-        // if file exists, generate new random name!
+        // if file exists or articleTitle is invalid, generate new random name!
         if (fs.existsSync(baseDir + file) || !isValidate) {
             file = subDir + permalinkHash + ".md"
         }
+
         isCreateFile = true;
         console.log("create new file, file name=" + file)
-        header = await buildHeader(body, true, { permalinkHash })
-    } else { // file exists!
+        const settings = await useStorage('MINDPRESS_CONFIG').getItem<SettingStruct>('settings')
+        const changedKeyValueObj = {
+            title: body.title,
+            date: todayDate,
+            createTime: todayDate,
+            permalink: '/article/' + permalinkHash,
+            mpid: permalinkHash,
+            mpstatus: 'draft',
+        } as any;
+
+        if (settings && settings.author) {
+            changedKeyValueObj.author = {
+                name: settings.author,
+                link: settings.author
+            }
+        }
+        header = buildMDHeaderWithUpdateKeyValue({}, changedKeyValueObj);
+    } else {   // file exists!
+        let mdheader = body.mdHeader;
+        if (!mdheader) {
+            console.log('header pase from origin file, not from client side.')
+            const mdData = queryFileContent({ file } as any)
+            mdheader = (await mdData).mdheader
+        }
+        const changedKeyValueObj = {
+            title: body.title,
+            date: todayDate,
+        } as any;
+
         if (fs.existsSync(baseDir + file)) {
             const stats = fs.statSync(baseDir + file);
             const createTime = dateFormat(new Date(stats.birthtimeMs > 0 ? stats.birthtime : stats.ctime), true)
-            header = await buildHeader(body, false, { createTime })
-        } else {
-            header = await buildHeader(body, false)
+            changedKeyValueObj.createTime = createTime;
         }
+        header = buildMDHeaderWithUpdateKeyValue(mdheader, changedKeyValueObj);
     }
 
+    console.log(header)
     let contentStruct = await buildContent(body)
     const content = contentStruct.content
-    console.log(header)
 
     try {
         fs.writeFileSync(baseDir + file, header + content);
@@ -130,6 +154,13 @@ export default defineEventHandler(async (event) => {
         isCreateFile
     }
 })
+
+function createFolderIfNotExists(folderPath: string) {
+    if (!fs.existsSync(folderPath)) {
+        console.warn(folderPath + ' doesnot exists! now create it!')
+        fs.mkdirSync(folderPath, { recursive: true });
+    }
+}
 
 async function buildContent(body: any) {
     let content = extractBody(body.content)

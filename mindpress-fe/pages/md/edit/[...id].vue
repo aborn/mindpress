@@ -120,7 +120,6 @@ async function getDataAx() {
     }) as any;
 }
 
-const bodyExtra: any = {};
 const mdHeader: any = {};
 const isOpen = ref(false)
 const isFullPage = ref(false)
@@ -151,7 +150,6 @@ function onAction(type: string) {
         console.log(res)
         if (!res.status) {
             hint.value = {
-                title: 'Info',
                 desc: res.msg,
                 color: 'orange'
             }
@@ -160,7 +158,6 @@ function onAction(type: string) {
             markdown.value.mppubtime = res.mppubtime
             markdown.value.date = res.date
             hint.value = {
-                title: 'Info',
                 desc: res.msg,
                 color: 'green'
             }
@@ -169,9 +166,8 @@ function onAction(type: string) {
         console.log('mdstatus exception...')
         console.log(error)
         hint.value = {
-            title: 'Error',
             desc: "request exception" + error,
-            color: 'orange'
+            color: 'red'
         }
     })
 }
@@ -187,18 +183,13 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
             : await queryContent().where({ permalink: { $eq: permalink } }).findOne()
         file.value = dataL._file;
         console.log(dataL)
-        const idxNames = ['author', 'authors', 'permalink']
-        idxNames.forEach(item => {
-            if (dataL.hasOwnProperty(item)) {
-                bodyExtra[item] = dataL[item]
-            }
-        })
         title.value = dataL.title
         hint.value = {
             title: 'Tips',
             desc: "SSG Mode cannot save md content!! ",
             color: 'orange'
         }
+        markdown.value = dataL
         const markdownContent = compileHastToStringify(dataL.body)
         mkdContent.value = markdownContent //JSON.stringify(dataL.body.children)
     } else {
@@ -215,35 +206,32 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
     } else {
         // const { data: data } = await useFetch('/api/md/queryContent?_id=' + articleid.value) as any
         // const dataQ = data.value
+        hint.value = {
+            desc: 'loading...',
+            color: 'primary'
+        }
+
         $fetch('/api/md/queryContent?_id=' + articleid.value).then((res: any) => {
             console.log(res)
             if (!res.status) {
                 hint.value = {
-                    title: 'Info',
                     desc: res.msg,
                     color: 'primary'
                 }
             } else {
                 mkdContent.value = res.mdcontent || ''
                 markdown.value = { ...res }
-                console.log('content updated')
+                console.log('content updated: articleid=' + articleid.value)
                 mdHeader.value = res.mdheader
                 title.value = res.title
                 file.value = res._file;
-                const idxNames = ['author', 'authors', 'permalink']
-                idxNames.forEach(item => {
-                    if (res.hasOwnProperty(item)) {
-                        bodyExtra[item] = res[item]
-                    }
-                })
             }
         }, error => {
             console.log('exception...')
             console.log(error)
             hint.value = {
-                title: 'Error',
                 desc: "request exception" + error,
-                color: 'orange'
+                color: 'red'
             }
         })
     }
@@ -293,14 +281,12 @@ function saveAction(text: string, type: string = 'default', articleidinput: stri
         }
         return
     }
-    const extInfo = simpleParser(text)
-    // console.log(extInfo)
 
-    if ((!title.value || title.value.trim().length === 0) && extInfo.title && extInfo.title !== '') {
-        title.value = extInfo.title
-    }
-
-    if (type == AUTO_SAVE) {
+    if (type == AUTO_SAVE) {  // from MagicEditor auto_save mode.
+        if (isBlank(text)) {
+            console.log('auto save content is blank, not save it!')
+            return;
+        }
         if (!title.value) {
             title.value = generateAutoSaveTitle()
         }
@@ -308,29 +294,15 @@ function saveAction(text: string, type: string = 'default', articleidinput: stri
             articleid.value = articleidinput
         }
     }
-
-    // console.log('title:' + title.value)
-    console.log('--- now save event triggled. articleid=' + articleid.value + '---' + type)
-    // console.log(text)            
-    const requestSpace = articleid.value + "t" + new Date()
-    // static mode for save to local files !!
-    extInfo.mode = mp.mode;
-
-    if (type == AUTO_SAVE && isBlank(text)) {
-        console.log('auto save content is blank, not save it!')
-        return;
-    }
+    console.log('--- now save event triggled. articleid=' + articleid.value + '---' + type + '  , title:' + title.value)
+    // console.log(text) 
 
     const bodyContent = {
         articleid: articleid.value,
         content: text,
         title: title.value,
-        extInfo: JSON.stringify(extInfo),
         file: file.value,
-        permalink: articleid.value ? '/article/' + articleid.value : undefined,
-        pub: true, // default value
-        header: mdHeader.value,
-        ...bodyExtra
+        mdHeader: mdHeader.value,
     }
 
     hint.value = {
@@ -339,15 +311,14 @@ function saveAction(text: string, type: string = 'default', articleidinput: stri
         desc: 'save......'
     }
     // console.log(bodyContent)
-    // console.log(mp.contentUrl)
-    const token = localStorage.getItem('token');
+
     $fetch(mp.mode === MINDPRESS_MODE.FCM ? '/api/md/savecontent' : mp.contentUrl,
         {
-            key: requestSpace,
+            key: articleid.value + "t" + new Date(),
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "token": token || ''
+                "token": localStorage.getItem('token') || ''
             },
             body: bodyContent
         }).then((res: any) => {
@@ -358,6 +329,7 @@ function saveAction(text: string, type: string = 'default', articleidinput: stri
                     desc: res.msg + " Finished Time: " + (res.date ? res.date : mpFormatDate(new Date())),
                     color: 'green'
                 }
+
                 // scm mode
                 if (res.ext && res.ext.articleid) {
                     console.log(res.ext.articleid)
@@ -368,7 +340,7 @@ function saveAction(text: string, type: string = 'default', articleidinput: stri
                 // fcm mode
                 if (res.ext && res.ext.file) {
                     file.value = res.ext.file
-                    if (res.ext.contentUpdate) {
+                    if (res.ext.contentUpdate) { // client side update.
                         console.warn('content updated!')
                         mkdContent.value = res.ext.content
                     }
