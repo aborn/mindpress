@@ -9,7 +9,8 @@
                 </div>
             </div>
             <MagicEditor :content="mkdContent" @change="onChange" :tips="hint" @save="editorSaveAction"
-                @uploadImg="onUploadImg" @fullpage="onFullPageChange" :title="title" :markdown="markdown" />
+                @uploadImg="onUploadImg" @fullpage="onFullPageChange" @action="onAction" :title="title"
+                :markdown="markdown" />
         </main>
         <div id="snackbar"></div>
         <UModal v-model="isOpen" prevent-close>
@@ -51,7 +52,7 @@ const tokenInput = ref(null as any)
 const title = ref<string | undefined>('')
 const token = ref<string | undefined>('')
 const mkdContent = ref('')
-const markdown = ref({});
+const markdown = ref({} as any);
 const hint = ref({} as any)
 const debounce = createDebounce()
 const articleids = route.params.id
@@ -127,6 +128,45 @@ const isFullPage = ref(false)
 function onFullPageChange(fullpage: boolean) {
     console.log(fullpage)
     isFullPage.value = fullpage;
+}
+
+function onAction(type: string) {
+    console.log('toolbar action, type:' + type)
+    const token = localStorage.getItem('token');
+    const mpstatus = (type === 'publish' || type === 'republish') ? 'publish' : 'draft'
+    const bodyContent = {
+        articleid: articleid.value,
+        mpstatus,
+        file: file.value,
+    }
+    $fetch('/api/md/mdstatus' + articleid.value, {
+        key: articleid.value + "t" + new Date(),
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "token": token || ''
+        },
+        body: bodyContent
+    }).then((res: any) => {
+        console.log(res)
+        if (!res.status) {
+            hint.value = {
+                title: 'Info',
+                desc: res.msg,
+                color: 'primary'
+            }
+        } else {
+            markdown.value.mpstatus = res.mpstatus
+        }
+    }, error => {
+        console.log('mdstatus exception...')
+        console.log(error)
+        hint.value = {
+            title: 'Error',
+            desc: "request exception" + error,
+            color: 'orange'
+        }
+    })
 }
 
 console.log('mode===>' + mp.mode)

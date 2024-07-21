@@ -197,7 +197,7 @@ const debounce = createDebounce()
 
 export default {
     props: ['content', 'csa', 'tips', 'title', 'markdown'],   // current scroll area, only: 'preview', 'editor'
-    emits: ['change', 'save', 'uploadImg', 'fullpage'],
+    emits: ['change', 'save', 'uploadImg', 'fullpage', 'action'],
     name: "MarkdownEditor",
     data() {
         return {
@@ -346,6 +346,8 @@ export default {
 
                 showToast(this.isrecovered ? 'Markdown data recover to recent!' : 'Markdown data recover to origin!')
                 this.isrecovered = !this.isrecovered
+            } else if ('publish' === type || 'republish' === type || 'unpublish' === type) {
+                this.$emit('action', type)
             } else {
                 runCommand(this.editor, type)
             }

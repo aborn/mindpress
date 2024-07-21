@@ -78,8 +78,7 @@ export async function queryFileContent(query: { file: string, articleid: string 
     let data = '';
     const { file, articleid } = query;
     try {
-        const __rootDir = getMindPressRootPath();
-        const baseDir = __rootDir + '/content/';
+        const baseDir = getMindPressRootPath() + '/content/';
         console.log('file--->' + baseDir + file)
         if (!fs.existsSync(baseDir + file)) {
             return {
@@ -98,12 +97,7 @@ export async function queryFileContent(query: { file: string, articleid: string 
     let mdheader: any = '';
     //console.warn('--------------mkdcont------')
     //console.log(mdcontent)
-    if (mdcontent === MOCK_MD_CONTENT2) {
-        console.error('eeeeeeeeeeee')
-    } else {
-        console.warn('nooooooooooooooooooo' + MOCK_MD_CONTENT2.length + '   ,,,,' + mdcontent?.length)
-        
-    }
+    
     if (mdcontent) {
         const { content, data: frontmatter } = await parseFrontMatter(MOCK_MD_CONTENT2)
         mdheader = frontmatter;

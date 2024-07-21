@@ -28,13 +28,15 @@ export default defineEventHandler(async (event) => {
     let articleid = body.articleid;
     const mpstatus = body.mpstatus
     const currentTime = dateFormat(new Date());
-    let header: string = buildMDHeaderWithUpdateKeyValue(body.header, {
+
+    const fileData = await queryFileContent({ file, articleid })
+    let header: string = buildMDHeaderWithUpdateKeyValue(fileData.mdheader, {
         mpstatus,
         mppubtime: currentTime,
         date: currentTime
     });
 
-    const content = extractBody(body)
+    const content = extractBody(fileData.mdcontent)
     const baseDir = getMindPressRootPath() + '/content/';
 
     if (fs.existsSync(baseDir + file)) {
@@ -48,7 +50,7 @@ export default defineEventHandler(async (event) => {
             console.error(err);
             return {
                 md: data,
-                success: false,
+                status: false,
                 msg: 'articleid=' + (articleid || file) + ", update status failed! reason:" + err,
             }
         }
@@ -56,14 +58,15 @@ export default defineEventHandler(async (event) => {
         console.warn(`file ${baseDir + file} does not exists!`,)
         return {
             md: data,
-            success: false,
+            status: false,
             msg: `file ${file} does not exists!`,
         }
     }
 
     return {
         md: data,
-        success: true,
+        status: true,
         msg: 'articleid=' + (articleid || file) + ", update status success!",
+        mpstatus
     }
 })
