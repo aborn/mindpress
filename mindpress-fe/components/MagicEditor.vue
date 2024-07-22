@@ -74,6 +74,17 @@
                             </g>
                         </svg>
                     </span>
+                    <span v-if="!isrecovered && showRecover" class="toolbaritem" @click="toobarItemAction('diff')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 24 24">
+                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5">
+                                <path d="M18 21a3 3 0 1 0 0-6a3 3 0 0 0 0 6m0-6V7.5a2 2 0 0 0-2-2h-2.5" />
+                                <path
+                                    d="M14.5 8L12 5.5L14.5 3M6 3a3 3 0 1 0 0 6a3 3 0 0 0 0-6m0 6v7.5a2 2 0 0 0 2 2h2.5" />
+                                <path d="m9.5 16l2.5 2.5L9.5 21" />
+                            </g>
+                        </svg>
+                    </span>
                     <span v-if="isrecovered" class="toolbaritem" @click="toobarItemAction('recover')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 24 24">
                             <path fill="currentColor" fill-rule="evenodd"
@@ -187,6 +198,11 @@
                 </div>
             </div>
         </div>
+        <UModal v-model="isOpen">
+            <div class="p-4 w-100" id="outputHtml" :style="`max-height: calc(100vh - ${heightExp}px)`">
+                <section id="diffHtml" v-html="diffHtml"></section>
+            </div>
+        </UModal>
     </div>
 </template>
 
@@ -211,6 +227,11 @@ import { showToast } from "~/client/popup/toast"
 import { copyToWechat, mergeCss, solveWeChatImage } from "~/unjs/editor/wechat"
 import { AUTO_SAVE, MD_CURRENT_CONTENT, MD_ORIGIN_CONTENT, MD_RECENT_CONTENT } from "~/unjs/editor/staticValue"
 import { countWords, countLines } from "alfaaz";
+import * as Diff from 'diff'
+import * as Diff2Html from 'diff2html';
+import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui-slim.js';
+import 'diff2html/bundles/css/diff2html.min.css';
+
 const debounce = createDebounce()
 
 export default {
@@ -227,6 +248,8 @@ export default {
             isrecovered: false as boolean,
             isContentChanged: false as boolean,
             showRecover: false as boolean,
+            isOpen: false as boolean,
+            diffHtml: '' as string,
         }
     },
     setup() {
@@ -367,6 +390,23 @@ export default {
                 this.isrecovered = !this.isrecovered
             } else if ('publish' === type || 'republish' === type || 'unpublish' === type) {
                 this.$emit('action', type)
+            } else if ('diff' === type) {
+                this.isOpen = !this.isOpen
+                const currentContent = localStorage.getItem(MD_CURRENT_CONTENT)
+                const originCOntent = localStorage.getItem(MD_ORIGIN_CONTENT)
+                const fileName = this.markdown?.articleid || 'markdown.md'
+                //const diff = Diff.createPatch(fileName, 'abc ', 'abc \n ad')
+                const diff = Diff.createPatch(fileName, originCOntent, currentContent)
+
+                this.diffHtml = Diff2Html.html(diff, {
+                    drawFileList: true,
+                    matching: 'lines',
+                    outputFormat: 'side-by-side',
+                    synchronisedScroll: true,
+                    showFiles: false,
+                    highlight: true,
+                });
+                console.log(diff)
             } else {
                 runCommand(this.editor, type)
             }
@@ -511,6 +551,10 @@ export default {
                                 this.$emit('change', content)
                                 this.isContentChanged = true; // 第一次请求网络的时候，这个内容也会更新，如何检测是手工更新的呢？？
                                 const originCOntent = localStorage.getItem(MD_ORIGIN_CONTENT)
+
+                                console.log('isBlank(originCOntent as string)' + isBlank(originCOntent as string))
+                                console.log('isBlank(content)' + isBlank(content))
+                                console.log('fa==' + originCOntent != content)
                                 if (!isBlank(originCOntent as string) && !isBlank(content) && originCOntent != content) {
                                     this.showRecover = true
                                 } else {
