@@ -199,7 +199,7 @@
             </div>
         </div>
         <UModal v-model="isOpen">
-            <div class="p-4 w-100" id="outputHtml" :style="`max-height: calc(100vh - ${heightExp}px)`">
+            <div class="p-4 w-100" id="outputHtml" :style="`max-height: calc(100vh - ${heightExp}px - 10px);overflow: auto;`">
                 <section id="diffHtml" v-html="diffHtml"></section>
             </div>
         </UModal>

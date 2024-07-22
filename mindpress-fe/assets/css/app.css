@@ -624,3 +624,13 @@ section {
 }
 
 /** Toast CSS end*/
+
+.d2h-code-side-linenumber {
+  position: inherit;
+  width: 3em;   /* 4em */
+}
+
+.d2h-code-side-line {
+  padding: 0 1.0em;
+  width: calc(100% - 9em);
+}
