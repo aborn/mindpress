@@ -229,8 +229,9 @@ import { AUTO_SAVE, MD_CURRENT_CONTENT, MD_ORIGIN_CONTENT, MD_RECENT_CONTENT } f
 import { countWords, countLines } from "alfaaz";
 import * as Diff from 'diff'
 import * as Diff2Html from 'diff2html';
-import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui-slim.js';
-import 'diff2html/bundles/css/diff2html.min.css';
+import { ColorSchemeType } from "diff2html/lib/types"
+// import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui-slim.js';
+// import 'diff2html/bundles/css/diff2html.min.css';
 
 const debounce = createDebounce()
 
@@ -402,9 +403,7 @@ export default {
                     drawFileList: true,
                     matching: 'lines',
                     outputFormat: 'side-by-side',
-                    synchronisedScroll: true,
-                    showFiles: false,
-                    highlight: true,
+                    colorScheme: ColorSchemeType.AUTO,
                 });
                 console.log(diff)
             } else {
