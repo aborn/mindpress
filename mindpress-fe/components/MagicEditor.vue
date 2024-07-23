@@ -95,7 +95,7 @@ import { ColorSchemeType } from "diff2html/lib/types"
 import ToolBarIcon from './Editor/ToolBarIcon.vue'
 import ToolBarDivider from './Editor/ToolBarDivider.vue'
 // import { Diff2HtmlUI } from 'diff2html/lib/ui/js/diff2html-ui-slim.js';
-// import 'diff2html/bundles/css/diff2html.min.css';
+import 'diff2html/bundles/css/diff2html.min.css';
 
 const debounce = createDebounce()
 
