@@ -627,10 +627,16 @@ section {
 
 .d2h-code-side-linenumber {
   position: inherit;
-  width: 3em;   /* 4em */
+  width: 3em; /* 4em */
 }
 
 .d2h-code-side-line {
-  padding: 0 1.0em;
+  padding: 0 1em;
   width: calc(100% - 9em);
+}
+
+@media (min-width: 640px) {
+  .sm\:max-w-lg {
+    max-width: 64rem;
+  }
 }
