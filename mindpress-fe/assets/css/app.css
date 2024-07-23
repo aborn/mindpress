@@ -444,11 +444,22 @@ nav > ul:first-of-type li:nth-of-type(2) {
   background-color: var(--md-cm-gutter-bg);
 }
 
+.toobaricon {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 2px 0;
+}
+
+.toobaricon:hover {
+  border-radius: 3px;
+  background-color: var(--md-cm-gutter-bg);
+}
+
 .toolbar-col {
   display: flex;
   margin-left: 10px;
   margin-right: 14px;
-  margin-top: 5px;
+  /*margin-top: 5px;*/
 }
 
 .toobar-message-box {
