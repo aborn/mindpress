@@ -3,11 +3,14 @@ import { MINDPRESS_ROOT_PATH } from '~/server/utils/markdownUtils'
 import { MINDPRESS_MODE } from '~/composables/consts'
 import fs from 'fs'
 
-export function getMindPressRootPath(): string {
+export function isSSGMode(): boolean {
     const config = useRuntimeConfig();
     const { mode } = config.public.mindpress
-    console.log('mode ===' + mode)
-    if (mode == MINDPRESS_MODE.SSG) {
+    console.log('isSSGMode  mode ===' + mode)
+    return mode === MINDPRESS_MODE.SSG
+}
+export function getMindPressRootPath(): string {
+    if (isSSGMode()) {
         return process.cwd()
     }
 

@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import https from 'https'
 import { dateFormat } from '../../unjs/utils/date'
-import { getMindPressRootPath } from '../../unjs/inf/env'
+import { getMindPressRootPath, isSSGMode } from '../../unjs/inf/env'
 
 export function generatePermalinkHash(len: number = 16) {
     const uuid = uuidv4();
@@ -144,6 +144,9 @@ export async function downloadImage(url: string) {
 }
 
 export function buildImageUrl(dir: string, fileName: string): string {
+    if (isSSGMode()) {
+        return '/' + dir + '/' + encodeURIComponent(fileName)
+    }
     return '/file/' + dir + '/' + encodeURIComponent(fileName)
 }
 
