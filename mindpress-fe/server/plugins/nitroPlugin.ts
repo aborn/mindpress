@@ -5,12 +5,13 @@ import fs from 'node:fs';
 import path from 'path'
 import { MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, makeSureImagePathExists } from '~/server/utils/markdownUtils'
 import { reloadConfigFile, useAdaptFile } from '../utils/settingsUtils';
-import { getMindPressRootPath } from '~/unjs/inf/env'
+import { getMindPressRootPath, isSSGMode } from '~/unjs/inf/env'
 import { CONFIG_FILE_NAME } from '~/unjs/inf/conf';
 
 
 export default defineNitroPlugin(async (nitroApp) => {
     //console.log('Nitro plugin', nitroApp)
+    if (isSSGMode()) { return }
     const storage = prefixStorage(useStorage(), 'markdown:source');
     const cacheParsedStorage = prefixStorage(useStorage(), 'cache:markdown:parsed')
     const ROOT_PATH = getMindPressRootPath()
