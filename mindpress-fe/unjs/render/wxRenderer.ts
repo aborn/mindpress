@@ -149,10 +149,13 @@ class WxRenderer {
                             return "";
                     } */
                 };
+                const useReqURL = useRequestURL()
+                const hostname = useReqURL.hostname
                 const buildMode = process.env.BUILD_MODE
-                console.log(' ### buildMode ___>' + buildMode)
+                console.log(' ### buildMode ___>' + buildMode + '    __hostname=' + hostname)
+               
                 let hrefAdapt = href
-                if (buildMode === 'ghpages') {
+                if (buildMode === 'ghpages' || hostname ==='aborn.github.io') {
                     hrefAdapt = 'https://raw.githubusercontent.com/aborn/mindpress/main/mindpress-fe/public' + href
                 }
                 const subText = createSubText(transform(title, text));

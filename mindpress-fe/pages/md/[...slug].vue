@@ -50,6 +50,8 @@ const formatDate = mpFormatDate;
 const mp = mpConfig(useRuntimeConfig().public.mindpress)
 const queryV = route.query
 let file = ref<string | undefined>('');
+const useReqURL = useRequestURL()
+const hostname = useReqURL.hostname
 
 const articleids = route.params.slug
 const articleid = ((mp.mode === MINDPRESS_MODE.SSG || mp.mode === MINDPRESS_MODE.FCM) && 'undefined' === articleids[0]) ?
