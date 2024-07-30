@@ -132,6 +132,9 @@ class WxRenderer {
                     return `<figcaption ${getStyles("figcaption")}>${s}</figcaption>`;
                 };
                 const transform = (title: string, alt: string) => {
+                    return alt || title;
+                    //  legendOption
+                    /** localStorage cannot be used in server-side
                     const legend = localStorage.getItem("legend");
                     switch (legend) {
                         case "alt":
@@ -144,7 +147,7 @@ class WxRenderer {
                             return title || alt;
                         default:
                             return "";
-                    }
+                    } */
                 };
                 const subText = createSubText(transform(title, text));
                 const figureStyles = getStyles("figure");

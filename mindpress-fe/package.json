@@ -22,6 +22,7 @@
     "dev:scm": "cross-env MINDPRESS_MODE=SCM nuxt dev --port=7001",
     "dev:fcm": "cross-env MINDPRESS_MODE=FCM nuxt dev --port=7001",
     "generate": "BUILD_MODE=ghpages MINDPRESS_MODE=SSG nuxt generate",
+    "g": "cross-env BUILD_MODE=ghpages MINDPRESS_MODE=SSG nuxt generate",
     "preview": "nuxt preview",
     "start": "nuxt build && PORT=8001 node .output/server/index.mjs",
     "deploy": "touch ./dist/.nojekyll && push-dir --dir=dist --branch=gh-pages --cleanup",
