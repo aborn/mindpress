@@ -60,6 +60,7 @@ const queryV = route.query
 console.log(queryV)
 
 const useReqURL = useRequestURL()
+const hostname = useReqURL.hostname
 console.log(useReqURL)
 
 const apiBaseURL = useReqURL.protocol + '//' + useReqURL.host
@@ -186,7 +187,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
         title.value = dataL.title
         hint.value = {
             title: 'Tips',
-            desc: "SSG Mode cannot save md content!! ",
+            desc: isLocalHost(hostname) ? "" : "SSG Mode cannot save md content!! ",
             color: 'orange'
         }
         markdown.value = dataL
@@ -273,9 +274,6 @@ const onTokenSubmit = () => {
 }
 
 function saveAction(text: string, type: string = 'default', articleidinput: string | null = null) {
-    const useReqURL = useRequestURL()
-    const hostname = useReqURL.hostname
-    console.log(useReqURL)
     if (mp.mode === MINDPRESS_MODE.SSG && !isLocalHost(hostname)) {
         console.error("SSG mode cannot save edit content!")
         hint.value = {

@@ -9,6 +9,7 @@ import { isBlank, isValidFilename } from '~/unjs/utils/utils';
 import { getMindPressRootPath } from '~/unjs/inf/env'
 import { extractBody, buildMDHeaderWithUpdateKeyValue } from '~/unjs/utils/markdown'
 import { queryFileContent, serverQueryContent } from '~/server/utils/query/server-query'
+import { MINDPRESS_MODE } from '~/composables/consts'
 
 export default defineEventHandler(async (event) => {
     console.log("----------- nitro ------------")
@@ -16,9 +17,12 @@ export default defineEventHandler(async (event) => {
     const req = event.node.req
     const token = req.headers['token'] as string
     console.log(req.url + '  >> token=' + token)
+    const config = useRuntimeConfig();
+    const { mode } = config.public.mindpress
+    console.log('mode ===' + mode)
 
     const validateResult = await validateToken(token)
-    if (!validateResult) {
+    if (!validateResult && mode == MINDPRESS_MODE.FCM) {
         return {
             success: false,
             msg: 'validate token is error，please retry!',
