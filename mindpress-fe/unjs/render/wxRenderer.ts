@@ -149,10 +149,16 @@ class WxRenderer {
                             return "";
                     } */
                 };
+                const buildMode = process.env.BUILD_MODE
+                console.log(' ### buildMode ___>' + buildMode)
+                let hrefAdapt = href
+                if (buildMode === 'ghpages') {
+                    hrefAdapt = 'https://raw.githubusercontent.com/aborn/mindpress/main/mindpress-fe/public' + href
+                }
                 const subText = createSubText(transform(title, text));
                 const figureStyles = getStyles("figure");
                 const imgStyles = getStyles("image");
-                return `<figure ${figureStyles}><img ${imgStyles} src="${href}" title="${title}" alt="${text}"/>${subText}</figure>`;
+                return `<figure ${figureStyles}><img ${imgStyles} src="${hrefAdapt}" title="${title}" alt="${text}"/>${subText}</figure>`;
             },
             link(href: any, title: string, text: string) {
                 if (href.startsWith("https://mp.weixin.qq.com")) {
