@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import path from 'path';
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
@@ -7,4 +8,14 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
   },
+  resolve: {
+    alias: {
+      '~': path.resolve(__dirname, './')
+    }
+  },
+  server: {
+    hmr: {
+      overlay: false
+    }
+  }
 })

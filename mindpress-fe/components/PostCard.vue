@@ -43,6 +43,7 @@
 </template>
 
 <script lang="ts" setup>
+import { permalinkAdapt } from '~/unjs/utils/utils'
 const props = defineProps({
     item: {
         type: Object,
@@ -55,7 +56,7 @@ const authors = assembyAuthors();
 const link = prelink()
 
 function prelink() {
-    return props.item.permalink || props.item._path
+    return permalinkAdapt(props.item.permalink || props.item._path)
 }
 
 function assembyAuthors() {

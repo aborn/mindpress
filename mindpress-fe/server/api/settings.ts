@@ -1,3 +1,7 @@
+import { DEFAULTCONF } from '~/unjs/inf/conf';
+
 export default cachedEventHandler(async () => {
-    return await useStorage('MINDPRESS_CONFIG').getItem<any>('settings') || {}
+    console.log("----------- nitro ------------")
+    console.log("nitro: req comming...(api/settings)")
+    return await useStorage('MINDPRESS_CONFIG').getItem<any>('settings') || DEFAULTCONF
 })

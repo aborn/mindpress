@@ -3,6 +3,8 @@ import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 import https from 'https'
+import { dateFormat } from '../../unjs/utils/date'
+import { getMindPressRootPath } from '../../unjs/inf/env'
 
 export function generatePermalinkHash(len: number = 16) {
     const uuid = uuidv4();
@@ -10,16 +12,13 @@ export function generatePermalinkHash(len: number = 16) {
     return permalink.length > len ? permalink.substring(permalink.length - len) : permalink
 }
 
-export const MD_DIVIDER = '<!-- Content of the page -->';
-export const IMAGE_UPLOAD_PATH = "uploads"
-export const MINDPRESS_ROOT_PATH = "mindpress"
-
-export function extractBody(content: string | null) {
-    if (!content) { return '' }
-    let idx = content.lastIndexOf(MD_DIVIDER);
-    return (idx >= 0) ? content.substring(idx + MD_DIVIDER.length + 1) : content
+export function generateAutoSaveTitle(date: Date = new Date()) {
+    const title = 'Auto Save ' + dateFormat(date, false)
+    return title.replace(/:/g, '');
 }
 
+export const IMAGE_UPLOAD_PATH = "uploads"
+export const MINDPRESS_ROOT_PATH = "mindpress"
 export interface IdxStruct {
     s: number,
     e: number
@@ -53,7 +52,8 @@ export function extraWithSurroundings(idx: IdxStruct, value: string) {
 }
 
 export function makeSureImagePathExists() {
-    const imagePath = path.join(process.cwd(), MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH)
+    const ROOT_PATH = getMindPressRootPath();
+    const imagePath = path.join(ROOT_PATH, IMAGE_UPLOAD_PATH)
     if (!fs.existsSync(imagePath)) {
         console.log(imagePath + ' doesnot exists! now create it!')
         fs.mkdirSync(imagePath, { recursive: true });
@@ -144,7 +144,7 @@ export async function downloadImage(url: string) {
 }
 
 export function buildImageUrl(dir: string, fileName: string): string {
-    return '/file/' + dir + '/' + fileName;
+    return '/file/' + dir + '/' + encodeURIComponent(fileName)
 }
 
 export async function downloadImageAxios(url: string) {
@@ -197,16 +197,4 @@ async function downloadImageHttps(url: string, file: any, filePath: string) {
         });
     })
     return result;
-}
-
-export function buildHeaderArray(arrayVal: any[]) {
-    if (arrayVal.length == 0) {
-        return ''
-    }
-
-    let initValue = '\n';
-    arrayVal.forEach(item => {
-        initValue = initValue + "  - " + item + "\n"
-    })
-    return initValue
 }

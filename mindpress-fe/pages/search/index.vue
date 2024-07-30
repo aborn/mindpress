@@ -3,10 +3,9 @@
     <NavBar />
     <main class="container">
       <form @submit.prevent="submit" style="display: flex;justify-content: center;margin-bottom:0rem">
-        <input ref="searchInput" type="text" style="height:2.5rem" v-model="search"
-          placeholder="Please input your keyword." />
-        <UButton @click="submit" icon="i-heroicons-magnifying-glass-16-solid" style="width: 10rem;margin-left: 10px"
-          block>Search</UButton>
+        <input ref="searchInput" type="text" v-model="search" placeholder="Please input your keyword." />
+        <UButton @click="submit" icon="i-heroicons-magnifying-glass-16-solid"
+          style="width: 10rem;margin-left: 10px; font-size: larger;" block>Search</UButton>
       </form>
 
       <label style="margin-bottom:1rem" v-html="hint"></label>
@@ -24,7 +23,9 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import type { SearchParams } from "~/types";
+import { doMiniSearch, searchContentWrap, searchMindPressSSG } from "~/unjs/search/minisearch";
 import type { MarkdownMetaPageResponse, MarkdownMetaS, MarkdownMeta } from "~~/composables/types";
+
 const search = ref("")
 const mp = mpConfig(useRuntimeConfig().public.mindpress)
 const hint = ref("")
@@ -49,6 +50,53 @@ function searchShows(searchKey: string) {
   console.log(url)
 
   if (mp.mode === MINDPRESS_MODE.SSG) {
+    loading.value = true
+    let startTime = performance.now()
+
+    searchMindPressSSG(searchKey).then(async (searchResult: any) => {
+      console.log(searchResult)
+
+      if (searchResult.length > 0) {
+        articles.value = searchResult as any;
+        let endTime = performance.now()
+        let timeCost = (endTime - startTime).toFixed(2)
+        hint.value = `Mindpress found <span style="color:red">${searchResult.length}</span> files (key:<span style="color:red">${searchKey}</span>). Time cost: ${timeCost} milliseconds.`
+        loading.value = false
+      } else {
+        articles.value = []
+        hint.value = "no markdown file find." + mp.mode
+        loading.value = false
+      }
+    })
+
+    /**
+    searchContent(searchKey).then(async (res: any) => {
+      const searchResult = res.value
+      console.log(searchResult)
+
+      if (searchResult.length > 0) {
+        const ids = searchResult.map((i: any) => {
+          const arr = i.id.split('#')
+          return arr[0]
+        })
+        //console.log(ids)
+        const { data } = await useAsyncData('home', () => queryContent().where({ _path: { $in: ids } }).sort({ _id: 1 }).find())
+        const tdata = data.value && data.value.map((value) => {
+          return staticMdTransform(value)
+        })
+
+        articles.value = tdata as any;
+        let endTime = performance.now()
+        let timeCost = (endTime - startTime).toFixed(2)
+        hint.value = `Mindpress found <span style="color:red">${searchResult.length}</span> files (key:<span style="color:red">${searchKey}</span>). Time cost: ${timeCost} milliseconds.`
+        loading.value = false
+      } else {
+        articles.value = []
+        hint.value = "no markdown file find." + mp.mode
+        loading.value = false
+      }
+    })*/
+
     articles.value = []
     hint.value = "no markdown file find." + mp.mode
     loading.value = false

@@ -11,6 +11,7 @@ content/magazine/
 mindpress-fe/content/test/
 mindpress-fe/public/uploads/
 mindpress-fe/mindpress/uploads/
+mindpress-fe/mindpress/content/
 mindpress-fe/server/resources/
 mdparser/
 dist

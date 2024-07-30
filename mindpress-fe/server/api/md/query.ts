@@ -19,6 +19,7 @@ export default defineEventHandler(async (event) => {
         serverQuery.pageNo = body.pageNo;
         serverQuery.pageSize = body.pageSize;
     }
-
-    return await serverQueryContent(serverQuery);
+    const res = await serverQueryContent(serverQuery);
+    // console.log(res)
+    return res;
 })

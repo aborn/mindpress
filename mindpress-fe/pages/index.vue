@@ -56,6 +56,10 @@ function loadingMore() {
   if (!isLoading.value && !isLastPage.value) {
     isLoading.value = true
     try {
+      if (mp.mode == MINDPRESS_MODE.SSG) {
+        return;
+      }
+      
       console.log("pageNo==" + pageNo.value)
       const url = (mp.mode == MINDPRESS_MODE.FCM) ? '/api/md/query' : (mp.mode == MINDPRESS_MODE.SCM ? mp.metaUrl : null)
       queryPageData({ pageNo: pageNo.value, url: url }).then((res) => {
@@ -99,7 +103,6 @@ function handleScroll(e) {
       console.log('You are at the bottom! isLoading=' + isLoading.value + ', is isLastPage=' + isLastPage.value)
       showLoadingComponent.value = true;
       loadingMore()
-
     } else {
       showLoadingComponent.value = false;
     }
@@ -111,7 +114,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
   if (articles.value.length <= 0) {
     const { data } = await useAsyncData('home', () => queryContent().sort({ _id: 1 }).find())
     console.log('--------data SSG-----')
-    // console.log(data.value)
+    console.log(data.value)
     const tdata = data.value.map((value) => {
       return staticMdTransform(value)
     })
@@ -130,13 +133,13 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
       }
     });
     pageNo.value = pageNo.value + 1
-    // console.log(dataQ.value.data)
+    console.log(dataQ.value.data)
     const tdata = dataQ.value.data.map((value) => {
       return staticMdTransform(value)
     })
     articles.value = tdata
-    // console.log('***************')
-    // console.log(tdata)
+    console.log('***************')
+    //console.log(tdata)
   } catch (error) {
     console.warn(error)
   }

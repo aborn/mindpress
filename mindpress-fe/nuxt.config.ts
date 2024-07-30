@@ -3,13 +3,7 @@ export default defineNuxtConfig({
     app: {
         baseURL: process.env.BUILD_MODE === 'ghpages' ? '/mindpress/' : '/',   // default '/'  (change to your need.)
         head: {
-            title: 'MindPress, Press your mind gracefully.',
-            link: [
-                {
-                    rel: 'stylesheet',
-                    href: 'https://unpkg.com/@picocss/pico@latest/css/pico.min.css'
-                }
-            ]
+            title: 'MindPress, Press your mind gracefully.'
         }
     },
     routeRules: {
@@ -23,12 +17,23 @@ export default defineNuxtConfig({
         '@nuxt/content',
         '@nuxt/ui'
     ],
+    ui: {
+        global: true,
+    },
     content: {
         highlight: {
             theme: "one-dark-pro",
             preload: ['bash', 'c', 'csharp', 'c#', 'css', 'docker', 'go', 'groovy', 'html', 'java', 'javascript', 'js', 'jsx',
                 'json', 'julia', 'kotlin', 'markdown', 'lua', 'less', 'md', 'nginx', 'objc', 'python', 'py', 'ruby', 'rb', 'rust',
                 'rs', 'swift', 'sql', 'typescript', 'ts', 'tsx', 'vue', 'xml', 'yaml']
+        },
+        experimental: {
+            search: {
+                indexed: true,
+                options: {
+                    fields: ['title', 'content', 'description'],
+                }
+            }
         }
     },
     runtimeConfig: {
