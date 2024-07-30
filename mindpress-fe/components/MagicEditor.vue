@@ -120,7 +120,8 @@ export default {
             diffHtml: '' as string,
         }
     },
-    setup() {
+    setup(props) {
+        console.log('magic editor setup...')
         const previewRef = ref(null as any)
         const editorContainerRef = ref(null as any)
         const innnerCSA = 'preview'
@@ -128,6 +129,7 @@ export default {
         const fullPage = ref(false)
         const curPos = 0;
         const pos = {} as { from: number, to: number, pos: number, row: number, col: number, info: string };
+        localStorage.setItem(MD_ORIGIN_CONTENT, props.content)
         return { previewRef, innnerCSA, editorContainerRef, fullScreen, fullPage, curPos, pos }
     },
     computed: {
@@ -310,6 +312,9 @@ export default {
             const originCOntent = localStorage.getItem(MD_ORIGIN_CONTENT)
 
             if (originCOntent !== currentContent) {
+                // console.log(currentContent)
+                // console.log('\n\n------divider------------')
+                // console.log(originCOntent)
                 console.log('content changed, now save it!')
                 this.$emit('save', this.editor.viewState.state.doc.toString(), AUTO_SAVE, this.markdown.articleid)
             } else {
@@ -491,8 +496,7 @@ export default {
                 moveCursorToBeginOfLine(this.editor)
                 // console.log('from .....>>>>>' + this.from)
                 this.editor.dispatch({ selection: { anchor: this.curPos, head: this.curPos } })
-            }
-            else if (e.key === "Escape") {
+            } else if (e.key === "Escape") {
                 console.log('esc key click....')
                 this.fullPage = false;
                 this.fullScreen = false;
