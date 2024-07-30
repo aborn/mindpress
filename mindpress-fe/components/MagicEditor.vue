@@ -129,7 +129,9 @@ export default {
         const fullPage = ref(false)
         const curPos = 0;
         const pos = {} as { from: number, to: number, pos: number, row: number, col: number, info: string };
-        localStorage.setItem(MD_ORIGIN_CONTENT, props.content)
+        if (import.meta.client) {
+            localStorage.setItem(MD_ORIGIN_CONTENT, props.content)
+        }
         return { previewRef, innnerCSA, editorContainerRef, fullScreen, fullPage, curPos, pos }
     },
     computed: {
