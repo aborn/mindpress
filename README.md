@@ -47,7 +47,7 @@ pnpm dev:fcm  # pnpm dev:scm  （scm mode）
 ```
 Now the nuxt server boot up in http://localhost:7001
 
-### 2.2 API server dev (optional)
+### 2.2 API server dev (Optional)
 Only for `SCM` mode (`pnpm dev:scm` in 2.1)
 
 **Make sure you have Java 17+ env**.  
