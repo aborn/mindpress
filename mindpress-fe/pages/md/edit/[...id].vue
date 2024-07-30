@@ -40,7 +40,7 @@ import { ref } from 'vue';
 import { mpConfig } from '~~/composables/utils';
 import axios from 'axios'
 import { generateAutoSaveTitle, imageMatches } from '~/server/utils/markdownUtils';
-import { forceToArray, isBlank } from '~/unjs/utils/utils';
+import { forceToArray, isBlank, isLocalHost } from '~/unjs/utils/utils';
 import { validateToken } from '~/unjs/inf/auth'
 import { diffHour } from '~/unjs/utils/date'
 import { AUTH_VALIDATE_SUCCESS_TIME, AUTO_SAVE } from '~/unjs/editor/staticValue';
@@ -273,7 +273,10 @@ const onTokenSubmit = () => {
 }
 
 function saveAction(text: string, type: string = 'default', articleidinput: string | null = null) {
-    if (mp.mode === MINDPRESS_MODE.SSG) {
+    const useReqURL = useRequestURL()
+    const hostname = useReqURL.hostname
+    console.log(useReqURL)
+    if (mp.mode === MINDPRESS_MODE.SSG && !isLocalHost(hostname)) {
         console.error("SSG mode cannot save edit content!")
         hint.value = {
             title: 'Error',
@@ -313,7 +316,7 @@ function saveAction(text: string, type: string = 'default', articleidinput: stri
     }
     // console.log(bodyContent)
 
-    $fetch(mp.mode === MINDPRESS_MODE.FCM ? '/api/md/savecontent' : mp.contentUrl,
+    $fetch((mp.mode === MINDPRESS_MODE.SSG || mp.mode === MINDPRESS_MODE.FCM) ? '/api/md/savecontent' : mp.contentUrl,
         {
             key: articleid.value + "t" + new Date(),
             method: "POST",
