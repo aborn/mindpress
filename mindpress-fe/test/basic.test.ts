@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { generateAutoSaveTitle } from '../server/utils/markdownUtils'
-import { permalinkAdapt, isValidFilename, isLocalHost } from '../unjs/utils/utils'
+import { permalinkAdapt, isValidFilename, isLocalHost, isGithubHost } from '../unjs/utils/utils'
 import { dateFormat } from '../unjs/utils/date'
 import { buildHeaderArray, buildMDHeaderWithUpdateKeyValue, extractBody } from '~/unjs/utils/markdown'
 import { parseFrontMatter } from 'remark-mdc'
@@ -35,6 +35,12 @@ describe('utils test', () => {
         expect(isLocalHost('localhost')).toBe(true)
         expect(isLocalHost('github.com')).toBe(false)
         expect(isLocalHost('192.168.31.34')).toBe(true)
+    })
+    it('test isGithubHost', ()=>{
+        expect(isGithubHost('localhost')).toBe(false)
+        expect(isGithubHost('github.com')).toBe(true)
+        expect(isGithubHost('192.168.31.34')).toBe(false)
+        expect(isGithubHost('aborn.github.io')).toBe(true)
     })
 })
 

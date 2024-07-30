@@ -9,6 +9,7 @@ export function isSSGMode(): boolean {
     console.log('isSSGMode  mode ===' + mode)
     return mode === MINDPRESS_MODE.SSG
 }
+
 export function getMindPressRootPath(): string {
     if (isSSGMode()) {
         return process.cwd()

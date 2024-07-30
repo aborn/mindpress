@@ -23,7 +23,7 @@ export function isString(str: any): boolean {
     return typeof str === 'string' || str instanceof String
 }
 
-export function isValidFilename(filename: string) {
+export function isValidFilename(filename: string): boolean {
     // https://stackoverflow.com/a/122431
     // https://support.microsoft.com/en-us/office/restrictions-and-limitations-in-onedrive-and-sharepoint-64883a5d-228e-48f5-b3d2-eb39e07630fa#invalidcharacters
     const invalidFilenameCharactersRegexp = /[/?<>\\:*|"^\u0000-\u001F]/g
@@ -39,11 +39,18 @@ export function isValidFilename(filename: string) {
     )
 }
 
-export function isLocalHost(hostname: string) {
+export function isLocalHost(hostname: string): boolean {
     return (
         (['localhost', '127.0.0.1', '', '::1', '[::1]'].includes(hostname))
         || (hostname.startsWith('192.168.'))
         || (hostname.startsWith('10.'))
         || (hostname.endsWith('.local'))
+    )
+}
+
+export function isGithubHost(hostname: string): boolean {
+    return (
+        hostname.endsWith('github.io')
+        || hostname.endsWith('github.com')
     )
 }

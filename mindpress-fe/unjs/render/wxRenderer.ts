@@ -2,6 +2,7 @@ import { marked } from "marked";
 import { config } from './config'
 import { setColor } from './theme'
 import hljs from "highlight.js";
+import { isGithubHost } from "../utils/utils";
 
 class WxRenderer {
     getRenderer: Function
@@ -153,9 +154,9 @@ class WxRenderer {
                 const hostname = useReqURL.hostname
                 const buildMode = process.env.BUILD_MODE
                 console.log(' ### buildMode ___>' + buildMode + '    __hostname=' + hostname)
-               
+
                 let hrefAdapt = href
-                if (buildMode === 'ghpages' || hostname ==='aborn.github.io') {
+                if (buildMode === 'ghpages' || isGithubHost(hostname)) {
                     hrefAdapt = 'https://raw.githubusercontent.com/aborn/mindpress/main/mindpress-fe/public' + href
                 }
                 const subText = createSubText(transform(title, text));
