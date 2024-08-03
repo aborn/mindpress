@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,8 @@ public class MindpressController {
     private final MarkdownMetaService markdownMetaService;
 
     private final MindpressESClient mindpressESClient;
+
+    private final Date bootDate = new Date();
 
     @GetMapping("search")
     @ApiOperation("query Markdown meta infos")
@@ -56,6 +61,12 @@ public class MindpressController {
         return new ResponseEntity<>(detail, HttpStatus.OK);
     }
 
+    /**
+     * http://localhost:3012/api/v1/mindpress/status
+     *
+     * @return
+     * @throws IOException
+     */
     @GetMapping("status")
     @ApiOperation("mindpress status")
     @CrossOrigin
@@ -64,6 +75,7 @@ public class MindpressController {
         boolean health = mindpressESClient.isActived();
         res.put("es_status", health);
         res.put("live", true);
+        res.put("bootDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(bootDate));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

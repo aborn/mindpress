@@ -27,7 +27,7 @@ public class Content extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "ID")
     private Long id;
 
-    @Column(name = "articleid",unique = true,nullable = false)
+    @Column(name = "articleid", unique = true, nullable = false)
     @NotBlank
     @ApiModelProperty(value = "article id")
     private String articleid;
