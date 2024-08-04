@@ -7,11 +7,13 @@ import { MINDPRESS_ROOT_PATH, IMAGE_UPLOAD_PATH, makeSureImagePathExists } from 
 import { reloadConfigFile, useAdaptFile } from '../utils/settingsUtils';
 import { getMindPressRootPath, isSSGMode } from '~/unjs/inf/env'
 import { CONFIG_FILE_NAME } from '~/unjs/inf/conf';
-
+import { updateCache } from '~/server/storage'
 
 export default defineNitroPlugin(async (nitroApp) => {
     //console.log('Nitro plugin', nitroApp)
     if (isSSGMode()) { return }
+
+    // PART 1: deal with conten cache.
     const storage = prefixStorage(useStorage(), 'markdown:source');
     const cacheParsedStorage = prefixStorage(useStorage(), 'cache:markdown:parsed')
     const ROOT_PATH = getMindPressRootPath()
@@ -21,28 +23,12 @@ export default defineNitroPlugin(async (nitroApp) => {
         driver: 'fs',
         base: path.join(ROOT_PATH, '/content')
     }
-
     for (const [key, source] of Object.entries(sources)) {
         storage.mount(key, fsDriver({ base: path.join(ROOT_PATH, '/content') }));
     }
-    const length = 'markdown:source'.length;
-    let keys = await storage.getKeys('markdown:source')
+    await updateCache();  // init all cache.
 
-    await Promise.all(
-        keys.map(async (key: string) => {
-            const value = await storage.getItem(key);
-            const meta = await storage.getMeta(key);
-            const pKey = `${key.substring(length + 1)}`;
-            const parsedKey = `cache:markdown:parsed:${pKey}`;
-            const parsedValue = await parseContent('content:' + pKey, value) as any
-            await cacheParsedStorage.setItem(parsedKey, parsedValue)
-            if (parsedValue.mpid) {
-                const parsedIdKey = `cache:markdown:parsed:id:${parsedValue.mpid}`
-                await cacheParsedStorage.setItem(parsedIdKey, parsedValue)
-            }
-        })
-    )
-
+    // PART 2: deal with mindpress config.
     // https://github.com/nuxt/nuxt/issues/15366
     // https://stackoverflow.com/questions/76488291/how-to-fetch-data-as-part-of-server-start-up-in-nuxt-3
     const config = useRuntimeConfig();

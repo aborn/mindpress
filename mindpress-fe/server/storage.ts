@@ -2,7 +2,7 @@ import { createStorage, type WatchEvent, prefixStorage } from 'unstorage'
 import fsDriver from "unstorage/drivers/fs";
 import { parseContent } from '#content/server'
 
-export async function updateCache(fileId: string) {
+export async function updateCache(fileId: string | undefined = undefined) {
     const storage = prefixStorage(useStorage(), 'markdown:source');
     const cacheParsedStorage = prefixStorage(useStorage(), 'cache:markdown:parsed')
     const PREFIX = 'markdown:source:'
@@ -14,10 +14,10 @@ export async function updateCache(fileId: string) {
         const articleid = PREFIX + fileId.replace(/\//g, ':')
         console.log('fileid=', fileId + ', articleid=' + articleid)
         keys = keys.filter(item => item == articleid)
+        console.log('only update follows keys cache:')
         console.log(keys)
     }
 
-    // TODO logic keep with nitroPlugin.ts
     await Promise.all(
         keys.map(async (key: string) => {
             const value = await storage.getItem(key);
