@@ -35,7 +35,7 @@ const invalid = '#d30102',
     tooltipBackground = base05,
     selection = darkBackground,
     selectedBackground = `var(--md-cm-selected-text-bg)`,
-    cursor = base01
+    cursor = 'yellow'
 
 /// The editor theme styles for Basic Light.
 export const basicLightTheme = EditorView.theme(
@@ -49,8 +49,11 @@ export const basicLightTheme = EditorView.theme(
             caretColor: cursor
         },
 
+        // https://codemirror.net/examples/styling/
+        '.cm-cursor, .cm-dropCursor': {
+            borderLeftColor: cursor
+        },
 
-        '.cm-cursor, .cm-dropCursor': { borderLeftColor: cursor },
         '&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection':
             { backgroundColor: selectedBackground },  /** selected text background color */
 

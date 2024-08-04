@@ -40,7 +40,7 @@ export const basicSetup: Extension = (() => [
   autocompletion(),
   rectangularSelection(),
   crosshairCursor(),
-  highlightActiveLine(),
+  // highlightActiveLine(),
   highlightSelectionMatches(),
   keymap.of([
     ...closeBracketsKeymap,

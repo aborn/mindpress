@@ -636,6 +636,7 @@ section {
 
 /** Toast CSS end*/
 
+/** CodeMirror css */
 .d2h-code-side-linenumber {
   position: inherit;
   width: 3em; /* 4em */
