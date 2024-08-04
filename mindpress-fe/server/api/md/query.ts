@@ -13,11 +13,16 @@ export default defineEventHandler(async (event) => {
 
     let serverQuery: QueryParams = {} as QueryParams;
     serverQuery._id = query._id
+    if (query.mpstatus) {
+        serverQuery.mpstatus = query.mpstatus
+    }
+
     if (req.method === 'POST') {
         const body = await readBody(event)
         serverQuery.sort = body.sort;
         serverQuery.pageNo = body.pageNo;
         serverQuery.pageSize = body.pageSize;
+        serverQuery.mpstatus = body.mpstatus || query.mpstatus
     }
     const res = await serverQueryContent(serverQuery);
     // console.log(res)

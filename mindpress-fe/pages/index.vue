@@ -61,7 +61,7 @@ function loadingMore() {
       }
       
       console.log("pageNo==" + pageNo.value)
-      const url = (mp.mode == MINDPRESS_MODE.FCM) ? '/api/md/query' : (mp.mode == MINDPRESS_MODE.SCM ? mp.metaUrl : null)
+      const url = (mp.mode == MINDPRESS_MODE.FCM) ? '/api/md/query?mpstatus=publish' : (mp.mode == MINDPRESS_MODE.SCM ? mp.metaUrl : null)
       queryPageData({ pageNo: pageNo.value, url: url }).then((res) => {
         isLoading.value = false
         if (pageNo.value >= res.totalPage) {
@@ -124,7 +124,7 @@ if (mp.mode === MINDPRESS_MODE.SSG) {
   }
 } else if (mp.mode === MINDPRESS_MODE.FCM) {
   try {
-    const { data: dataQ } = await useFetch('/api/md/query', {
+    const { data: dataQ } = await useFetch('/api/md/query?mpstatus=publish', {
       method: "POST",
       body: {
         'pageNo': pageNo.value,  // start from 1
