@@ -34,8 +34,12 @@ export default defineNitroPlugin(async (nitroApp) => {
             const meta = await storage.getMeta(key);
             const pKey = `${key.substring(length + 1)}`;
             const parsedKey = `cache:markdown:parsed:${pKey}`;
-            const parsedValue = await parseContent('content:' + pKey, value)
+            const parsedValue = await parseContent('content:' + pKey, value) as any
             await cacheParsedStorage.setItem(parsedKey, parsedValue)
+            if (parsedValue.mpid) {
+                const parsedIdKey = `cache:markdown:parsed:id:${parsedValue.mpid}`
+                await cacheParsedStorage.setItem(parsedIdKey, parsedValue)
+            }
         })
     )
 

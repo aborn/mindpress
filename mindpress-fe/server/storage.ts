@@ -17,6 +17,7 @@ export async function updateCache(fileId: string) {
         console.log(keys)
     }
 
+    // TODO logic keep with nitroPlugin.ts
     await Promise.all(
         keys.map(async (key: string) => {
             const value = await storage.getItem(key);
@@ -25,10 +26,14 @@ export async function updateCache(fileId: string) {
             // console.log('------pkey')
             // console.log(pKey)
             const parsedKey = `cache:markdown:parsed:${pKey}`;
-            const parsedValue = await parseContent('content:' + pKey, value)
+            const parsedValue = await parseContent('content:' + pKey, value) as any
             // console.log(key)
             // console.log(parsedValue)
             await cacheParsedStorage.setItem(parsedKey, parsedValue)
+            if (parsedValue.mpid) {
+                const parsedIdKey = `cache:markdown:parsed:id:${parsedValue.mpid}`
+                await cacheParsedStorage.setItem(parsedIdKey, parsedValue)
+            }
         })
     )
 }

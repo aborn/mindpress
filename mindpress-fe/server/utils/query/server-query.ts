@@ -22,8 +22,11 @@ export async function serverQueryContent(query: QueryParams) {
     if (query._id) {
         const realId = query._id.substring('content:'.length)
         const parsedKey = `cache:markdown:parsed:${realId}`;
-        const paserdValue = await cacheParsedStorage.getItem(parsedKey);
+        const parsedIdKey = `cache:markdown:parsed:id:${query._id}`
+        console.log('parsedIdKey=' + parsedIdKey)
+        const paserdValue = await cacheParsedStorage.getItem(parsedIdKey);
         if (paserdValue) {
+            console.log('hit in cahce. -->' + query._id)
             return paserdValue;
         } else {
             console.warn('not find in cahce. -->' + query._id)
