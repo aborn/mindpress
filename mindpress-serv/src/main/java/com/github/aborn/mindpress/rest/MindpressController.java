@@ -76,6 +76,7 @@ public class MindpressController {
         res.put("es_status", health);
         res.put("live", true);
         res.put("bootDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(bootDate));
+        res.put("currentTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }
