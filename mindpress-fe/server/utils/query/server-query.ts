@@ -40,7 +40,8 @@ export async function serverQueryContent(query: QueryParams) {
         keys.map(async (key: string) => {
             const parsedKey = `cache:markdown:parsed:${key.substring(length + 1)}`;
             const paserdValue = await cacheParsedStorage.getItem(parsedKey);
-            if (!paserdValue.mpstatus || !query.mpstatus || paserdValue.mpstatus === query.mpstatus) {  
+            // console.log(parsedKey + ':' + paserdValue.mpstatus + '#' + query.mpstatus + '#' + query.mpstatus)
+            if (!paserdValue.mpstatus || !query.mpstatus || paserdValue.mpstatus === query.mpstatus) {
                 res.push(paserdValue)
             } 
         })
